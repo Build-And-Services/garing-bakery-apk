@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:garing_bakery_apk/core/routes/app.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -7,9 +8,14 @@ class AuthPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: const Center(
+      body: Center(
         child: Column(
-          children: [],
+          children: [
+            TextButton(
+                onPressed: () => Navigator.of(context)
+                    .pushReplacementNamed(Routes.DASHBOARD),
+                child: const Text("Login"))
+          ],
         ),
       ),
     );

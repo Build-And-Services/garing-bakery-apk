@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
-import 'package:garing_bakery_apk/features/auth/presenter/pages/auth_page.dart';
-import 'package:garing_bakery_apk/features/auth/presenter/pages/splash_page.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +15,14 @@ void main() {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
       ],
       child: MaterialApp(
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            backgroundColor: MyTheme.primary,
+            iconTheme: IconThemeData(
+              color: Colors.white,
+            ),
+          ),
+        ),
         debugShowCheckedModeBanner: false,
         initialRoute: Routes.SPLASH,
         onGenerateRoute: (settings) => Routes.generateRoute(settings),
