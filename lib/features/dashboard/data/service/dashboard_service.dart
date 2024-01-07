@@ -1,13 +1,22 @@
+import 'dart:convert';
+
+import 'package:garing_bakery_apk/core/config/remote.dart';
+import 'package:garing_bakery_apk/features/dashboard/data/model/products_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 
 class DashboardService {
-  static Future<Response> login(String email, String password) async {
-    final result = await http
-        .post(Uri.parse("http://192.168.1.56:3000/api/v1/auth"), body: {
-      'email': email,
-      'password': password,
-    });
-    return result;
+  static Future<List<ProductModel>> allProducts() async {
+    List<ProductModel> products = [];
+    try {
+      final result = await http.get(Uri.parse(RemoteApi().PRODUCTS));
+      if (result.statusCode == 200) {
+        List data = jsonDecode(result.body)["data"];
+        products = data.map((e) => ProductModel.fromJson(e)).toList();
+        return products;
+      }
+      return products;
+    } catch (e) {
+      return products;
+    }
   }
 }

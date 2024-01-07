@@ -1,6 +1,4 @@
 // ignore_for_file: constant_identifier_names
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/pages/auth_page.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/pages/splash_page.dart';

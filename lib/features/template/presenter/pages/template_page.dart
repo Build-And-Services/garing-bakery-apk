@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:garing_bakery_apk/core/routes/app.dart';
 
 class TemplatePage extends StatelessWidget {
   const TemplatePage({super.key});
