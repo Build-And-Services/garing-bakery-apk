@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
-import 'package:garing_bakery_apk/features/dashboard/presenter/pages/sub_page/product.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/widgets/category_box_item.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/widgets/drawer_widget.dart';
+import 'package:garing_bakery_apk/features/dashboard/presenter/widgets/search_widget.dart';
 
 class CategorySubPage extends StatelessWidget {
   const CategorySubPage({super.key});
