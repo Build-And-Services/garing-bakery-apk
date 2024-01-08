@@ -1,15 +1,19 @@
-import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/remote.dart';
+import 'package:garing_bakery_apk/features/auth/data/model/auth_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 
 class AuthService {
-  static Future<Response> login(String email, String password) async {
-    debugPrint(RemoteApi().LOGIN);
-    final result = await http.post(Uri.parse(RemoteApi().LOGIN), body: {
-      'email': email,
-      'password': password,
-    });
-    return result;
+  static Future<AuthModel> login(String email, String password) async {
+    try {
+      final result = await http.post(Uri.parse(RemoteApi().LOGIN), body: {
+        'email': email,
+        'password': password,
+      });
+      print(email + password);
+      print(result.body);
+      return AuthModel.fromRawJson(result.body);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

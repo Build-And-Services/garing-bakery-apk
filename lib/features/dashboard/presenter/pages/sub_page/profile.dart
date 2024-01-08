@@ -20,7 +20,12 @@ class ProfileSubPage extends StatelessWidget {
               child: Container(
                 width: 100,
                 height: 100,
-                color: Colors.blueGrey,
+                decoration: const BoxDecoration(
+                  color: Colors.blueGrey,
+                  image: DecorationImage(
+                    image: AssetImage('assets/profile.jpeg'),
+                  ),
+                ),
               ),
             ),
             const SizedBox(

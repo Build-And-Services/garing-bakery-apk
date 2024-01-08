@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
-import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
+import 'package:garing_bakery_apk/features/auth/presenter/widgets/input_login_widget.dart';
 import 'package:provider/provider.dart';
 
 class AuthLogin extends StatefulWidget {
@@ -12,136 +12,160 @@ class AuthLogin extends StatefulWidget {
 }
 
 class _AuthPage extends State<AuthLogin> {
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
-  late String _email, _password;
   @override
   Widget build(BuildContext context) {
-    AuthProvider auth = Provider.of<AuthProvider>(context);
-
-    var loading = const Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        CircularProgressIndicator(),
-        Text(" Authenticating ... Please wait")
-      ],
-    );
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                Image.asset(
-                  "assets/images/logogading.png",
-                  height: 250,
-                  width: double.infinity,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  "Email",
-                  style: TextStyle(fontSize: 14),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black12,
+          child: Consumer<AuthProvider>(
+            builder: (context, authProvider, _) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 50,
                       ),
-                      color: Colors.grey[100],
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10))),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Enter Your Email',
-                      contentPadding: EdgeInsets.all(10),
-                      // icon: Icon(Icons.email),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  "Password",
-                  style: TextStyle(fontSize: 14),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black12,
+                      Image.asset(
+                        "assets/images/logogading.png",
+                        height: 250,
+                        width: double.infinity,
                       ),
-                      color: Colors.grey[100],
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10))),
-                  child: const TextField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Enter Password',
-                        contentPadding: EdgeInsets.all(10)),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      InputAuthWidget(
+                        label: "Email",
+                        placeholder: "Masukan email",
+                        validation: authProvider.validationEmail,
+                        controller: authProvider.email,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      InputAuthWidget(
+                        label: "password",
+                        placeholder: "Masukan Password",
+                        obscure: true,
+                        validation: authProvider.validationPassword,
+                        controller: authProvider.password,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      MaterialButton(
+                        color: MyTheme.secondary,
+                        height: 20,
+                        minWidth: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: const BorderSide(
+                            color: MyTheme.secondary,
+                          ),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            try {
+                              authProvider.startLoading();
+                              authProvider.login().then((value) {
+                                authProvider.stopLoading();
+                                if (authProvider.message != null) {
+                                  dialogMessage(context, authProvider);
+                                }
+                              });
+                            } catch (e) {
+                              authProvider.stopLoading();
+                            }
+                          }
+                        },
+                        child: authProvider.isloading
+                            ? const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    "Tunggu sebentar",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    ),
+                                  )
+                                ],
+                              )
+                            : const Text(
+                                "Login",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Gading Bakery",
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                MaterialButton(
-                  color: MyTheme.secondary,
-                  height: 20,
-                  minWidth: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      side: const BorderSide(color: MyTheme.secondary)),
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                  onPressed: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (_) => const ForgotPassword()));
-                  },
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Gading Bakery",
-                      style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                          color: Colors.grey),
-                    ),
-                  ],
-                )
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
+    );
+  }
+
+  dialogMessage(BuildContext context, AuthProvider authProvider) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Alert Message'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(authProvider.message as String),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                authProvider.clear();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

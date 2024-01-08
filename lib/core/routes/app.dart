@@ -19,7 +19,7 @@ class Routes {
             child: const SplashPage(), type: PageTransitionType.bottomToTop);
       case Routes.LOGIN:
         return MaterialPageRoute(
-            builder: (BuildContext context) => AuthLogin());
+            builder: (BuildContext context) => const AuthLogin());
       case Routes.DASHBOARD:
         return MaterialPageRoute(
             builder: (BuildContext context) => const DashboardPage());
