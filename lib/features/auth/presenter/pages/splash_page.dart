@@ -54,27 +54,9 @@ class _SplashPageState extends State<SplashPage> {
       child: Scaffold(
         backgroundColor: MyTheme.primary,
         body: Center(
-<<<<<<< HEAD
           child: Image(
             width: 350,
             image: AssetImage("assets/images/logogading.png"),
-=======
-          child: Column(
-            children: [
-              const Text('splash page'),
-              InkWell(
-                onTap: () async {
-                  Navigator.of(context, rootNavigator: true)
-                      .pushNamed(Routes.LOGIN);
-                },
-                child: const Column(
-                  children: [
-                    Text("pindah"),
-                  ],
-                ),
-              )
-            ],
->>>>>>> a5b0dbd (feat: dashboard layout)
           ),
         ),
       ),
