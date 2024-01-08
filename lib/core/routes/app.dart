@@ -18,14 +18,15 @@ class Routes {
         return PageTransition(
             child: const SplashPage(), type: PageTransitionType.bottomToTop);
       case Routes.LOGIN:
-        return MaterialPageRoute(
-            builder: (BuildContext context) => const AuthLogin());
+        return PageTransition(
+            child: const AuthLogin(), type: PageTransitionType.fade);
       case Routes.DASHBOARD:
-        return MaterialPageRoute(
-            builder: (BuildContext context) => const DashboardPage());
+        return PageTransition(
+            child: const DashboardPage(), type: PageTransitionType.fade);
       case Routes.TRANSACTIONS:
         return PageTransition(
-            child: const TransactionPage(), type: PageTransitionType.fade);
+            child: const TransactionPage(),
+            type: PageTransitionType.bottomToTop);
       default:
         return PageTransition(
             child: const SplashPage(), type: PageTransitionType.fade);

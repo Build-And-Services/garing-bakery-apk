@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
+import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/widgets/input_login_widget.dart';
 import 'package:provider/provider.dart';
@@ -63,14 +64,14 @@ class _AuthPage extends State<AuthLogin> {
                         height: 30,
                       ),
                       MaterialButton(
-                        color: MyTheme.secondary,
+                        color: MyTheme.brown,
                         height: 20,
                         minWidth: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           side: const BorderSide(
-                            color: MyTheme.secondary,
+                            color: MyTheme.brown,
                           ),
                         ),
                         onPressed: () {
@@ -79,8 +80,12 @@ class _AuthPage extends State<AuthLogin> {
                               authProvider.startLoading();
                               authProvider.login().then((value) {
                                 authProvider.stopLoading();
-                                if (authProvider.message != null) {
+                                if (authProvider.message != null &&
+                                    authProvider.message != "success login") {
                                   dialogMessage(context, authProvider);
+                                } else {
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      Routes.DASHBOARD, (route) => false);
                                 }
                               });
                             } catch (e) {

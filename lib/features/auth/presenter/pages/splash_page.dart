@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
-import 'package:garing_bakery_apk/core/routes/app.dart';
+import 'package:garing_bakery_apk/features/auth/presenter/pages/auth_page.dart';
+import 'package:page_transition/page_transition.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -11,12 +12,37 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   late Timer _timer;
+  int duration = 2;
+  late final AnimationController _animate = AnimationController(
+    duration: Duration(seconds: duration),
+    vsync: this,
+  )..repeat(
+      reverse: true,
+    );
+
+  late final Animation<double> _animation = CurvedAnimation(
+    parent: _animate,
+    curve: Curves.fastOutSlowIn,
+  );
+
   removeScreen() {
-    return _timer = Timer(const Duration(seconds: 2), () {
-      Navigator.of(context).pushReplacementNamed(Routes.LOGIN);
-    });
+    return _timer = Timer(
+      Duration(seconds: duration + 1),
+      () {
+        Navigator.of(context).pushAndRemoveUntil(
+          PageTransition(
+            child: const AuthLogin(),
+            type: PageTransitionType.fade,
+            duration: const Duration(
+              milliseconds: 900,
+            ),
+          ),
+          (route) => false,
+        );
+      },
+    );
   }
 
   @override
@@ -27,19 +53,23 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   void dispose() {
+    _animate.dispose();
     _timer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
+    return SafeArea(
       child: Scaffold(
-        backgroundColor: MyTheme.primary,
+        backgroundColor: MyTheme.white,
         body: Center(
-          child: Image(
-            width: 350,
-            image: AssetImage("assets/images/logogading.png"),
+          child: ScaleTransition(
+            scale: _animation,
+            child: const Image(
+              width: 350,
+              image: AssetImage("assets/images/logogading.png"),
+            ),
           ),
         ),
       ),
