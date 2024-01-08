@@ -3,9 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
-import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
-import 'package:garing_bakery_apk/main.dart';
-import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -34,20 +31,6 @@ class _SplashPageState extends State<SplashPage> {
     super.dispose();
   }
 
-  // @override
-  // void initState() {
-  //   if (mounted) {
-  //     Future.delayed(const Duration(seconds: 3)).then((value) {
-  //       bool isLogin =
-  //           Provider.of<AuthProvider>(context, listen: false).isLogin;
-  //       if (isLogin) {
-  //         Navigator.of(context).pushReplacementNamed(Routes.DASHBOARD);
-  //       } else {
-  //         Navigator.of(context).pushReplacementNamed(Routes.LOGIN);
-  //       }
-  //     });
-  //   }
-  //   super.initState();
   @override
   Widget build(BuildContext context) {
     return const SafeArea(

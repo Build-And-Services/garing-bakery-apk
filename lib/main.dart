@@ -24,7 +24,7 @@ void main() {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: Routes.DASHBOARD,
+        initialRoute: Routes.SPLASH,
         onGenerateRoute: (settings) => Routes.generateRoute(settings),
       ),
     ),
