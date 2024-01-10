@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/features/auth/data/model/auth_model.dart';
 import 'package:garing_bakery_apk/features/auth/data/service/auth_service.dart';
+import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
 
 class AuthProvider with ChangeNotifier {
   // initialization
@@ -37,6 +38,8 @@ class AuthProvider with ChangeNotifier {
     try {
       AuthModel result = await AuthService.login(_email.text, _password.text);
       if (result.message == 'success login') {
+        await TokenService.saveData("${result.tokenType} ${result.accessToken}",
+            result.data!.toJson().toString());
         _isLogin = true;
         _message = result.message;
         notifyListeners();

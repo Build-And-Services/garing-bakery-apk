@@ -9,8 +9,6 @@ class AuthService {
         'email': email,
         'password': password,
       });
-      print(email + password);
-      print(result.body);
       return AuthModel.fromRawJson(result.body);
     } catch (e) {
       rethrow;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
-import 'package:garing_bakery_apk/features/dashboard/presenter/widgets/drawer_widget.dart';
+import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
 
 class CartSubPage extends StatelessWidget {
   const CartSubPage({super.key});

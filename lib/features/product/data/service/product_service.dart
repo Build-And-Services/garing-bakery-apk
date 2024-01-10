@@ -4,7 +4,7 @@ import 'package:garing_bakery_apk/core/config/remote.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:http/http.dart' as http;
 
-class DashboardService {
+class ProductService {
   static Future<List<ProductModel>> allProducts() async {
     List<ProductModel> products = [];
     try {

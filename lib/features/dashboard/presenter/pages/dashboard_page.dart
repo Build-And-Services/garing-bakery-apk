@@ -4,7 +4,7 @@ import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/pages/sub_page/cart.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/pages/sub_page/category.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/pages/sub_page/home.dart';
-import 'package:garing_bakery_apk/features/dashboard/presenter/pages/sub_page/product.dart';
+import 'package:garing_bakery_apk/features/product/presenter/pages/product_sub_page.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/pages/sub_page/profile.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -35,19 +35,18 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedTab],
-      floatingActionButton:
-          _selectedTab == 0 || _selectedTab == 1 || _selectedTab == 2
-              ? FloatingActionButton(
-                  backgroundColor: MyTheme.primary,
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.TRANSACTIONS);
-                  },
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                )
-              : null,
+      floatingActionButton: _selectedTab == 0 || _selectedTab == 2
+          ? FloatingActionButton(
+              backgroundColor: MyTheme.primary,
+              onPressed: () {
+                Navigator.of(context).pushNamed(Routes.TRANSACTIONS);
+              },
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            )
+          : null,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedTab,
         onTap: (index) => _changeTab(index),
