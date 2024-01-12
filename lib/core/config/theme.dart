@@ -8,6 +8,10 @@ class MyTheme {
 
   static AppBar appBar(String title, List<Widget>? action) {
     return AppBar(
+      // leading: IconButton(
+      //   icon: const Icon(Icons.format_align_left_outlined),
+      //   onPressed: () => Scaffold.of(context).openDrawer(),
+      // ),
       title: Text(
         title,
         style: const TextStyle(
