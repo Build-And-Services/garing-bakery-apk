@@ -9,16 +9,7 @@ class CartSubPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const DrawerPage(),
-      appBar: AppBar(
-        title: const Text(
-          'Riwayat Transaksi',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: MyTheme.primary,
-      ),
+      appBar: MyTheme.appBar("Riwayat Transaksi", []),
       body: Container(
         margin: const EdgeInsets.only(
           top: 20,

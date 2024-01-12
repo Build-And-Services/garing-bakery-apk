@@ -39,6 +39,10 @@ class _DashboardPageState extends State<DashboardPage> {
           ? FloatingActionButton(
               backgroundColor: MyTheme.primary,
               onPressed: () {
+                // SharedPreferences preferences =
+                //     await SharedPreferences.getInstance();
+                // await preferences.clear();
+                // Navigator.of(context).pushNamed(Routes.SPLASH);
                 Navigator.of(context).pushNamed(Routes.TRANSACTIONS);
               },
               child: const Icon(

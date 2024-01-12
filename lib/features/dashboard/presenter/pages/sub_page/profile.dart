@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProfileSubPage extends StatelessWidget {
@@ -6,39 +9,271 @@ class ProfileSubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 80,
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: const BoxDecoration(
-                  color: Colors.blueGrey,
-                  image: DecorationImage(
-                    image: AssetImage('assets/profile.jpeg'),
+            _headerProfile(width, height),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  _tileInformation(
+                    Icons.email,
+                    "Email",
+                    "herisetyawan233@gmail.com",
                   ),
+                  _tileInformation(
+                    Icons.person,
+                    "Role",
+                    "chasier store",
+                  ),
+                  _tileInformation(
+                    Icons.email,
+                    "Password",
+                    "***************",
+                  ),
+                  _tileInformation(
+                    Icons.email,
+                    "Token Login",
+                    "&65jhjgwuegr37uyggbfuegwruyegr",
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Container(
+                      padding: const EdgeInsets.all(
+                        10,
+                      ),
+                      width: width,
+                      decoration: const BoxDecoration(
+                        color: MyTheme.primary,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            10,
+                          ),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Update data",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container _tileInformation(IconData icon, String label, String info) {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 10,
+      ),
+      padding: const EdgeInsets.all(
+        10,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            icon,
+            color: Colors.grey,
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              "Heri Setyawan",
-              style: GoogleFonts.poppins(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+              Text(
+                info,
+                style: GoogleFonts.poppins(
+                  fontSize: 13,
+                  color: const Color.fromARGB(
+                    255,
+                    73,
+                    73,
+                    73,
+                  ),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Container _headerProfile(double width, double height) {
+    return Container(
+      width: width,
+      height: height * 4.5 / 10,
+      decoration: const BoxDecoration(
+        color: MyTheme.primary,
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(
+            30,
+          ),
+        ),
+      ),
+      child: Stack(
+        alignment: AlignmentDirectional.center,
+        children: [
+          _bigBall(width),
+          _smallBall(width),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _contentProfile(width),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Heri Setyawan",
+                    style: GoogleFonts.poppins(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  Text(
+                    "cahsier store",
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Positioned _smallBall(double width) {
+    return Positioned(
+      width: width * 2,
+      height: width * 2,
+      top: -width / 0.9,
+      right: -width / 0.7,
+      child: Container(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: RadialGradient(
+            colors: [
+              Colors.transparent,
+              Color.fromARGB(54, 255, 255, 255),
+            ],
+            stops: [0.2, 1.0],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: MyTheme.primary,
+              offset: Offset(
+                10,
+                -10,
+              ),
+              blurRadius: 10,
             )
           ],
+        ),
+        child: ClipOval(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+            child: Container(
+              color: Colors.transparent,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Positioned _bigBall(double width) {
+    return Positioned(
+      width: width * 2,
+      height: width * 2,
+      top: -width,
+      right: -width,
+      child: Container(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: RadialGradient(
+            colors: [
+              Colors.transparent,
+              Color.fromARGB(54, 255, 255, 255),
+            ],
+            stops: [0.2, 1.0],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: MyTheme.primary,
+              offset: Offset(
+                10,
+                -10,
+              ),
+              blurRadius: 10,
+            )
+          ],
+        ),
+        child: ClipOval(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+            child: Container(
+              color: Colors.transparent,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container _contentProfile(double width) {
+    return Container(
+      width: width / 3,
+      height: width / 3,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.white,
+          width: 10,
+          style: BorderStyle.solid,
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(100),
+        ),
+        image: const DecorationImage(
+          image: AssetImage('assets/profile.jpeg'),
         ),
       ),
     );

@@ -11,16 +11,7 @@ class CategorySubPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const DrawerPage(),
-      appBar: AppBar(
-        title: const Text(
-          'Category',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: MyTheme.primary,
-      ),
+      appBar: MyTheme.appBar("Kategori", []),
       body: ListView(
         children: [
           const SizedBox(

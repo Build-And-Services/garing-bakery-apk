@@ -16,16 +16,9 @@ class ProductSubPage extends StatelessWidget {
     final productProvider = context.read<ProductProvider>();
     return Scaffold(
       drawer: const DrawerPage(),
-      appBar: AppBar(
-        title: const Text(
-          'Produk / Barang',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: MyTheme.primary,
-        actions: [
+      appBar: MyTheme.appBar(
+        "Produk / Barang",
+        [
           GestureDetector(
             onTap: () => Navigator.of(context).pushNamed(Routes.ADD_PRODUCT),
             child: const Icon(Icons.add),
@@ -47,41 +40,53 @@ class ProductSubPage extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 2.0),
-              child: FutureBuilder(
-                future: productProvider.getProduct(),
-                builder: (_, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const ShimmerLoading();
-                  }
-
-                  return Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
-                    child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.75,
-                      ),
-                      itemCount: productProvider.products.length,
-                      itemBuilder: (context, index) {
-                        final product = productProvider.products[index];
-                        // final product = product.products[index];
-                        return ProductCardItem(
-                          product: product,
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
+              child: _buildFutureProduct(productProvider, context),
             )
           ],
         ),
       ),
+    );
+  }
+
+  FutureBuilder<dynamic> _buildFutureProduct(
+      ProductProvider productProvider, BuildContext context) {
+    return FutureBuilder(
+      future: productProvider.getProduct(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const ShimmerLoading();
+        }
+
+        return Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: _builderGridview(productProvider, context),
+        );
+      },
+    );
+  }
+
+  GridView _builderGridview(
+      ProductProvider productProvider, BuildContext context) {
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: MediaQuery.of(context).size.width /
+            (MediaQuery.of(context).size.height / 1.4),
+        mainAxisSpacing: 20.0,
+        crossAxisSpacing: 10.0,
+      ),
+      itemCount: productProvider.products.length,
+      itemBuilder: (context, index) {
+        final product = productProvider.products[index];
+        // final product = product.products[index];
+        return ProductCardItem(
+          product: product,
+        );
+      },
     );
   }
 }
