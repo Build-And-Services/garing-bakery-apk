@@ -13,44 +13,57 @@ class ProductSubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productProvider = context.read<ProductProvider>();
-    return Scaffold(
-      drawer: const DrawerPage(),
-      appBar: MyTheme.appBar(
-        "Produk / Barang",
-        [
-          GestureDetector(
-            onTap: () async {},
-            child: const Icon(Icons.refresh_rounded),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          GestureDetector(
-            onTap: () => Navigator.of(context).pushNamed(Routes.ADD_PRODUCT),
-            child: const Icon(Icons.add),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-        ],
-      ),
-      body: ListView(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          const SearchWidget(),
-          const SizedBox(
-            height: 30,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2.0),
-            child: _buildFutureProduct(productProvider, context),
-          )
-        ],
-      ),
-    );
+    return Consumer<ProductProvider>(
+        builder: (context, productProvider, child) {
+      if (productProvider.eventLoadingStatus) {
+        productProvider.getProduct();
+        return const SimmerPage();
+      }
+      return Scaffold(
+        drawer: const DrawerPage(),
+        appBar: MyTheme.appBar(
+          "Produk / Barang",
+          [
+            GestureDetector(
+              onTap: () async {
+                productProvider.setLoading = true;
+              },
+              child: const Icon(Icons.refresh_rounded),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            GestureDetector(
+              onTap: () => Navigator.of(context).pushNamed(Routes.ADD_PRODUCT),
+              child: const Icon(Icons.add),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+          ],
+        ),
+        body: ListView(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            const SearchWidget(),
+            const SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: _builderGridview(productProvider, context),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   FutureBuilder<dynamic> _buildFutureProduct(
@@ -92,6 +105,49 @@ class ProductSubPage extends StatelessWidget {
           product: product,
         );
       },
+    );
+  }
+}
+
+class SimmerPage extends StatelessWidget {
+  const SimmerPage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: const DrawerPage(),
+      appBar: MyTheme.appBar(
+        "Produk / Barang",
+        [
+          GestureDetector(
+            child: const Icon(Icons.refresh_rounded),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          GestureDetector(
+            onTap: () => Navigator.of(context).pushNamed(Routes.ADD_PRODUCT),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+        ],
+      ),
+      body: ListView(
+        children: const [
+          SizedBox(
+            height: 20,
+          ),
+          SearchWidget(),
+          SizedBox(
+            height: 30,
+          ),
+          ShimmerLoading(),
+        ],
+      ),
     );
   }
 }
