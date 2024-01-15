@@ -20,6 +20,13 @@ class ProductSubPage extends StatelessWidget {
         "Produk / Barang",
         [
           GestureDetector(
+            onTap: () async {},
+            child: const Icon(Icons.refresh_rounded),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          GestureDetector(
             onTap: () => Navigator.of(context).pushNamed(Routes.ADD_PRODUCT),
             child: const Icon(Icons.add),
           ),
@@ -28,22 +35,20 @@ class ProductSubPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            const SearchWidget(),
-            const SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2.0),
-              child: _buildFutureProduct(productProvider, context),
-            )
-          ],
-        ),
+      body: ListView(
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          const SearchWidget(),
+          const SizedBox(
+            height: 30,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2.0),
+            child: _buildFutureProduct(productProvider, context),
+          )
+        ],
       ),
     );
   }

@@ -6,8 +6,16 @@ import 'package:garing_bakery_apk/features/product/data/service/product_service.
 
 class ProductProvider with ChangeNotifier {
   List<ProductModel> _products = [];
+  bool _isLoading = false;
 
   List<ProductModel> get products => _products;
+  bool get isLoading => _isLoading;
+
+  set setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
+
   set setProduct(List<ProductModel> newproduct) {
     _products = newproduct;
     notifyListeners();
@@ -17,10 +25,12 @@ class ProductProvider with ChangeNotifier {
     try {
       List<ProductModel> productsResp = await ProductService.allProducts();
       setProduct = productsResp;
-      return;
+      notifyListeners();
+      print(productsResp.toString());
+      return productsResp;
     } catch (e) {
       log(e.toString());
-      return;
+      return [];
     }
   }
 }
