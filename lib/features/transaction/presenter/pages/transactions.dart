@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
+import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
 
 class CartSubPage extends StatelessWidget {
@@ -34,31 +35,34 @@ class HistoryTransactionFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(
-        bottom: 10,
-      ),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: const Color.fromARGB(103, 116, 116, 116),
-          width: 1,
-          style: BorderStyle.solid,
+    return InkWell(
+      onTap: () => Navigator.of(context).pushNamed(Routes.TRANSACTIONS_SHOW),
+      child: Container(
+        margin: const EdgeInsets.only(
+          bottom: 10,
         ),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: ListTile(
-        trailing: GestureDetector(
-          child: const Icon(
-            Icons.remove_red_eye,
-            color: Colors.green,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: const Color.fromARGB(103, 116, 116, 116),
+            width: 1,
+            style: BorderStyle.solid,
           ),
+          borderRadius: BorderRadius.circular(10),
         ),
-        focusColor: Colors.amberAccent,
-        leading: const Icon(
-          Icons.date_range,
-          color: MyTheme.primary,
+        child: ListTile(
+          trailing: GestureDetector(
+            child: const Icon(
+              Icons.remove_red_eye,
+              color: Colors.green,
+            ),
+          ),
+          focusColor: Colors.amberAccent,
+          leading: const Icon(
+            Icons.date_range,
+            color: MyTheme.primary,
+          ),
+          title: const Text("Riwayat transaksi untuk hari ini"),
         ),
-        title: const Text("Riwayat transaksi untuk hari ini"),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
-import 'package:garing_bakery_apk/features/dashboard/presenter/pages/sub_page/cart.dart';
+import 'package:garing_bakery_apk/features/transaction/presenter/pages/transactions.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/pages/sub_page/category.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/pages/sub_page/home.dart';
 import 'package:garing_bakery_apk/features/product/presenter/pages/product_sub_page.dart';
