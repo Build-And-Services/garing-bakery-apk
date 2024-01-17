@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
+import 'package:garing_bakery_apk/features/category/presenter/provider/category_provider.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/provider/dashboard_provider.dart';
+import 'package:garing_bakery_apk/features/product/presenter/provider/form_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/transaction_provider.dart';
 import 'package:provider/provider.dart';
@@ -16,53 +18,34 @@ void main() {
 
 void selectInitialRoute() async {
   final pref = await SharedPreferences.getInstance();
-  if (pref.getString("token") == null && pref.getString("user") == null) {
-    return runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => AuthProvider()),
-          ChangeNotifierProvider(create: (_) => DashboardProvider()),
-          ChangeNotifierProvider(create: (_) => ProductProvider()),
-          ChangeNotifierProvider(create: (_) => TransactionProvider()),
-        ],
-        child: MaterialApp(
-          theme: ThemeData(
-            appBarTheme: const AppBarTheme(
-              backgroundColor: MyTheme.primary,
-              iconTheme: IconThemeData(
-                color: Colors.white,
-              ),
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => DashboardProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => TransactionProvider()),
+        ChangeNotifierProvider(create: (_) => CategoryProvider()),
+        ChangeNotifierProvider(create: (_) => FormProductProvider())
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            backgroundColor: MyTheme.primary,
+            iconTheme: IconThemeData(
+              color: Colors.white,
             ),
           ),
-          debugShowCheckedModeBanner: false,
-          initialRoute: Routes.SPLASH,
-          onGenerateRoute: (settings) => Routes.generateRoute(settings),
+        ),
+        debugShowCheckedModeBanner: false,
+        initialRoute:
+            pref.getString("token") == null && pref.getString("user") == null
+                ? Routes.SPLASH
+                : Routes.DASHBOARD,
+        onGenerateRoute: (settings) => Routes.generateRoute(
+          settings,
         ),
       ),
-    );
-  } else {
-    return runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => AuthProvider()),
-          ChangeNotifierProvider(create: (_) => DashboardProvider()),
-          ChangeNotifierProvider(create: (_) => ProductProvider()),
-          ChangeNotifierProvider(create: (_) => TransactionProvider())
-        ],
-        child: MaterialApp(
-          theme: ThemeData(
-            appBarTheme: const AppBarTheme(
-              backgroundColor: MyTheme.primary,
-              iconTheme: IconThemeData(
-                color: Colors.white,
-              ),
-            ),
-          ),
-          debugShowCheckedModeBanner: false,
-          initialRoute: Routes.DASHBOARD,
-          onGenerateRoute: (settings) => Routes.generateRoute(settings),
-        ),
-      ),
-    );
-  }
+    ),
+  );
 }

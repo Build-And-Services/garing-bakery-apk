@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
+import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
+import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +38,7 @@ class TransactionPage extends StatelessWidget {
                   return ListView.builder(
                     itemCount: productProvider.products.length,
                     itemBuilder: (context, index) {
+                      ProductModel product = productProvider.products[index];
                       return Container(
                         margin: const EdgeInsets.only(
                           left: 20,
@@ -66,7 +69,7 @@ class TransactionPage extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        "Roti Bakar",
+                                        product.name,
                                         style: GoogleFonts.poppins(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w700,
@@ -76,7 +79,7 @@ class TransactionPage extends StatelessWidget {
                                         height: 10,
                                       ),
                                       Text(
-                                        "Rp. 150.000",
+                                        formatRupiah(product.sellingPrice),
                                         style: GoogleFonts.poppins(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
@@ -86,11 +89,17 @@ class TransactionPage extends StatelessWidget {
                                   ),
                                 ),
                                 CachedNetworkImage(
-                                  imageUrl:
-                                      "https://stagging.gading-bakery.com/images/products/20240110120520-image.png",
+                                  imageUrl: product.image,
                                   progressIndicatorBuilder:
                                       (context, url, progress) {
                                     return Container(
+                                      width: 80,
+                                      height: 80,
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
                                       child: CircularProgressIndicator(
                                           value: progress.progress,
                                           color: MyTheme.primary),

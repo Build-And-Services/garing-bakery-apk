@@ -68,25 +68,6 @@ class ProductSubPage extends StatelessWidget {
     );
   }
 
-  FutureBuilder<dynamic> _buildFutureProduct(
-      ProductProvider productProvider, BuildContext context) {
-    return FutureBuilder(
-      future: productProvider.getProduct(),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const ShimmerLoading();
-        }
-
-        return Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-          ),
-          child: _builderGridview(productProvider, context),
-        );
-      },
-    );
-  }
-
   GridView _builderGridview(
       ProductProvider productProvider, BuildContext context) {
     return GridView.builder(
