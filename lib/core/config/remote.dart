@@ -9,4 +9,5 @@ class RemoteApi {
   String get STOCKS => '$API_BASE_URL/api/v1/stocks';
   String get LAPORAN => '$API_BASE_URL/api/v1/reports';
   String get TRANSACTION => '$API_BASE_URL/api/v1/transactions';
+  String get DASHBOARD => '$API_BASE_URL/api/v1/dashboard';
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class ProductModel {
   final int id;
   final String name;
@@ -18,6 +20,11 @@ class ProductModel {
     required this.purchasePrice,
     required this.sellingPrice,
   });
+
+  factory ProductModel.fromRawJson(String str) =>
+      ProductModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
         id: json["id"],

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:garing_bakery_apk/core/models/categories_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CategoryBox extends StatelessWidget {
-  const CategoryBox({
-    super.key,
-  });
+  CategoryModel category;
+  CategoryBox({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
