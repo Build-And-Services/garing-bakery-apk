@@ -31,3 +31,33 @@ class CategoryGetResponse {
         "data": List<CategoryModel>.from(data.map((x) => x)),
       };
 }
+
+class CategoryAddResponse {
+  final bool success;
+  final String message;
+  final CategoryModel? data;
+
+  CategoryAddResponse({
+    required this.success,
+    required this.message,
+    this.data,
+  });
+
+  factory CategoryAddResponse.fromRawJson(String str) =>
+      CategoryAddResponse.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory CategoryAddResponse.fromJson(Map<String, dynamic> json) =>
+      CategoryAddResponse(
+        success: json["success"],
+        message: json["message"],
+        data: CategoryModel.fromJson(json["data"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "success": success,
+        "message": message,
+        "data": {},
+      };
+}
