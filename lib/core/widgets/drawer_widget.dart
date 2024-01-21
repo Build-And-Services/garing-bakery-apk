@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
+import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DrawerPage extends StatelessWidget {
@@ -26,10 +27,24 @@ class DrawerPage extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            _tapSidebar(Icons.dataset_rounded, "Manajemen", () {}),
+            _tapSidebar(
+              Icons.dataset_rounded,
+              "Dashboard",
+              () => Navigator.pushReplacementNamed(
+                context,
+                Routes.DASHBOARD,
+              ),
+            ),
             _tapSidebar(Icons.print_outlined, "Printer dan struk", () {}),
-            _tapSidebar(Icons.money_sharp, "Keuangan", () {}),
-            _tapSidebar(Icons.note_outlined, "Laporan", () {}),
+            // _tapSidebar(Icons.money_sharp, "Keuangan", () {}),
+            _tapSidebar(
+              Icons.note_outlined,
+              "Laporan",
+              () => Navigator.pushReplacementNamed(
+                context,
+                Routes.REPORTS,
+              ),
+            ),
             _tapSidebar(Icons.logout_outlined, "Logout", () {}),
           ],
         ),
