@@ -5,8 +5,11 @@ import 'dart:developer';
 
 class DashboardProvider with ChangeNotifier {
   DashboardModel _dashboardData = DashboardModel(success: false, message: '');
+  bool _loading = true;
 
   DashboardModel get dashboardData => _dashboardData;
+  bool get loading => _loading;
+
   set setDashboard(DashboardModel dashboardData) {
     _dashboardData = dashboardData;
     notifyListeners();
@@ -16,6 +19,7 @@ class DashboardProvider with ChangeNotifier {
     try {
       DashboardModel data = await DashboardService.getDashboard();
       setDashboard = data;
+      _loading = false;
       return;
     } catch (e) {
       log(e.toString());

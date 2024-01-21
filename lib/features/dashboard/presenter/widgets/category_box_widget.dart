@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/models/categories_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class CategoryBox extends StatelessWidget {
   CategoryModel category;
   CategoryBox({super.key, required this.category});
@@ -16,8 +18,8 @@ class CategoryBox extends StatelessWidget {
       height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        image: const DecorationImage(
-          image: AssetImage('assets/product.jpg'),
+        image: DecorationImage(
+          image: CachedNetworkImageProvider(category.image),
           fit: BoxFit.cover,
         ),
       ),
@@ -36,7 +38,7 @@ class CategoryBox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Roti Basah",
+                  category.name,
                   style: GoogleFonts.poppins(
                     fontSize: 14,
                     color: Colors.white,
