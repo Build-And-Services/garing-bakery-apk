@@ -12,11 +12,13 @@ class ProductProvider with ChangeNotifier {
   bool _isLoading = false;
   ProductAddResponse _responseAdd =
       ProductAddResponse(success: false, message: "");
+  ProductDelResponse _responseDel =
+      ProductDelResponse(success: false, message: '');
 
-  List<ProductModel> get products => _products.reversed.toList();
-
+  List<ProductModel> get products => _products;
   bool get eventLoadingStatus => _eventLoadingStatus;
   ProductAddResponse get responseAdd => _responseAdd;
+  ProductDelResponse get responseDel => _responseDel;
   bool get isLoading => _isLoading;
 
   set isProccess(bool loading) {
@@ -46,19 +48,21 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> delete(int id) async {
+  Future delete(int id) async {
     try {
-      _products.removeWhere((item) => item.id == id);
+      final response = await ProductService.delete(id);
+      _responseDel = response;
+      if (response.success) {
+        _products.removeWhere((item) => item.id == id);
+      }
       notifyListeners();
-      return true;
     } catch (e) {
-      return false;
+      log(e.toString());
     }
   }
 
   Future addProduct(Map<String, String> body, String image) async {
     try {
-      body["category_id"] = "1";
       final service = await ProductService.addImage(body, image);
       if (service.success) {
         _products.add(service.data as ProductModel);

@@ -59,4 +59,19 @@ class ProductService {
       rethrow;
     }
   }
+
+  static Future<ProductDelResponse> delete(int id) async {
+    try {
+      final response =
+          await http.delete(Uri.parse('${RemoteApi().PRODUCTS}/$id'));
+      final body = jsonDecode(response.body);
+      print(body);
+      return ProductDelResponse.fromJson(body);
+    } catch (e) {
+      return ProductDelResponse(
+        success: false,
+        message: "terjadi kesalahan di server",
+      );
+    }
+  }
 }

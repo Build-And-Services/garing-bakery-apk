@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/widgets/button_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/input_widget.dart';
+import 'package:garing_bakery_apk/features/category/presenter/provider/category_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/form_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:select_form_field/select_form_field.dart';
 
 class AddProductPage extends StatefulWidget {
   const AddProductPage({super.key});
@@ -32,6 +32,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    final product = context.watch<ProductProvider>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -47,8 +48,11 @@ class _AddProductPageState extends State<AddProductPage> {
           style: TextStyle(color: MyTheme.primary, fontWeight: FontWeight.w700),
         ),
       ),
-      body: Consumer2<ProductProvider, FormProductProvider>(
-        builder: (context, product, formProduct, child) {
+      body: Consumer2<FormProductProvider, CategoryProvider>(
+        builder: (context, formProduct, category, child) {
+          if (category.isLoading) {
+            category.getCategories();
+          }
           return Form(
             key: _formKey,
             child: Column(
@@ -76,7 +80,7 @@ class _AddProductPageState extends State<AddProductPage> {
                         sectionName(formProduct),
                         sectionMore(formProduct),
                         sectionPrice(formProduct),
-                        // sectionCategory(formProduct),
+                        sectionCategory(formProduct, category),
                       ],
                     ),
                   ),
@@ -100,14 +104,18 @@ class _AddProductPageState extends State<AddProductPage> {
                             ),
                           )
                         : const Center(
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
                           ),
                     tap: () async {
                       if (_formKey.currentState!.validate()) {
                         product.setLoading = true;
                         final image = formProduct.image;
+                        print(image);
                         if (image != null) {
                           product.isProccess = true;
+
                           await product.addProduct(
                               formProduct.body, image.path);
                           product.isProccess = false;
@@ -176,24 +184,67 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  Row sectionCategory(FormProductProvider formProduct) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Flexible(
-          child: InputWidget(
-            controller: formProduct.category,
-            validate: formProduct.validateSelect,
-            label: "kategori",
-            type: "select",
-            add: GestureDetector(
-              child: const Icon(
-                Icons.add,
-              ),
+  Container sectionCategory(
+      FormProductProvider formProduct, CategoryProvider category) {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        vertical: 20,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Kategori",
+            style: GoogleFonts.poppins(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
             ),
           ),
-        ),
-      ],
+          const SizedBox(
+            height: 5,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: SelectFormField(
+                  controller: formProduct.category,
+                  validator: formProduct.validateSelect,
+                  type: SelectFormFieldType.dialog,
+                  labelText: 'kategori',
+                  changeIcon: true,
+                  dialogTitle: 'pilih kategori',
+                  dialogCancelBtn: 'CANCEL',
+                  enableSearch: true,
+                  dialogSearchHint: 'Search item',
+                  items: category.items,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          50,
+                        ),
+                      ),
+                      borderSide: BorderSide(
+                        color: MyTheme.primary,
+                        width: 1,
+                        style: BorderStyle.solid,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 15,
+                    ),
+                    suffixIcon: Icon(
+                      Icons.arrow_drop_down,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

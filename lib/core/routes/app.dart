@@ -39,7 +39,7 @@ class Routes {
             type: PageTransitionType.bottomToTop);
       case Routes.ADD_PRODUCT:
         return PageTransition(
-            child: AddProductPage(),
+            child: const AddProductPage(),
             type: PageTransitionType.rightToLeftWithFade);
       default:
         return PageTransition(

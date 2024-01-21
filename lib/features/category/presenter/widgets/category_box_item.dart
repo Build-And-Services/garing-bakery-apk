@@ -29,7 +29,7 @@ class CategoryBoxItem extends StatelessWidget {
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: MyTheme.primary,
+                color: const Color.fromARGB(255, 195, 148, 131),
               ),
             ),
           ),

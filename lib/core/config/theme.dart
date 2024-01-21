@@ -10,10 +10,6 @@ class MyTheme {
 
   static AppBar appBar(String title, List<Widget>? action) {
     return AppBar(
-      // leading: IconButton(
-      //   icon: const Icon(Icons.format_align_left_outlined),
-      //   onPressed: () => Scaffold.of(context).openDrawer(),
-      // ),
       title: Text(
         title,
         style: const TextStyle(
@@ -31,7 +27,7 @@ class MyTheme {
       context: context,
       type: QuickAlertType.success,
       text: message,
-      autoCloseDuration: const Duration(seconds: 2),
+      autoCloseDuration: const Duration(seconds: 1),
       showConfirmBtn: false,
     );
   }

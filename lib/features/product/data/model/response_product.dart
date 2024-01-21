@@ -30,3 +30,33 @@ class ProductAddResponse {
         "data": data ?? data?.toJson(),
       };
 }
+
+class ProductDelResponse {
+  final bool success;
+  final String message;
+  final ProductModel? data;
+
+  ProductDelResponse({
+    required this.success,
+    required this.message,
+    this.data,
+  });
+
+  factory ProductDelResponse.fromRawJson(String str) =>
+      ProductDelResponse.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory ProductDelResponse.fromJson(Map<String, dynamic> json) =>
+      ProductDelResponse(
+        success: json["success"],
+        message: json["message"],
+        data: json["data"] == null ? null : ProductModel.fromJson(json["data"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "success": success,
+        "message": message,
+        "data": data?.toJson(),
+      };
+}
