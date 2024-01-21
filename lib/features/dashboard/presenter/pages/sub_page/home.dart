@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
-import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/provider/dashboard_provider.dart';
 import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/widgets/category_box_widget.dart';
