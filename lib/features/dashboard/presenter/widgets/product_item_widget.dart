@@ -1,10 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:garing_bakery_apk/core/models/products_model.dart';
+import 'package:garing_bakery_apk/core/widgets/shimmer/wrapper_shimmer_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class ProductCardItem extends StatelessWidget {
-  const ProductCardItem({
-    super.key,
-  });
+  ProductModel product;
+  ProductCardItem({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +23,35 @@ class ProductCardItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: double.infinity,
-            height: 150,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-              image: DecorationImage(
-                image: AssetImage('assets/product.jpg'),
-                fit: BoxFit.cover,
+          CachedNetworkImage(
+            imageUrl: product.image,
+            placeholder: (context, url) => WrapperShimmer(
+              child: Container(
+                width: double.infinity,
+                height: 150,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
               ),
             ),
+            imageBuilder: (context, imageProvider) {
+              return Container(
+                width: double.infinity,
+                height: 150,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              );
+            },
           ),
           Expanded(
             child: Padding(
@@ -41,19 +64,27 @@ class ProductCardItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        children: [
-                          Text(
-                            "Product 1",
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w600,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              product.name,
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
-                          ),
-                          const Text("Roti Basah"),
-                        ],
+                            Text(product.category),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 30,
                       ),
                       Text(
-                        "200",
+                        "${product.quantity}",
                         style: GoogleFonts.poppins(
                           fontSize: 12,
                           color: const Color.fromARGB(255, 32, 138, 35),
@@ -62,11 +93,11 @@ class ProductCardItem extends StatelessWidget {
                       )
                     ],
                   ),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("harga: "),
-                      Text("Rp. 10.000"),
+                      const Text("harga: "),
+                      Text("Rp. ${product.sellingPrice}"),
                     ],
                   ),
                 ],

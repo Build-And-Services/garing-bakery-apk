@@ -1,22 +1,22 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:garing_bakery_apk/core/config/remote.dart';
-import 'package:garing_bakery_apk/core/models/products_model.dart';
+import 'package:garing_bakery_apk/features/dashboard/data/model/dashboard_model.dart';
 import 'package:http/http.dart' as http;
 
 class DashboardService {
-  static Future<List<ProductModel>> allProducts() async {
-    List<ProductModel> products = [];
+  static Future<DashboardModel> getDashboard() async {
+    // Map<String, dynamic> dashboard = {};
     try {
-      final result = await http.get(Uri.parse(RemoteApi().PRODUCTS));
+      final result = await http.get(Uri.parse(RemoteApi().DASHBOARD));
       if (result.statusCode == 200) {
-        List data = jsonDecode(result.body)["data"];
-        products = data.map((e) => ProductModel.fromJson(e)).toList();
-        return products;
+        Map<String, dynamic> data = jsonDecode(result.body);
+        return DashboardModel.fromJson(data);
       }
-      return products;
+      return DashboardModel.fromJson({});
     } catch (e) {
-      return products;
+      rethrow;
     }
   }
 }

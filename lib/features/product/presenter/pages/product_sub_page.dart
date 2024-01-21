@@ -7,6 +7,8 @@ import 'package:garing_bakery_apk/features/product/presenter/widgets/product_wid
 import 'package:garing_bakery_apk/features/product/presenter/widgets/shimmer_loading.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class ProductSubPage extends StatelessWidget {
   const ProductSubPage({super.key});
@@ -68,25 +70,6 @@ class ProductSubPage extends StatelessWidget {
     );
   }
 
-  FutureBuilder<dynamic> _buildFutureProduct(
-      ProductProvider productProvider, BuildContext context) {
-    return FutureBuilder(
-      future: productProvider.getProduct(),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const ShimmerLoading();
-        }
-
-        return Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-          ),
-          child: _builderGridview(productProvider, context),
-        );
-      },
-    );
-  }
-
   GridView _builderGridview(
       ProductProvider productProvider, BuildContext context) {
     return GridView.builder(
@@ -100,11 +83,33 @@ class ProductSubPage extends StatelessWidget {
         crossAxisSpacing: 10.0,
       ),
       itemCount: productProvider.products.length,
+      // itemCount: productProvider.products.length,
       itemBuilder: (context, index) {
         final product = productProvider.products[index];
         // final product = product.products[index];
         return ProductCardItem(
           product: product,
+          tap: () => {
+            QuickAlert.show(
+              onCancelBtnTap: () {
+                Navigator.pop(context);
+              },
+              onConfirmBtnTap: () {
+                productProvider.delete(product.id).then((value) {
+                  Navigator.pop(context);
+                }).catchError((onError) {
+                  Navigator.pop(context);
+                  MyTheme.alertError(context, "Gagal menghapus data");
+                });
+              },
+              context: context,
+              confirmBtnColor: Colors.red,
+              type: QuickAlertType.confirm,
+              text: 'apakah anda akan menghapus barang ini',
+              confirmBtnText: 'Hapus',
+              cancelBtnText: 'Tidak jadi',
+            )
+          },
         );
       },
     );
