@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
+import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/provider/dashboard_provider.dart';
-import 'package:garing_bakery_apk/features/dashboard/presenter/widgets/category_box_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/widgets/product_item_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,9 +15,6 @@ class HomeSubPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final dashboardProvider = context.read<DashboardProvider>();
     dashboardProvider.getDataDashboard();
-    // print(dashboardProvider.dashboardData.data?.products.length);
-    print(dashboardProvider.sucess);
-    // final productProvider = context.read<ProductProvider>();
     return Scaffold(
       drawer: const DrawerPage(),
       appBar: AppBar(
@@ -43,15 +40,14 @@ class HomeSubPage extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          // Expanded(
-          _builderGridProduct(dashboardProvider,context),
-          // ),
+          _builderGridProduct(dashboardProvider, context),
         ],
       ),
     );
   }
 
-  Container _builderGridProduct(DashboardProvider dashboardProvider ,BuildContext context) {
+  Container _builderGridProduct(
+      DashboardProvider dashboardProvider, BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -66,9 +62,12 @@ class HomeSubPage extends StatelessWidget {
           mainAxisSpacing: 20.0,
           crossAxisSpacing: 10.0,
         ),
+        itemCount: dashboardProvider.dashboardData.data?.products.length,
         itemBuilder: (context, index) {
           final product = dashboardProvider.dashboardData.data?.products[index];
-          return ProductCardItem(product: product)
+          return ProductCardItem(
+            product: product!,
+          );
         },
       ),
     );
