@@ -1,16 +1,39 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
+import 'package:garing_bakery_apk/core/models/user_model.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileSubPage extends StatelessWidget {
+class ProfileSubPage extends StatefulWidget {
   const ProfileSubPage({super.key});
+
+  @override
+  State<ProfileSubPage> createState() => _ProfileSubPageState();
+}
+
+class _ProfileSubPageState extends State<ProfileSubPage> {
+  UserModel? user;
+  Future getStringValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+    String? userCache = prefs.getString('user');
+    return userCache;
+  }
+
+  @override
+  void initState() {
+    getStringValuesSF();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    print(user.toString());
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
