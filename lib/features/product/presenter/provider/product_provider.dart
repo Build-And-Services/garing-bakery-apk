@@ -65,7 +65,7 @@ class ProductProvider with ChangeNotifier {
     try {
       final service = await ProductService.addImage(body, image);
       if (service.success) {
-        _products.add(service.data as ProductModel);
+        _products.insert(0, service.data as ProductModel);
       }
       _responseAdd = service;
       notifyListeners();

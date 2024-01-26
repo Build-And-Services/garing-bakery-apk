@@ -45,25 +45,30 @@ class ProductSubPage extends StatelessWidget {
               ),
             ],
           ),
-          body: ListView(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              const SearchWidget(),
-              const SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2.0),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                  ),
-                  child: _builderGridview(productProvider, context),
+          body: RefreshIndicator(
+            onRefresh: () async {
+              productProvider.setLoading = true;
+            },
+            child: ListView(
+              children: [
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-            ],
+                const SearchWidget(),
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    child: _builderGridview(productProvider, context),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

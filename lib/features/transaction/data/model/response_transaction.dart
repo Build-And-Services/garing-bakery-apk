@@ -5,7 +5,7 @@ import 'package:garing_bakery_apk/core/models/products_model.dart';
 class RespTransactionModel {
   final int id;
   final int nominal;
-  final int userId;
+  final String userId;
   final int totalPembelian;
   final List<dynamic> orderItems;
 

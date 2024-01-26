@@ -42,12 +42,12 @@ class HomeSubPage extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          _carouselCategory(dashboardProvider),
+          // _carouselCategory(dashboardProvider),
           _textTitle("Semua Barang"),
           const SizedBox(
             height: 20,
           ),
-          _builderGridProduct(dashboardProvider, context),
+          // _builderGridProduct(dashboardProvider, context),
         ],
       ),
     );

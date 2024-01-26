@@ -51,6 +51,7 @@ class CategorySubPage extends StatelessWidget {
                   itemCount: category.categories.length,
                   itemBuilder: (context, index) {
                     return CategoryBoxItem(
+                      id: category.categories[index].id,
                       image: category.categories[index].image,
                       name: category.categories[index].name,
                     );

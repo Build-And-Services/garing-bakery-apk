@@ -1,15 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:garing_bakery_apk/features/category/presenter/provider/category_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class CategoryBoxItem extends StatelessWidget {
   String image;
   String name;
+  int id;
   CategoryBoxItem({
     Key? key,
     required this.image,
     required this.name,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -38,6 +42,19 @@ class CategoryBoxItem extends StatelessWidget {
                   color: const Color.fromARGB(135, 0, 0, 0),
                 ),
               ),
+              Positioned(
+                right: 5,
+                top: 5,
+                child: InkWell(
+                  onTap: () =>
+                      Provider.of<CategoryProvider>(context, listen: false)
+                          .delete(id),
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -50,13 +67,6 @@ class CategoryBoxItem extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    // Text(
-                    //   "2 produk",
-                    //   style: GoogleFonts.poppins(
-                    //     color: Colors.white,
-                    //     fontSize: 12,
-                    //   ),
-                    // )
                   ],
                 ),
               ),

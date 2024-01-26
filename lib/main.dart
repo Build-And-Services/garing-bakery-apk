@@ -3,6 +3,7 @@ import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
 import 'package:garing_bakery_apk/features/category/presenter/provider/category_provider.dart';
+import 'package:garing_bakery_apk/features/category/presenter/provider/form_category_provider.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/provider/dashboard_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/form_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
@@ -38,6 +39,9 @@ void selectInitialRoute() async {
         ),
         ChangeNotifierProvider(
           create: (_) => FormProductProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => FormCategoryProvider(),
         )
       ],
       child: MaterialApp(

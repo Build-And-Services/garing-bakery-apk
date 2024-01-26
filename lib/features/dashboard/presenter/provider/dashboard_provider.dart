@@ -20,9 +20,11 @@ class DashboardProvider with ChangeNotifier {
       DashboardModel data = await DashboardService.getDashboard();
       setDashboard = data;
       _loading = false;
+      notifyListeners();
       return;
     } catch (e) {
-      log(e.toString());
+      _loading = false;
+      notifyListeners();
       return;
     }
   }

@@ -52,7 +52,7 @@ class Routes {
       case Routes.TRANSACTIONS_SHOW:
         return PageTransition(
           child: const TransactionShowPage(),
-          type: PageTransitionType.bottomToTop,
+          type: PageTransitionType.rightToLeft,
         );
       case Routes.ADD_PRODUCT:
         return PageTransition(

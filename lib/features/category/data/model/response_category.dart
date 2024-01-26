@@ -61,3 +61,29 @@ class CategoryAddResponse {
         "data": {},
       };
 }
+
+class CategoryDelResponse {
+  final bool success;
+  final String message;
+
+  CategoryDelResponse({
+    required this.success,
+    required this.message,
+  });
+
+  factory CategoryDelResponse.fromRawJson(String str) =>
+      CategoryDelResponse.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory CategoryDelResponse.fromJson(Map<String, dynamic> json) =>
+      CategoryDelResponse(
+        success: json["success"],
+        message: json["message"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "success": success,
+        "message": message,
+      };
+}

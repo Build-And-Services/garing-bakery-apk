@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:garing_bakery_apk/core/config/remote.dart';
 import 'package:garing_bakery_apk/core/models/catgory_model.dart';
@@ -53,6 +54,18 @@ class CategoryService {
       return result;
     } catch (e) {
       return CategoryAddResponse(success: false, message: e.toString());
+    }
+  }
+
+  static Future<CategoryDelResponse> deleteCategory(int id) async {
+    try {
+      final result =
+          await http.delete(Uri.parse("${RemoteApi().CATEGORIES}/$id"));
+      final dataDecode = jsonDecode(result.body);
+      return CategoryDelResponse.fromJson(dataDecode);
+    } catch (e) {
+      print(e.toString());
+      rethrow;
     }
   }
 }
