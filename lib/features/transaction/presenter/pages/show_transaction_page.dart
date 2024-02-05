@@ -7,7 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class TransactionShowPage extends StatefulWidget {
-  const TransactionShowPage({super.key});
+  final String filter;
+  const TransactionShowPage({super.key, required this.filter});
 
   @override
   State<TransactionShowPage> createState() => _TransactionShowPageState();
@@ -15,24 +16,19 @@ class TransactionShowPage extends StatefulWidget {
 
 class _TransactionShowPageState extends State<TransactionShowPage> {
   var transactionProvider = TransactionProvider();
-  @override
-  void initState() {
-    transactionProvider =
-        Provider.of<TransactionProvider>(context, listen: false);
-    transactionProvider.getTransaction();
-    setState(() {});
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    // final transactionProvider = context.watch<TransactionProvider>();
-    // if (transactionProvider.isLoading) {
-    //   transactionProvider.getTransaction();
-    //   return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    // }
+    final transactionProvider = context.read<TransactionProvider>();
+    transactionProvider.getTransaction(widget.filter);
     return Scaffold(
-      appBar: MyTheme.appBar("Riwayat Hari ini", []),
+      appBar: widget.filter == 'all'
+          ? MyTheme.appBar("Riwayat Semua Transaksi", [])
+          : widget.filter == "month"
+              ? MyTheme.appBar("Riwayat Transaksi Bulan ini", [])
+              : widget.filter == "year"
+                  ? MyTheme.appBar("Riwayat Transaksi Tahun ini", [])
+                  : MyTheme.appBar("Riwayat Transaksi Hari ini", []),
       body: RefreshIndicator(
         onRefresh: () async {
           transactionProvider.setLoading = true;
@@ -44,10 +40,21 @@ class _TransactionShowPageState extends State<TransactionShowPage> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: transactionProvider.transactions.length,
+                itemCount: widget.filter == 'all'
+                    ? transactionProvider.transactions.length
+                    : widget.filter == "month"
+                        ? transactionProvider.transactionsMonth.length
+                        : widget.filter == "year"
+                            ? transactionProvider.transactionsYear.length
+                            : transactionProvider.transactionsDay.length,
                 itemBuilder: (context, index) {
-                  RespTransactionModel transaction =
-                      transactionProvider.transactions[index];
+                  RespTransactionModel transaction = widget.filter == 'all'
+                      ? transactionProvider.transactions[index]
+                      : widget.filter == "month"
+                          ? transactionProvider.transactionsMonth[index]
+                          : widget.filter == "year"
+                              ? transactionProvider.transactionsYear[index]
+                              : transactionProvider.transactionsDay[index];
                   return ListTile(
                     leading: const Icon(Icons.person),
                     title: Text(
@@ -58,7 +65,7 @@ class _TransactionShowPageState extends State<TransactionShowPage> {
                       ),
                     ),
                     subtitle: Text(
-                      "Jumlah Barang: ${transaction.orderItems.length}",
+                      "Jumlah Barang: ${transaction.productLength}",
                       style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,

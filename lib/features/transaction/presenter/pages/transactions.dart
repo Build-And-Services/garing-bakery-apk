@@ -18,9 +18,22 @@ class CartSubPage extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: const Column(
           children: [
-            HistoryTransactionFilter(),
-            HistoryTransactionFilter(),
-            HistoryTransactionFilter(),
+            HistoryTransactionFilter(
+              title: 'Riwayat Transaksi hari ini',
+              filter: 'day',
+            ),
+            HistoryTransactionFilter(
+              title: 'Riwayat Transaksi bulan ini',
+              filter: 'month',
+            ),
+            HistoryTransactionFilter(
+              title: 'Riwayat Transaksi tahun ini',
+              filter: 'year',
+            ),
+            HistoryTransactionFilter(
+              title: 'Riwayat Transaksi semua',
+              filter: 'all',
+            ),
           ],
         ),
       ),
@@ -29,14 +42,21 @@ class CartSubPage extends StatelessWidget {
 }
 
 class HistoryTransactionFilter extends StatelessWidget {
+  final String title;
+  final String filter;
   const HistoryTransactionFilter({
-    super.key,
-  });
+    Key? key,
+    required this.title,
+    required this.filter,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.of(context).pushNamed(Routes.TRANSACTIONS_SHOW),
+      onTap: () => Navigator.of(context).pushNamed(
+        Routes.TRANSACTIONS_SHOW,
+        arguments: filter,
+      ),
       child: Container(
         margin: const EdgeInsets.only(
           bottom: 10,
@@ -61,7 +81,7 @@ class HistoryTransactionFilter extends StatelessWidget {
             Icons.date_range,
             color: MyTheme.primary,
           ),
-          title: const Text("Riwayat transaksi untuk hari ini"),
+          title: Text(title),
         ),
       ),
     );

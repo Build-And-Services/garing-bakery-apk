@@ -44,14 +44,15 @@ class CategoryBox extends StatelessWidget {
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                   ),
+                  textAlign: TextAlign.center,
                 ),
-                Text(
-                  "2 produk",
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 10,
-                  ),
-                )
+                // Text(
+                //   "2 produk",
+                //   style: GoogleFonts.poppins(
+                //     color: Colors.white,
+                //     fontSize: 10,
+                //   ),
+                // )
               ],
             ),
           ),

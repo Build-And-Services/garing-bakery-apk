@@ -76,7 +76,11 @@ class ProductCardItem extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
-                            Text(product.category),
+                            Text(
+                              product.category ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ],
                         ),
                       ),

@@ -112,7 +112,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       if (_formKey.currentState!.validate()) {
                         product.setLoading = true;
                         final image = formProduct.image;
-                        print(image);
+
                         if (image != null) {
                           product.isProccess = true;
 

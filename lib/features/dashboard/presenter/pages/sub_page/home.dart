@@ -34,21 +34,33 @@ class HomeSubPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: MyTheme.primary,
       ),
-      body: ListView(
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _headerHome(),
-          _textTitle("Semua Kategori"),
-          const SizedBox(
-            height: 20,
-          ),
-          // _carouselCategory(dashboardProvider),
-          _textTitle("Semua Barang"),
-          const SizedBox(
-            height: 20,
-          ),
-          // _builderGridProduct(dashboardProvider, context),
-        ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          dashboardProvider.setLoading = true;
+        },
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _headerHome(),
+            _textTitle("Semua Kategori"),
+            const SizedBox(
+              height: 20,
+            ),
+            dashboardProvider.dashboardData.data!.categories.isEmpty
+                ? Container(
+                    padding: EdgeInsets.all(
+                      20,
+                    ),
+                    child: const Text('category not found'),
+                  )
+                : _carouselCategory(dashboardProvider),
+            _textTitle("Semua Barang"),
+            const SizedBox(
+              height: 20,
+            ),
+            _builderGridProduct(dashboardProvider, context),
+          ],
+        ),
       ),
     );
   }
@@ -72,8 +84,13 @@ class HomeSubPage extends StatelessWidget {
         itemCount: dashboardProvider.dashboardData.data?.products.length,
         itemBuilder: (context, index) {
           final product = dashboardProvider.dashboardData.data?.products[index];
+          if (product == null) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return ProductCardItem(
-            product: product!,
+            product: product,
           );
         },
       ),
@@ -86,6 +103,7 @@ class HomeSubPage extends StatelessWidget {
       itemBuilder: (context, index, realIndex) {
         final category =
             dashboardProvider.dashboardData.data?.categories[index];
+
         return CategoryBox(
           category: category!,
         );

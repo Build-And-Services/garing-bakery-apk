@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/models/user_model.dart';
+import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileSubPage extends StatefulWidget {
   const ProfileSubPage({super.key});
@@ -17,10 +16,10 @@ class ProfileSubPage extends StatefulWidget {
 class _ProfileSubPageState extends State<ProfileSubPage> {
   UserModel? user;
   Future getStringValuesSF() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //Return String
-    String? userCache = prefs.getString('user');
-    return userCache;
+    UserModel userCache = await TokenService.getCacheUser();
+    setState(() {
+      user = userCache;
+    });
   }
 
   @override
@@ -33,13 +32,19 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    print(user.toString());
+    if (user == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
         child: Column(
           children: [
-            _headerProfile(width, height),
+            _headerProfile(width, height, user!),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.zero,
@@ -47,12 +52,12 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
                   _tileInformation(
                     Icons.email,
                     "Email",
-                    "herisetyawan233@gmail.com",
+                    user!.email,
                   ),
                   _tileInformation(
                     Icons.person,
                     "Role",
-                    "chasier store",
+                    "${user!.email} store",
                   ),
                   _tileInformation(
                     Icons.email,
@@ -148,7 +153,7 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
     );
   }
 
-  Container _headerProfile(double width, double height) {
+  Container _headerProfile(double width, double height, UserModel user) {
     return Container(
       width: width,
       height: height * 4.5 / 10,
@@ -176,7 +181,7 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
                     height: 20,
                   ),
                   Text(
-                    "Heri Setyawan",
+                    user.name,
                     style: GoogleFonts.poppins(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
@@ -186,7 +191,7 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
                     maxLines: 1,
                   ),
                   Text(
-                    "cahsier store",
+                    "${user.role} store",
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.w400,

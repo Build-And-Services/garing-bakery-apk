@@ -22,6 +22,11 @@ class CategoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  set setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
+
   Future getCategories() async {
     try {
       _categories = await CategoryService.getCategory();
@@ -57,9 +62,11 @@ class CategoryProvider with ChangeNotifier {
 
   Future delete(int id) async {
     try {
-      final response = await CategoryService.deleteCategory(id);
-      // _categories =
-      // _categories.removeWhere((item) => item.id == id);
-    } catch (e) {}
+      await CategoryService.deleteCategory(id);
+      _categories.removeWhere((item) => item.id == id);
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
   }
 }

@@ -6,8 +6,8 @@ class UserModel {
   final String email;
   final String image;
   final String role;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   UserModel({
     required this.id,
@@ -15,8 +15,8 @@ class UserModel {
     required this.email,
     required this.image,
     required this.role,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory UserModel.fromRawJson(String str) =>
@@ -40,7 +40,7 @@ class UserModel {
         "email": email,
         "image": image,
         "role": role,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
       };
 }

@@ -50,8 +50,11 @@ class Routes {
           type: PageTransitionType.bottomToTop,
         );
       case Routes.TRANSACTIONS_SHOW:
+        final filter = settings.arguments as String;
         return PageTransition(
-          child: const TransactionShowPage(),
+          child: TransactionShowPage(
+            filter: filter,
+          ),
           type: PageTransitionType.rightToLeft,
         );
       case Routes.ADD_PRODUCT:
@@ -76,7 +79,9 @@ class Routes {
         );
       default:
         return PageTransition(
-            child: const DashboardPage(), type: PageTransitionType.fade);
+          child: const DashboardPage(),
+          type: PageTransitionType.fade,
+        );
     }
   }
 }

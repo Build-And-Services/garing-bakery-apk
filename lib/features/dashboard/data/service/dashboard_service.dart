@@ -12,7 +12,6 @@ class DashboardService {
       final result = await http.get(Uri.parse(RemoteApi().DASHBOARD));
       if (result.statusCode == 200) {
         Map<String, dynamic> data = jsonDecode(result.body);
-        print(data);
         return DashboardModel.fromJson(data);
       }
       return DashboardModel.fromJson({});

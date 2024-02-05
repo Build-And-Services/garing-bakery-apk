@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:garing_bakery_apk/core/models/user_model.dart';
+import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
 import 'package:garing_bakery_apk/features/dashboard/data/model/dashboard_model.dart';
 import 'package:garing_bakery_apk/features/dashboard/data/service/dashboard_service.dart';
-import 'dart:developer';
 
 class DashboardProvider with ChangeNotifier {
   DashboardModel _dashboardData = DashboardModel(success: false, message: '');
@@ -9,6 +10,11 @@ class DashboardProvider with ChangeNotifier {
 
   DashboardModel get dashboardData => _dashboardData;
   bool get loading => _loading;
+
+  set setLoading(bool loading) {
+    _loading = loading;
+    notifyListeners();
+  }
 
   set setDashboard(DashboardModel dashboardData) {
     _dashboardData = dashboardData;

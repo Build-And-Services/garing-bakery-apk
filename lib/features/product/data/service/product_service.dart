@@ -12,7 +12,6 @@ class ProductService {
       if (result.statusCode == 200) {
         List data = jsonDecode(result.body)["data"];
         products = data.map((e) => ProductModel.fromJson(e)).toList();
-        print(data);
         return products;
       }
       return products;
@@ -67,7 +66,6 @@ class ProductService {
       final response =
           await http.delete(Uri.parse('${RemoteApi().PRODUCTS}/$id'));
       final body = jsonDecode(response.body);
-      print(body);
       return ProductDelResponse.fromJson(body);
     } catch (e) {
       return ProductDelResponse(

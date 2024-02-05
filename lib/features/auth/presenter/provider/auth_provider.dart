@@ -37,8 +37,8 @@ class AuthProvider with ChangeNotifier {
     try {
       AuthModel result = await AuthService.login(_email.text, _password.text);
       if (result.message == 'success login') {
-        await TokenService.saveData("${result.tokenType} ${result.accessToken}",
-            result.data!.toJson().toString());
+        await TokenService.saveData(
+            "${result.tokenType} ${result.accessToken}", result.data!);
         _isLogin = true;
         _message = result.message;
         notifyListeners();

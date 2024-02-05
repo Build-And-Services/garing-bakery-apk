@@ -59,6 +59,7 @@ class CategoryService {
 
   static Future<CategoryDelResponse> deleteCategory(int id) async {
     try {
+      // print(id);
       final result =
           await http.delete(Uri.parse("${RemoteApi().CATEGORIES}/$id"));
       final dataDecode = jsonDecode(result.body);

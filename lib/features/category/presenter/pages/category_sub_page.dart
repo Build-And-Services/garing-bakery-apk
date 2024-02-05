@@ -13,6 +13,37 @@ class CategorySubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CategoryProvider category = context.watch<CategoryProvider>();
+    if (category.isLoading) {
+      category.getCategories();
+      return Scaffold(
+        drawer: const DrawerPage(),
+        appBar: MyTheme.appBar("Kategori", [
+          GestureDetector(
+            onTap: () => Navigator.of(context).pushNamed(Routes.ADD_CATEGORY),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+        ]),
+        body: ListView(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            const SearchWidget(),
+            Container(
+              margin: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
+              child: const CategoryShimmerPage(),
+            ),
+          ],
+        ),
+      );
+    }
     return Scaffold(
       drawer: const DrawerPage(),
       appBar: MyTheme.appBar("Kategori", [
@@ -24,43 +55,40 @@ class CategorySubPage extends StatelessWidget {
           width: 20,
         ),
       ]),
-      body: ListView(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          const SearchWidget(),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          category.setLoading = true;
+        },
+        child: ListView(
+          children: [
+            const SizedBox(
+              height: 20,
             ),
-            child: Consumer<CategoryProvider>(
-              builder: (context, category, child) {
-                if (category.isLoading) {
-                  category.getCategories();
-                  return const CategoryShimmerPage();
-                }
-                return GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1,
-                  ),
-                  itemCount: category.categories.length,
-                  itemBuilder: (context, index) {
-                    return CategoryBoxItem(
-                      id: category.categories[index].id,
-                      image: category.categories[index].image,
-                      name: category.categories[index].name,
-                    );
-                  },
-                );
-              },
+            const SearchWidget(),
+            Container(
+              margin: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
+              child: GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1,
+                ),
+                itemCount: category.categories.length,
+                itemBuilder: (context, index) {
+                  return CategoryBoxItem(
+                    id: category.categories[index].id,
+                    image: category.categories[index].image,
+                    name: category.categories[index].name,
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

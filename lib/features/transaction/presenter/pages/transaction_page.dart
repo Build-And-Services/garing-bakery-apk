@@ -283,9 +283,7 @@ class ButtonCheckout extends StatelessWidget {
       width: MediaQuery.of(context).size.width - 20,
       height: MediaQuery.of(context).size.height / 12,
       child: InkWell(
-        onTap: () {
-          debugPrint("hallo");
-        },
+        onTap: () {},
         child: Container(
           decoration: const BoxDecoration(
             color: MyTheme.primary,
