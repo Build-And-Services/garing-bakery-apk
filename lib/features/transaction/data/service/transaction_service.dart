@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:garing_bakery_apk/core/config/remote.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/response_transaction.dart';
 import 'package:http/http.dart' as http;
