@@ -7,7 +7,9 @@ import 'package:garing_bakery_apk/features/dashboard/presenter/pages/dashboard_p
 import 'package:garing_bakery_apk/features/product/presenter/pages/add_product_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_sales_page.dart';
-import 'package:garing_bakery_apk/features/transaction/presenter/pages/show_transaction_page.dart';
+import 'package:garing_bakery_apk/features/transaction/presenter/pages/next_transaction.dart';
+import 'package:garing_bakery_apk/features/transaction/presenter/pages/history/show_transaction_page.dart';
+import 'package:garing_bakery_apk/features/transaction/presenter/pages/success_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/transaction_page.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -17,6 +19,8 @@ class Routes {
   static const String DASHBOARD = '/dashboard';
   static const String TRANSACTIONS = '/transactions';
   static const String TRANSACTIONS_SHOW = '/transactions_show';
+  static const String TRANSACTIONS_NEXT = '/transactions_next';
+  static const String TRANSACTIONS_SUCCESS = '/transactions_success';
 
   // product
   static const String ADD_PRODUCT = '/add_product';
@@ -48,6 +52,16 @@ class Routes {
         return PageTransition(
           child: const TransactionPage(),
           type: PageTransitionType.bottomToTop,
+        );
+      case Routes.TRANSACTIONS_NEXT:
+        return PageTransition(
+          child: const NextTransaction(),
+          type: PageTransitionType.rightToLeft,
+        );
+      case Routes.TRANSACTIONS_SUCCESS:
+        return PageTransition(
+          child: const SuccessTransaction(),
+          type: PageTransitionType.fade,
         );
       case Routes.TRANSACTIONS_SHOW:
         final filter = settings.arguments as String;

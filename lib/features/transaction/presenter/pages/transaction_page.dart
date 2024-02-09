@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
+import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
+import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class TransactionPage extends StatelessWidget {
   const TransactionPage({super.key});
@@ -19,14 +23,49 @@ class TransactionPage extends StatelessWidget {
             Icons.arrow_back_ios,
             color: MyTheme.primary,
           ),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            final cartProvider = context.read<CartProvider>();
+            if (cartProvider.cartList.isNotEmpty) {
+              QuickAlert.show(
+                onCancelBtnTap: () {
+                  Navigator.pop(context);
+                },
+                onConfirmBtnTap: () {
+                  cartProvider.setCartList = [];
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                context: context,
+                type: QuickAlertType.confirm,
+                text: 'Apakah ingin membatalkan transaksi ?',
+                titleAlignment: TextAlign.right,
+                textAlignment: TextAlign.right,
+                confirmBtnText: 'Yes',
+                cancelBtnText: 'No',
+
+                confirmBtnColor: MyTheme.primary,
+                backgroundColor: MyTheme.white,
+                headerBackgroundColor: Colors.grey,
+                confirmBtnTextStyle: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+                // barrierColor: Colors.white,
+                titleColor: Colors.black,
+                textColor: Colors.black,
+              );
+            } else {
+              Navigator.of(context).pop();
+            }
+          },
         ),
         title: const Text(
           'Kasir',
           style: TextStyle(color: MyTheme.primary, fontWeight: FontWeight.w700),
         ),
       ),
-      body: Center(
+      body: Container(
+        color: Colors.white,
         child: Column(
           children: [
             Expanded(
@@ -59,35 +98,9 @@ class TransactionPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        product.name,
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        formatRupiah(product.sellingPrice),
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                                 CachedNetworkImage(
                                   imageUrl: product.image,
                                   progressIndicatorBuilder:
@@ -120,13 +133,42 @@ class TransactionPage extends StatelessWidget {
                                       ),
                                     );
                                   },
-                                )
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        product.name,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      Text(
+                                        "stock: ${product.quantity}",
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        formatRupiah(product.sellingPrice),
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                AddItemWidget(product: product)
                               ],
                             ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            const AddItemWidget()
                           ],
                         ),
                       );
@@ -143,44 +185,29 @@ class TransactionPage extends StatelessWidget {
   }
 }
 
-class AddItemWidget extends StatefulWidget {
-  const AddItemWidget({
+// ignore: must_be_immutable
+class AddItemWidget extends StatelessWidget {
+  ProductModel product;
+  AddItemWidget({
     super.key,
+    required this.product,
   });
 
   @override
-  State<AddItemWidget> createState() => _AddItemWidgetState();
-}
-
-class _AddItemWidgetState extends State<AddItemWidget> {
-  int count = 0;
-
-  addProduct() {
-    setState(() {
-      count++;
-    });
-  }
-
-  minusProduct() {
-    setState(() {
-      count--;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final cartProvider = context.watch<CartProvider>();
     return SizedBox(
       height: MediaQuery.of(context).size.height / 20,
       child: AnimatedSwitcher(
         duration: const Duration(
           milliseconds: 1100,
         ),
-        child: (count >= 1)
+        child: (cartProvider.isThereCart(product))
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   InkWell(
-                    onTap: minusProduct,
+                    onTap: () => cartProvider.minusCartProduct(product),
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
@@ -203,7 +230,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                     width: 20,
                   ),
                   Text(
-                    count.toString(),
+                    cartProvider.getCart(product).count.toString(),
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -214,7 +241,9 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                     width: 20,
                   ),
                   InkWell(
-                    onTap: addProduct,
+                    onTap: () {
+                      cartProvider.toggleCartProduct(product, 'increase');
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
@@ -236,7 +265,9 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                 ],
               )
             : InkWell(
-                onTap: addProduct,
+                onTap: () {
+                  cartProvider.toggleCartProduct(product, 'increase');
+                },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 15,
@@ -275,6 +306,7 @@ class ButtonCheckout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cardProvider = context.watch<CartProvider>();
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: 10,
@@ -283,7 +315,13 @@ class ButtonCheckout extends StatelessWidget {
       width: MediaQuery.of(context).size.width - 20,
       height: MediaQuery.of(context).size.height / 12,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          if (cardProvider.cartList.isNotEmpty) {
+            Navigator.pushNamed(context, Routes.TRANSACTIONS_NEXT);
+          } else {
+            MyTheme.alertWarning(context, "Pilih Menu terlebih dahulu");
+          }
+        },
         child: Container(
           decoration: const BoxDecoration(
             color: MyTheme.primary,
@@ -291,9 +329,11 @@ class ButtonCheckout extends StatelessWidget {
               Radius.circular(100),
             ),
           ),
-          child: const Center(
+          child: Center(
             child: Text(
-              "Silahkan pilih roti",
+              cardProvider.cartList.isNotEmpty
+                  ? "Lanjut Transaksi"
+                  : "Silahkan pilih roti",
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
