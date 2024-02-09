@@ -8,7 +8,7 @@ class SuccessTransaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const kembalian = 10000;
+    final cartProvider = context.read<CartProvider>();
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.symmetric(
@@ -20,7 +20,8 @@ class SuccessTransaction extends StatelessWidget {
         child: Column(
           children: [
             const SuccessBanner(),
-            const KembalianWidget(kembalian: kembalian),
+            KembalianWidget(
+                kembalian: cartProvider.getTotal - cartProvider.nominal),
             const SizedBox(
               height: 50,
             ),
@@ -51,8 +52,8 @@ class SuccessTransaction extends StatelessWidget {
                     title: "Back to Dashboard",
                     aksi: () {
                       print("jalan ga");
-                      final cartProvider = context.read<CartProvider>();
                       cartProvider.setCartList = [];
+                      cartProvider.setNominal = "C";
                       Navigator.popUntil(
                         context,
                         (route) => route.isFirst,
