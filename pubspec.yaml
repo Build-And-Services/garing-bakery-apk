@@ -47,6 +47,7 @@ dependencies:
   shimmer: ^3.0.0
   select_form_field: ^2.2.0
   quickalert: ^1.0.2
+  flutter_barcode_scanner: ^2.0.0
 
 dev_dependencies:
   flutter_test:

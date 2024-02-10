@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/widgets/button_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/input_widget.dart';
@@ -154,6 +156,17 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   Row sectionMore(FormProductProvider formProduct) {
+    Future scanBarcode() async {
+      String barcodeScanRes;
+      try {
+        barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+            '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+      } on PlatformException {
+        barcodeScanRes = 'Failed to get platform version.';
+      }
+      formProduct.code.text = barcodeScanRes;
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -174,8 +187,9 @@ class _AddProductPageState extends State<AddProductPage> {
             controller: formProduct.code,
             validate: formProduct.validateNumber,
             add: GestureDetector(
+              onTap: scanBarcode,
               child: const Icon(
-                Icons.add,
+                Icons.qr_code_scanner,
               ),
             ),
           ),
