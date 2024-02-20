@@ -8,6 +8,7 @@ class RespTransactionModel {
   final String userId;
   final int totalPembelian;
   final int productLength;
+  final String createdAt;
 
   RespTransactionModel({
     required this.id,
@@ -15,6 +16,7 @@ class RespTransactionModel {
     required this.userId,
     required this.totalPembelian,
     required this.productLength,
+    required this.createdAt,
   });
 
   factory RespTransactionModel.fromRawJson(String str) =>
@@ -29,7 +31,7 @@ class RespTransactionModel {
         userId: json["user_id"],
         totalPembelian: json["total_pembelian"],
         productLength: json["product_length"],
-        // orderItems: List<dynamic>.from(json["order_items"].map((x) => x)),
+        createdAt: json["created_at"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -38,6 +40,7 @@ class RespTransactionModel {
         "user_id": userId,
         "total_pembelian": totalPembelian,
         "product_lenth": productLength,
+        "created_at": createdAt,
         // "order_items": List<dynamic>.from(orderItems.map((x) => x)),
       };
 }

@@ -15,6 +15,7 @@ class TransactionPage extends StatelessWidget {
   const TransactionPage({super.key});
   @override
   Widget build(BuildContext context) {
+    final cartProvider = context.read<CartProvider>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -69,109 +70,26 @@ class TransactionPage extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: Consumer<ProductProvider>(
-                builder: (context, productProvider, child) {
-                  if (productProvider.eventLoadingStatus) {
-                    productProvider.getProduct();
+              child: FutureBuilder<List<ProductModel>>(
+                future: cartProvider.getProduct(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
+
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: Text("Tidak punya produk"),
+                    );
+                  }
+
                   return ListView.builder(
-                    itemCount: productProvider.products.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      ProductModel product = productProvider.products[index];
-                      return Container(
-                        margin: const EdgeInsets.only(
-                          left: 20,
-                          right: 20,
-                        ),
-                        padding: const EdgeInsets.all(10),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
-                          border: Border.symmetric(
-                            horizontal: BorderSide(
-                              color: Color.fromARGB(255, 169, 169, 169),
-                              width: 0.3,
-                              style: BorderStyle.solid,
-                            ),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                CachedNetworkImage(
-                                  imageUrl: product.image,
-                                  progressIndicatorBuilder:
-                                      (context, url, progress) {
-                                    return Container(
-                                      width: 80,
-                                      height: 80,
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                      ),
-                                      child: CircularProgressIndicator(
-                                          value: progress.progress,
-                                          color: MyTheme.primary),
-                                    );
-                                  },
-                                  imageBuilder: (context, imageProvider) {
-                                    return Container(
-                                      width: 80,
-                                      height: 80,
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        product.name,
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      Text(
-                                        "stock: ${product.quantity}",
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        formatRupiah(product.sellingPrice),
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                AddItemWidget(product: product)
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
+                      // ProductModel product = snapshot.data![index];
+                      return ProductCartWidget(index: index);
                     },
                   );
                 },
@@ -180,6 +98,117 @@ class TransactionPage extends StatelessWidget {
             const ButtonCheckout(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ProductCartWidget extends StatelessWidget {
+  const ProductCartWidget({
+    super.key,
+    required this.index,
+  });
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final cartProvider = context.read<CartProvider>();
+    return Container(
+      margin: const EdgeInsets.only(
+        left: 20,
+        right: 20,
+      ),
+      padding: const EdgeInsets.all(10),
+      width: MediaQuery.of(context).size.width,
+      decoration: const BoxDecoration(
+        border: Border.symmetric(
+          horizontal: BorderSide(
+            color: Color.fromARGB(255, 169, 169, 169),
+            width: 0.3,
+            style: BorderStyle.solid,
+          ),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CachedNetworkImage(
+                imageUrl: cartProvider.products[index].image,
+                progressIndicatorBuilder: (context, url, progress) {
+                  return Container(
+                    width: 80,
+                    height: 80,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    child: CircularProgressIndicator(
+                      value: progress.progress,
+                      color: MyTheme.primary,
+                    ),
+                  );
+                },
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      cartProvider.products[index].name,
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      "stock: ${cartProvider.products[index].quantity}",
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      formatRupiah(cartProvider.products[index].sellingPrice),
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              AddItemWidget(product: cartProvider.products[index])
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -242,7 +271,7 @@ class AddItemWidget extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      cartProvider.toggleCartProduct(product, 'increase');
+                      cartProvider.toggleCartProduct(product, context);
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -266,7 +295,7 @@ class AddItemWidget extends StatelessWidget {
               )
             : InkWell(
                 onTap: () {
-                  cartProvider.toggleCartProduct(product, 'increase');
+                  cartProvider.toggleCartProduct(product, context);
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -334,7 +363,7 @@ class ButtonCheckout extends StatelessWidget {
               cardProvider.cartList.isNotEmpty
                   ? "Lanjut Transaksi"
                   : "Silahkan pilih roti",
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
                 fontSize: 18,

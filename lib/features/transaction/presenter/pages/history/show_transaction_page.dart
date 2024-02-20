@@ -65,18 +65,28 @@ class _TransactionShowPageState extends State<TransactionShowPage> {
                             ),
                           ),
                           subtitle: Text(
-                            "Jumlah Barang: ${transaction.productLength}",
+                            "Jumlah: ${transaction.productLength}",
                             style: GoogleFonts.poppins(
-                              fontSize: 14,
+                              fontSize: 12,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          trailing: Text(
-                            formatRupiah(transaction.totalPembelian),
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          trailing: Column(
+                            children: [
+                              Text(
+                                formatRupiah(transaction.totalPembelian),
+                                style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                transaction.createdAt,
+                              )
+                            ],
                           ),
                         );
                       },

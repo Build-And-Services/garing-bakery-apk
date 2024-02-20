@@ -9,6 +9,7 @@ import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_page.
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_sales_page.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/next_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/history/show_transaction_page.dart';
+import 'package:garing_bakery_apk/features/transaction/presenter/pages/struk_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/success_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/transaction_page.dart';
 import 'package:page_transition/page_transition.dart';
@@ -21,6 +22,7 @@ class Routes {
   static const String TRANSACTIONS_SHOW = '/transactions_show';
   static const String TRANSACTIONS_NEXT = '/transactions_next';
   static const String TRANSACTIONS_SUCCESS = '/transactions_success';
+  static const String TRANSACTIONS_STRUK = '/transactions_struk';
 
   // product
   static const String ADD_PRODUCT = '/add_product';
@@ -70,6 +72,11 @@ class Routes {
             filter: filter,
           ),
           type: PageTransitionType.rightToLeft,
+        );
+      case Routes.TRANSACTIONS_STRUK:
+        return PageTransition(
+          child: const StrukTransactionPage(),
+          type: PageTransitionType.bottomToTop,
         );
       case Routes.ADD_PRODUCT:
         return PageTransition(

@@ -93,11 +93,19 @@ class NextTransaction extends StatelessWidget {
                                 )
                               : keys[index] == "selesai"
                                   ? InkWell(
-                                      onTap: () {
-                                        Navigator.pushReplacementNamed(
-                                          context,
-                                          Routes.TRANSACTIONS_SUCCESS,
-                                        );
+                                      onTap: () async {
+                                        cartProvider.loading = true;
+                                        cartProvider
+                                            .addTransaction()
+                                            .then((result) {
+                                          if (result!.statusCode == 201) {
+                                            cartProvider.loading = false;
+                                            Navigator.pushReplacementNamed(
+                                              context,
+                                              Routes.TRANSACTIONS_SUCCESS,
+                                            );
+                                          }
+                                        });
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -110,11 +118,16 @@ class NextTransaction extends StatelessWidget {
                                             Radius.circular(5),
                                           ),
                                         ),
-                                        child: const Icon(
-                                          Icons.check,
-                                          color: Colors.white,
-                                          size: 60,
-                                        ),
+                                        child: !cartProvider.isLoading
+                                            ? const Icon(
+                                                Icons.check,
+                                                color: Colors.white,
+                                                size: 60,
+                                              )
+                                            : const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
                                       ),
                                     )
                                   : Center(

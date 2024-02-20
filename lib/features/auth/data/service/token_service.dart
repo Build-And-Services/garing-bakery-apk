@@ -29,4 +29,10 @@ class TokenService {
       role: role!,
     );
   }
+
+  static Future<String> getToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = "Bearer ${prefs.getString('token')}";
+    return token;
+  }
 }

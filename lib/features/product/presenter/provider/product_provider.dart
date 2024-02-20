@@ -36,15 +36,16 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future getProduct() async {
+  Future<List<ProductModel>> getProduct() async {
     try {
       List<ProductModel> productsResp = await ProductService.allProducts();
       setProduct = productsResp;
       _eventLoadingStatus = false;
       notifyListeners();
+      return productsResp;
     } catch (e) {
       log(e.toString());
-      // return [];
+      return [];
     }
   }
 
