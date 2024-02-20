@@ -74,4 +74,20 @@ class ProductService {
       );
     }
   }
+
+  static Future<ProductResponse> getProductById(String id) async {
+    try {
+      final result = await http.get(Uri.parse("${RemoteApi().PRODUCTS}/$id"));
+
+      if (result.statusCode != 200) {
+        return ProductResponse(
+            success: false, message: "Something when wrong!!");
+      }
+
+      ProductResponse data = ProductResponse.fromJson(jsonDecode(result.body));
+      return data;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

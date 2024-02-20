@@ -5,6 +5,7 @@ import 'package:garing_bakery_apk/features/auth/presenter/pages/splash_page.dart
 import 'package:garing_bakery_apk/features/category/presenter/pages/add_category_page.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/pages/dashboard_page.dart';
 import 'package:garing_bakery_apk/features/product/presenter/pages/add_product_page.dart';
+import 'package:garing_bakery_apk/features/product/presenter/pages/edit_product_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_sales_page.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/next_transaction.dart';
@@ -26,6 +27,7 @@ class Routes {
 
   // product
   static const String ADD_PRODUCT = '/add_product';
+  static const String EDIT_PRODUCT = '/edit_product';
 
   static const String ADD_CATEGORY = '/add_category';
 
@@ -82,6 +84,12 @@ class Routes {
         return PageTransition(
           child: const AddProductPage(),
           type: PageTransitionType.rightToLeftWithFade,
+        );
+      case Routes.EDIT_PRODUCT:
+        final id = settings.arguments.toString();
+        return PageTransition(
+          child: EditProductPage(id: id),
+          type: PageTransitionType.rightToLeft,
         );
       case Routes.ADD_CATEGORY:
         return PageTransition(

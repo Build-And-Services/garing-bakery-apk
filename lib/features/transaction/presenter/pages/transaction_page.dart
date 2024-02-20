@@ -4,7 +4,6 @@ import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
-import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

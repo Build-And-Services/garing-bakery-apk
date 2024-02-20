@@ -27,7 +27,7 @@ class CategoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future getCategories() async {
+  Future<List<Map<String, dynamic>>> getCategories() async {
     try {
       _categories = await CategoryService.getCategory();
       _items = _categories.map(
@@ -40,9 +40,10 @@ class CategoryProvider with ChangeNotifier {
       ).toList();
       _isLoading = false;
       notifyListeners();
+      return _items;
     } catch (e) {
       _isLoading = false;
-      // return [];
+      return [];
     }
   }
 

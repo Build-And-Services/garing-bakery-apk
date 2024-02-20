@@ -76,4 +76,16 @@ class ProductProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<ProductModel> getProductBy(String id) async {
+    try {
+      final product = await ProductService.getProductById(id);
+      if (product.data == null) {
+        throw "Something wrong";
+      }
+      return product.data!;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

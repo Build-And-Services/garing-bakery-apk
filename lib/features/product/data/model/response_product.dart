@@ -60,3 +60,28 @@ class ProductDelResponse {
         "data": data?.toJson(),
       };
 }
+
+class ProductResponse {
+  bool success;
+  String message;
+  ProductModel? data;
+
+  ProductResponse({
+    required this.success,
+    required this.message,
+    this.data,
+  });
+
+  factory ProductResponse.fromJson(Map<String, dynamic> json) =>
+      ProductResponse(
+        success: json["success"],
+        message: json["message"],
+        data: ProductModel.fromJson(json["data"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "success": success,
+        "message": message,
+        "data": data != null ? data?.toJson() : null,
+      };
+}

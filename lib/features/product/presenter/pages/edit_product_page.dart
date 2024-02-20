@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
+import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/core/widgets/button_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/input_widget.dart';
 import 'package:garing_bakery_apk/features/category/presenter/provider/category_provider.dart';
@@ -14,19 +15,24 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:select_form_field/select_form_field.dart';
 
-class AddProductPage extends StatefulWidget {
-  const AddProductPage({super.key});
+class EditProductPage extends StatefulWidget {
+  final String id;
+
+  const EditProductPage({
+    super.key,
+    required this.id,
+  });
 
   @override
-  State<AddProductPage> createState() => _AddProductPageState();
+  State<EditProductPage> createState() => _EditProductPageState();
 }
 
-class _AddProductPageState extends State<AddProductPage> {
+class _EditProductPageState extends State<EditProductPage> {
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final product = context.watch<ProductProvider>();
+    final product = context.read<ProductProvider>();
     final formProduct = context.watch<FormProductProvider>();
 
     return Scaffold(
@@ -37,100 +43,136 @@ class _AddProductPageState extends State<AddProductPage> {
             Icons.arrow_back_ios,
             color: MyTheme.primary,
           ),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            formProduct.clearController();
+            Navigator.of(context).pop();
+          },
         ),
         title: const Text(
-          'Tambah Barang',
-          style: TextStyle(color: MyTheme.primary, fontWeight: FontWeight.w700),
+          'Edit Barang',
+          style: TextStyle(
+            color: MyTheme.primary,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: ListView(
-                  children: [
-                    const SizedBox(
-                      height: 20,
+      body: FutureBuilder<ProductModel>(
+        future: product.getProductBy(widget.id),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text("Terjadi Kesalahan silakan reload aplikasi"),
+            );
+          }
+          final productModel = snapshot.data;
+          if (productModel == null) {
+            return const Center(
+              child: Text("Terjadi Kesalahan silakan reload aplikasi"),
+            );
+          }
+          formProduct.name.text = productModel.name;
+          formProduct.stock.text = productModel.quantity.toString();
+          formProduct.code.text = productModel.productCode;
+          formProduct.purchase.text = productModel.purchasePrice.toString();
+          formProduct.selling.text = productModel.sellingPrice.toString();
+          if (productModel.category != null) {
+            formProduct.category.text = productModel.category!;
+          }
+
+          return Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 20,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: ListView(
                       children: [
-                        _imagePreview(formProduct, context),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _imagePreview(formProduct, productModel, context),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        logoImage(formProduct),
+                        sectionName(formProduct),
+                        sectionMore(formProduct),
+                        sectionPrice(formProduct),
+                        sectionCategory(formProduct, context),
                       ],
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    logoImage(formProduct),
-                    sectionName(formProduct),
-                    sectionMore(formProduct),
-                    sectionPrice(formProduct),
-                    sectionCategory(
-                      formProduct,
-                      context,
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 80,
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(
-                vertical: 15,
-                horizontal: 20,
-              ),
-              child: ButtonWidget(
-                title: !product.isLoading
-                    ? Text(
-                        "Tambah Barang",
-                        style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
-                    : const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      ),
-                tap: () async {
-                  if (_formKey.currentState!.validate()) {
-                    product.setLoading = true;
-                    final image = formProduct.image;
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 80,
+                  color: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 20,
+                  ),
+                  child: ButtonWidget(
+                    title: !product.isLoading
+                        ? Text(
+                            "Update Barang",
+                            style: GoogleFonts.poppins(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )
+                        : const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ),
+                    tap: () async {
+                      if (_formKey.currentState!.validate()) {
+                        product.setLoading = true;
+                        final image = formProduct.image;
 
-                    if (image != null) {
-                      product.isProccess = true;
+                        if (image != null) {
+                          product.isProccess = true;
 
-                      await product.addProduct(formProduct.body, image.path);
-                      product.isProccess = false;
+                          await product.addProduct(
+                              formProduct.body, image.path);
+                          product.isProccess = false;
 
-                      if (product.responseAdd.success) {
-                        // ignore: use_build_context_synchronously
-                        MyTheme.alertSucces(
-                            context, product.responseAdd.message);
-                      } else {
-                        // ignore: use_build_context_synchronously
-                        MyTheme.alertWarning(
-                            context, product.responseAdd.message);
+                          if (product.responseAdd.success) {
+                            // ignore: use_build_context_synchronously
+                            MyTheme.alertSucces(
+                                context, product.responseAdd.message);
+                          } else {
+                            // ignore: use_build_context_synchronously
+                            MyTheme.alertWarning(
+                                context, product.responseAdd.message);
+                          }
+                        } else {
+                          MyTheme.alertWarning(
+                              context, "Gambar belum dimasukan");
+                        }
                       }
-                    } else {
-                      MyTheme.alertWarning(context, "Gambar belum dimasukan");
-                    }
-                  }
-                },
-              ),
-            )
-          ],
-        ),
+                    },
+                  ),
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -290,7 +332,11 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  InkWell _imagePreview(FormProductProvider formProduct, BuildContext context) {
+  InkWell _imagePreview(
+    FormProductProvider formProduct,
+    ProductModel productModel,
+    BuildContext context,
+  ) {
     return InkWell(
       onTap: () => formProduct.getImage(ImageSource.gallery),
       child: Container(
@@ -304,19 +350,34 @@ class _AddProductPageState extends State<AddProductPage> {
             ),
           ),
         ),
-        child: formProduct.image == null
-            ? const Icon(
-                Icons.upload_file_outlined,
-                size: 70,
-                color: MyTheme.primary,
-              )
-            : Image.file(
-                //to show image, you type like this.
-                File(formProduct.image!.path),
-                fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width,
-                height: 300,
-              ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(
+            Radius.circular(
+              10,
+            ),
+          ),
+          child: formProduct.image != null
+              ? Image.file(
+                  //to show image, you type like this.
+                  File(formProduct.image!.path),
+                  fit: BoxFit.cover,
+                  width: MediaQuery.of(context).size.width,
+                  height: 300,
+                )
+              // ignore: unnecessary_null_comparison
+              : productModel.image != null
+                  ? Image.network(
+                      productModel.image,
+                      fit: BoxFit.cover,
+                      width: MediaQuery.of(context).size.width,
+                      height: 300,
+                    )
+                  : const Icon(
+                      Icons.upload_file_outlined,
+                      size: 70,
+                      color: MyTheme.primary,
+                    ),
+        ),
       ),
     );
   }
