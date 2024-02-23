@@ -2,9 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
-class ReportsSalesPage extends StatelessWidget {
+class ReportsSalesPage extends StatefulWidget {
   const ReportsSalesPage({super.key});
+
+  @override
+  State<ReportsSalesPage> createState() => _ReportsSalesPageState();
+}
+
+class _ReportsSalesPageState extends State<ReportsSalesPage> {
+  String dropdownvalue = 'Today';
+  DateTime currentDate = DateTime.now();
+  String today =
+      DateFormat("EEEE, d MMMM yyyy", "id_ID").format(DateTime.now());
+  var filter = [
+    'Today',
+    'Yesterday',
+    'Custom',
+  ];
+
+  @override
+  void initState() {
+    today = DateFormat("EEEE, d MMMM yyyy", "id_ID").format(currentDate);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +46,7 @@ class ReportsSalesPage extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: const Color.fromARGB(255, 251, 232, 226),
+        color: const Color.fromARGB(255, 255, 247, 238),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Column(
@@ -33,23 +55,71 @@ class ReportsSalesPage extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
+            Container(
+              margin: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 10,
+              ),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: MyTheme.primary)),
+              width: MediaQuery.of(context).size.width,
+              child: DropdownButtonHideUnderline(
+                child: ButtonTheme(
+                    alignedDropdown: true,
+                    child: DropdownButton(
+                      borderRadius: BorderRadius.circular(8),
+                      value: dropdownvalue,
+                      items: filter.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Row(
+                            children: [
+                              const Icon(Icons.calendar_today),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Text(items),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownvalue = newValue!;
+                          if (dropdownvalue == 'Yesterday') {
+                            currentDate = DateTime.now()
+                                .subtract(const Duration(days: 1));
+                          } else if (dropdownvalue == 'Today') {
+                            currentDate = DateTime.now();
+                          } else {
+                            _selectDate(context);
+                          }
+                        });
+                      },
+                    )),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             Text(
               "Laporan Keseluruhan",
               style: GoogleFonts.poppins(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
             ),
             Text(
-              "21 Januari 2024",
+              DateFormat("EEEE, d MMMM yyyy", "id_ID").format(currentDate),
               style: GoogleFonts.poppins(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Colors.grey,
-              ),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey,
+                  fontStyle: FontStyle.italic),
             ),
             const SizedBox(
-              height: 10,
+              height: 8,
             ),
             BoxInforReport(
               value: "100",
@@ -57,12 +127,32 @@ class ReportsSalesPage extends StatelessWidget {
             ),
             BoxInforReport(
               value: formatRupiah(100000000),
-              label: "Jumlah Penghasilan",
+              label: "Keuntungan",
+            ),
+            BoxInforReport(
+              value: formatRupiah(100000000),
+              label: "Pendapatan",
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    await showDatePicker(
+            context: context,
+            initialDate: currentDate,
+            firstDate: DateTime(2015),
+            lastDate: DateTime(2050))
+        .then((value) => {
+              if (value != null)
+                {
+                  setState(() {
+                    currentDate = value;
+                  })
+                }
+            });
   }
 }
 

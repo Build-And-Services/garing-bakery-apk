@@ -51,24 +51,8 @@ class ReportsPage extends StatelessWidget {
               child: Divider(),
             ),
             ListTileReport(
-              icon: Icons.monetization_on_outlined,
-              title: "Laporan Keuangan",
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Divider(),
-            ),
-            ListTileReport(
               icon: Icons.inventory_outlined,
               title: "Laporan Persediaan",
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Divider(),
-            ),
-            ListTileReport(
-              icon: Icons.person_2_outlined,
-              title: "Laporan Pengunjung",
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),

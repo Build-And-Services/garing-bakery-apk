@@ -9,6 +9,7 @@ import 'package:garing_bakery_apk/features/product/presenter/provider/form_provi
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/transaction_provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,6 +21,7 @@ void main() {
 
 void selectInitialRoute() async {
   final pref = await SharedPreferences.getInstance();
+  await initializeDateFormatting('id_ID', null);
   runApp(
     MultiProvider(
       providers: [
