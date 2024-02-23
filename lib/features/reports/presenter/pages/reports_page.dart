@@ -44,7 +44,9 @@ class ReportsPage extends StatelessWidget {
             ),
             ListTileReport(
               icon: Icons.production_quantity_limits,
-              title: "Laporan Penjualan Per Barang",
+              title: "Laporan Transaksi",
+              tap: () =>
+                  Navigator.of(context).pushNamed(Routes.REPORTS_TRANSACTIONS),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -53,6 +55,7 @@ class ReportsPage extends StatelessWidget {
             ListTileReport(
               icon: Icons.inventory_outlined,
               title: "Laporan Persediaan",
+              tap: () => Navigator.of(context).pushNamed(Routes.REPORTS_STOCKS),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),

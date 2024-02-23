@@ -8,6 +8,8 @@ import 'package:garing_bakery_apk/features/product/presenter/pages/add_product_p
 import 'package:garing_bakery_apk/features/product/presenter/pages/edit_product_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_sales_page.dart';
+import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_stocks/reports_stocks_page.dart';
+import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_transaction/reports_transaction_page.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/next_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/history/show_transaction_page.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/struk_transaction.dart';
@@ -34,6 +36,8 @@ class Routes {
   // reports
   static const String REPORTS = '/reports';
   static const String REPORTS_SALES = '/reports_sales';
+  static const String REPORTS_TRANSACTIONS = '/reports_transactions';
+  static const String REPORTS_STOCKS = '/reports_stocks';
 
   static Route<dynamic> generateRoute(settings) {
     switch (settings.name) {
@@ -104,6 +108,16 @@ class Routes {
       case Routes.REPORTS_SALES:
         return PageTransition(
           child: const ReportsSalesPage(),
+          type: PageTransitionType.fade,
+        );
+      case Routes.REPORTS_TRANSACTIONS:
+        return PageTransition(
+          child: const ReportsTransactionPage(),
+          type: PageTransitionType.fade,
+        );
+      case Routes.REPORTS_STOCKS:
+        return PageTransition(
+          child: const ReportsStocksPage(),
           type: PageTransitionType.fade,
         );
       default:
