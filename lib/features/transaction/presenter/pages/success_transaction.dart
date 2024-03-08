@@ -5,8 +5,8 @@ import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_p
 import 'package:provider/provider.dart';
 
 class SuccessTransaction extends StatelessWidget {
-  const SuccessTransaction({super.key});
-
+  const SuccessTransaction({super.key, required this.kembalian});
+  final int kembalian;
   @override
   Widget build(BuildContext context) {
     final cartProvider = context.read<CartProvider>();
@@ -22,7 +22,8 @@ class SuccessTransaction extends StatelessWidget {
           children: [
             const SuccessBanner(),
             KembalianWidget(
-                kembalian: cartProvider.getTotal - cartProvider.nominal),
+              kembalian: kembalian,
+            ),
             const SizedBox(
               height: 50,
             ),
@@ -175,6 +176,9 @@ class ButtonNewTransaction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: () {
+        Navigator.of(context).pushNamed(Routes.TRANSACTIONS);
+      },
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.all(

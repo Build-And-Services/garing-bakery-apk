@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
@@ -94,18 +96,26 @@ class NextTransaction extends StatelessWidget {
                               : keys[index] == "selesai"
                                   ? InkWell(
                                       onTap: () async {
-                                        cartProvider.loading = true;
-                                        cartProvider
-                                            .addTransaction()
-                                            .then((result) {
-                                          if (result!.statusCode == 201) {
-                                            cartProvider.loading = false;
-                                            Navigator.pushReplacementNamed(
-                                              context,
-                                              Routes.TRANSACTIONS_SUCCESS,
-                                            );
-                                          }
-                                        });
+                                        if (cartProvider.checkNominal()) {
+                                          cartProvider.loading = true;
+                                          cartProvider
+                                              .addTransaction()
+                                              .then((result) {
+                                            if (result!.statusCode == 201) {
+                                              final kembalian = int.parse(
+                                                      jsonDecode(result.body)[
+                                                          "data"]["nominal"]) -
+                                                  jsonDecode(result.body)[
+                                                      "data"]["total_price"];
+                                              cartProvider.loading = false;
+                                              Navigator.pushReplacementNamed(
+                                                context,
+                                                Routes.TRANSACTIONS_SUCCESS,
+                                                arguments: kembalian,
+                                              );
+                                            }
+                                          });
+                                        }
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -137,7 +147,11 @@ class NextTransaction extends StatelessWidget {
                                           fontSize: 34.0,
                                           fontWeight: FontWeight.w700,
                                           color: Color.fromARGB(
-                                              255, 118, 115, 115),
+                                            255,
+                                            118,
+                                            115,
+                                            115,
+                                          ),
                                         ),
                                       ),
                                     ),

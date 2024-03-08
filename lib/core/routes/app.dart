@@ -71,8 +71,11 @@ class Routes {
           type: PageTransitionType.rightToLeft,
         );
       case Routes.TRANSACTIONS_SUCCESS:
+        final kembalian = settings.arguments;
         return PageTransition(
-          child: const SuccessTransaction(),
+          child: SuccessTransaction(
+            kembalian: kembalian,
+          ),
           type: PageTransitionType.fade,
         );
       case Routes.TRANSACTIONS_SHOW:

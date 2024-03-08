@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/config/theme.dart';
 
+// ignore: must_be_immutable
 class BoxInforReport extends StatelessWidget {
   String value;
   String label;
