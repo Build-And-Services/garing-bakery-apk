@@ -11,30 +11,32 @@ class CartSubPage extends StatelessWidget {
     return Scaffold(
       drawer: const DrawerPage(),
       appBar: MyTheme.appBar("Riwayat Transaksi", []),
-      body: Container(
-        margin: const EdgeInsets.only(
-          top: 20,
-        ),
-        padding: const EdgeInsets.all(10.0),
-        child: const Column(
-          children: [
-            HistoryTransactionFilter(
-              title: 'Riwayat Transaksi hari ini',
-              filter: 'day',
-            ),
-            HistoryTransactionFilter(
-              title: 'Riwayat Transaksi bulan ini',
-              filter: 'month',
-            ),
-            HistoryTransactionFilter(
-              title: 'Riwayat Transaksi tahun ini',
-              filter: 'year',
-            ),
-            HistoryTransactionFilter(
-              title: 'Riwayat Transaksi semua',
-              filter: 'all',
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.only(
+            top: 20,
+          ),
+          padding: const EdgeInsets.all(10.0),
+          child: const Column(
+            children: [
+              HistoryTransactionFilter(
+                title: 'Riwayat Transaksi hari ini',
+                filter: 'day',
+              ),
+              HistoryTransactionFilter(
+                title: 'Riwayat Transaksi bulan ini',
+                filter: 'month',
+              ),
+              HistoryTransactionFilter(
+                title: 'Riwayat Transaksi tahun ini',
+                filter: 'year',
+              ),
+              HistoryTransactionFilter(
+                title: 'Riwayat Transaksi semua',
+                filter: 'all',
+              ),
+            ],
+          ),
         ),
       ),
     );

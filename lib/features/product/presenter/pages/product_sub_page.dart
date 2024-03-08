@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/search_widget.dart';
+import 'package:garing_bakery_apk/core/widgets/shimmer/wrapper_shimmer_widget.dart';
 import 'package:garing_bakery_apk/features/product/presenter/widgets/product_widget.dart';
 import 'package:garing_bakery_apk/features/product/presenter/widgets/shimmer_loading.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
@@ -49,25 +51,27 @@ class ProductSubPage extends StatelessWidget {
             onRefresh: () async {
               productProvider.setLoading = true;
             },
-            child: ListView(
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                const SearchWidget(),
-                const SizedBox(
-                  height: 30,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2.0),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
-                    child: _builderGridview(productProvider, context),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-              ],
+                  const SearchWidget(),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                      ),
+                      child: _builderGridview(productProvider, context),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -75,46 +79,98 @@ class ProductSubPage extends StatelessWidget {
     );
   }
 
-  GridView _builderGridview(
+  Widget _builderGridview(
       ProductProvider productProvider, BuildContext context) {
-    return GridView.builder(
+    return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: MediaQuery.of(context).size.width /
-            (MediaQuery.of(context).size.height / 1.4),
-        mainAxisSpacing: 20.0,
-        crossAxisSpacing: 10.0,
-      ),
       itemCount: productProvider.products.length,
-      // itemCount: productProvider.products.length,
       itemBuilder: (context, index) {
         final product = productProvider.products[index];
         // final product = product.products[index];
-        return ProductCardItem(
-          product: product,
-          tap: () => {
-            QuickAlert.show(
-              onCancelBtnTap: () {
-                Navigator.pop(context);
-              },
-              onConfirmBtnTap: () {
-                productProvider.delete(product.id).then((value) {
-                  Navigator.pop(context);
-                }).catchError((onError) {
-                  Navigator.pop(context);
-                  MyTheme.alertError(context, "Gagal menghapus data");
-                });
-              },
-              context: context,
-              confirmBtnColor: Colors.red,
-              type: QuickAlertType.confirm,
-              text: 'apakah anda akan menghapus barang ini',
-              confirmBtnText: 'Hapus',
-              cancelBtnText: 'Tidak jadi',
-            )
-          },
+        final width = MediaQuery.of(context).size.width;
+        final height = MediaQuery.of(context).size.height;
+        return Card(
+          // elevation: 0,
+          shadowColor: Colors.black,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CachedNetworkImage(
+                imageUrl: product.image,
+                placeholder: (context, url) => WrapperShimmer(
+                  child: Container(
+                    width: width > 420 ? width / 3 : width / 3,
+                    height: width > 420 ? height / 2.5 : height / 7,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    width: width > 420 ? width / 3 : width / 5,
+                    height: width > 420 ? height / 2.5 : height / 9,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: const Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Marlong enak",
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
+                        Text(
+                          "983247983247",
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            "20",
+                            style: TextStyle(
+                              fontSize: 10,
+                            ),
+                          ),
+                          Text(
+                            "Rp. 90.000 - Rp 95.000",
+                            style: TextStyle(
+                              fontSize: 10,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
