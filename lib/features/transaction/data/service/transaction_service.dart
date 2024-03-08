@@ -33,7 +33,6 @@ class TransactionService {
     try {
       final token = await TokenService.getToken();
 
-      print(jsonEncode(order.toJson()));
       final result = await http.post(
         Uri.parse(RemoteApi().TRANSACTION),
         headers: {

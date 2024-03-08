@@ -108,4 +108,20 @@ class ProductService {
       return null;
     }
   }
+
+  static Future<ProductModel?> getProduct(String id) async {
+    try {
+      final result = await http.get(Uri.parse("${RemoteApi().PRODUCTS}/$id"));
+
+      if (result.statusCode != 200) {
+        return null;
+      }
+      final response = jsonDecode(result.body);
+      ProductModel data = ProductModel.fromJson(response["data"]);
+      return data;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 }
