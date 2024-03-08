@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 import 'package:flutter/material.dart';
+import 'package:garing_bakery_apk/core/models/arguments/ArgumentReportTransaction.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/pages/auth_page.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/pages/splash_page.dart';
 import 'package:garing_bakery_apk/features/category/presenter/pages/add_category_page.dart';
@@ -11,6 +12,7 @@ import 'package:garing_bakery_apk/features/product/presenter/pages/edit_product_
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_sales_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_stocks/reports_stocks_page.dart';
+import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_transaction/report_per_transaction.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_transaction/reports_transaction_page.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/next_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/history/show_transaction_page.dart';
@@ -40,7 +42,11 @@ class Routes {
   // reports
   static const String REPORTS = '/reports';
   static const String REPORTS_SALES = '/reports_sales';
+
+  // report transaction
   static const String REPORTS_TRANSACTIONS = '/reports_transactions';
+  static const String REPORTS_PER_TRANSACTIONS = '/reports_per_transactions';
+
   static const String REPORTS_STOCKS = '/reports_stocks';
 
   static Route<dynamic> generateRoute(settings) {
@@ -132,6 +138,14 @@ class Routes {
       case Routes.REPORTS_TRANSACTIONS:
         return PageTransition(
           child: const ReportsTransactionPage(),
+          type: PageTransitionType.fade,
+        );
+      case Routes.REPORTS_PER_TRANSACTIONS:
+        final argument = settings.arguments as ArgumentReportTransaction;
+        return PageTransition(
+          child: ReportPerTransaction(
+            date: argument,
+          ),
           type: PageTransitionType.fade,
         );
       case Routes.REPORTS_STOCKS:

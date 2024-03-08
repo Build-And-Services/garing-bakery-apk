@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
-import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
-import 'package:garing_bakery_apk/features/reports/presenter/widgets/box_info_report_widget.dart';
-import 'package:garing_bakery_apk/features/reports/presenter/widgets/chart_widget.dart';
-import 'package:garing_bakery_apk/features/reports/presenter/widgets/dropdown_widget.dart';
+import 'package:garing_bakery_apk/core/models/arguments/ArgumentReportTransaction.dart';
+import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -12,6 +10,7 @@ class ReportsTransactionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyTheme.primary,
@@ -42,78 +41,116 @@ class ReportsTransactionPage extends StatelessWidget {
           ),
         ],
         title: const Text(
-          'Laporan Penjualan',
+          'Laporan Transaksi',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
         ),
       ),
       body: SingleChildScrollView(
         child: Container(
-          color: const Color.fromARGB(255, 255, 247, 238),
           width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          padding: const EdgeInsets.all(
+            20,
+          ),
           // height: MediaQuery.of(context).size.height,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 20,
+              ListTileReportTransaction(
+                title: "Laporan Transaksi Per Hari Ini",
+                action: () {
+                  Navigator.of(context).pushNamed(
+                    Routes.REPORTS_PER_TRANSACTIONS,
+                    arguments: ArgumentReportTransaction(
+                      now.day.toString(),
+                      now.month.toString(),
+                      now.year.toString(),
+                    ),
+                  );
+                },
               ),
-              const DropdownWidget(),
-              const SizedBox(
-                height: 20,
+              ListTileReportTransaction(
+                title: "Laporan Transaksi Per Bulan Ini",
+                action: () {
+                  Navigator.of(context).pushNamed(
+                    Routes.REPORTS_PER_TRANSACTIONS,
+                    arguments: ArgumentReportTransaction(
+                      '',
+                      now.month.toString(),
+                      now.year.toString(),
+                    ),
+                  );
+                },
               ),
-              Text(
-                "Laporan Keseluruhan",
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
+              ListTileReportTransaction(
+                title: "Laporan Transaksi Per Tahun Ini",
+                action: () {
+                  Navigator.of(context).pushNamed(
+                    Routes.REPORTS_PER_TRANSACTIONS,
+                    arguments: ArgumentReportTransaction(
+                      '',
+                      '',
+                      now.year.toString(),
+                    ),
+                  );
+                },
               ),
-              // Text(
-              //   DateFormat("EEEE, d MMMM yyyy", "id_ID").format(currentDate),
-              //   style: GoogleFonts.poppins(
-              //       fontSize: 14,
-              //       fontWeight: FontWeight.w400,
-              //       color: Colors.grey,
-              //       fontStyle: FontStyle.italic),
-              // ),
-              const SizedBox(
-                height: 8,
+              ListTileReportTransaction(
+                title: "Laporan Semua Transaksi",
+                action: () {
+                  Navigator.of(context).pushNamed(
+                    Routes.REPORTS_PER_TRANSACTIONS,
+                    arguments: ArgumentReportTransaction(
+                      '',
+                      '',
+                      '',
+                    ),
+                  );
+                },
               ),
-              BoxInforReport(
-                value: "100",
-                label: "Jumlah Transaksi",
-              ),
-              BoxInforReport(
-                value: formatRupiah(100000000),
-                label: "Keuntungan",
-              ),
-              BoxInforReport(
-                value: formatRupiah(100000000),
-                label: "Pendapatan",
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Laporan Penjualan per Jam",
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              // Text(
-              //   DateFormat("EEEE, d MMMM yyyy", "id_ID").format(currentDate),
-              //   style: GoogleFonts.poppins(
-              //       fontSize: 14,
-              //       fontWeight: FontWeight.w400,
-              //       color: Colors.grey,
-              //       fontStyle: FontStyle.italic),
-              // ),
-              const SizedBox(
-                height: 5,
-              ),
-              ChartWidget()
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ListTileReportTransaction extends StatelessWidget {
+  const ListTileReportTransaction({
+    super.key,
+    required this.title,
+    required this.action,
+  });
+
+  final String title;
+  final Function() action;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: action,
+      child: Container(
+        margin: const EdgeInsets.only(
+          bottom: 10,
+        ),
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: MyTheme.brown,
+            width: 1,
+            style: BorderStyle.solid,
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.all(20),
+        child: Text(
+          title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.poppins(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: MyTheme.brown,
           ),
         ),
       ),

@@ -52,15 +52,15 @@ class ReportsPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Divider(),
             ),
-            ListTileReport(
-              icon: Icons.inventory_outlined,
-              title: "Laporan Persediaan",
-              tap: () => Navigator.of(context).pushNamed(Routes.REPORTS_STOCKS),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Divider(),
-            ),
+            // ListTileReport(
+            //   icon: Icons.inventory_outlined,
+            //   title: "Laporan Persediaan",
+            //   tap: () => Navigator.of(context).pushNamed(Routes.REPORTS_STOCKS),
+            // ),
+            // const Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 20.0),
+            //   child: Divider(),
+            // ),
           ],
         ),
       ),

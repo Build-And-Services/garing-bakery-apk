@@ -73,14 +73,6 @@ class _ReportsSalesPageState extends State<ReportsSalesPage> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              // Text(
-              //   DateFormat("EEEE, d MMMM yyyy", "id_ID").format(currentDate),
-              //   style: GoogleFonts.poppins(
-              //       fontSize: 14,
-              //       fontWeight: FontWeight.w400,
-              //       color: Colors.grey,
-              //       fontStyle: FontStyle.italic),
-              // ),
               const SizedBox(
                 height: 8,
               ),
@@ -106,14 +98,6 @@ class _ReportsSalesPageState extends State<ReportsSalesPage> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              // Text(
-              //   DateFormat("EEEE, d MMMM yyyy", "id_ID").format(currentDate),
-              //   style: GoogleFonts.poppins(
-              //       fontSize: 14,
-              //       fontWeight: FontWeight.w400,
-              //       color: Colors.grey,
-              //       fontStyle: FontStyle.italic),
-              // ),
               const SizedBox(
                 height: 5,
               ),
