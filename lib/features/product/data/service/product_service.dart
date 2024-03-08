@@ -90,4 +90,22 @@ class ProductService {
       rethrow;
     }
   }
+
+  static Future<StockProductResponse?> getStockProduct(String id) async {
+    try {
+      final result =
+          await http.get(Uri.parse("${RemoteApi().PRODUCTS}/$id/stocks"));
+
+      if (result.statusCode != 200) {
+        return null;
+      }
+      final response = jsonDecode(result.body);
+      StockProductResponse data =
+          StockProductResponse.fromJson(response["data"]);
+      return data;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 }
