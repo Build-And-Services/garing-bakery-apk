@@ -7,14 +7,9 @@ import 'package:garing_bakery_apk/features/reports/presenter/widgets/dropdown_wi
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ReportsSalesPage extends StatefulWidget {
-  const ReportsSalesPage({super.key});
+class ReportsStocksPage extends StatelessWidget {
+  const ReportsStocksPage({super.key});
 
-  @override
-  State<ReportsSalesPage> createState() => _ReportsSalesPageState();
-}
-
-class _ReportsSalesPageState extends State<ReportsSalesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
