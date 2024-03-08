@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
+import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
@@ -10,7 +11,6 @@ import 'package:garing_bakery_apk/features/product/presenter/widgets/shimmer_loa
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/main.dart';
 
 class ProductSubPage extends StatelessWidget {
   const ProductSubPage({super.key});
@@ -18,7 +18,7 @@ class ProductSubPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
+    // final height = MediaQuery.of(context).size.height;
     return Consumer<ProductProvider>(
       builder: (context, productProvider, child) {
         if (productProvider.eventLoadingStatus) {
@@ -102,50 +102,55 @@ class ProductSubPage extends StatelessWidget {
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        e.name,
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color: Colors.black,
-                                                          fontSize: 16,
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          e.name,
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color: Colors.black,
+                                                            fontSize: 16,
+                                                          ),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
                                                         ),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                      const Text(
-                                                        "983247983247",
-                                                        style: TextStyle(
-                                                          fontSize: 10,
+                                                        Text(
+                                                          e.productCode,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 10,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
                                                   const SizedBox(
                                                     width: 30,
                                                   ),
-                                                  const Expanded(
+                                                  Expanded(
                                                     child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .end,
                                                       children: [
                                                         Text(
-                                                          "20",
-                                                          style: TextStyle(
+                                                          e.quantity.toString(),
+                                                          style:
+                                                              const TextStyle(
                                                             fontSize: 10,
                                                           ),
                                                         ),
                                                         Text(
-                                                          "Rp. 90.000 - Rp 95.000 0000000000000000000000",
-                                                          style: TextStyle(
+                                                          "${formatRupiah(e.purchasePrice)} _ ${formatRupiah(e.sellingPrice)}",
+                                                          style:
+                                                              const TextStyle(
                                                             fontSize: 10,
                                                           ),
                                                           maxLines: 1,
@@ -161,7 +166,10 @@ class ProductSubPage extends StatelessWidget {
                                                 height: 15,
                                               ),
                                               InkWell(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  print(
+                                                      "delete product id ${e.id}");
+                                                },
                                                 child: SizedBox(
                                                   width: 80,
                                                   child: Row(
@@ -196,17 +204,6 @@ class ProductSubPage extends StatelessWidget {
                             ))
                         .toList(),
                   )
-                  // Expanded(
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.symmetric(vertical: 2.0),
-                  //     child: Container(
-                  //       padding: const EdgeInsets.symmetric(
-                  //         horizontal: 20,
-                  //       ),
-                  //       child: _builderGridview(productProvider, context),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
