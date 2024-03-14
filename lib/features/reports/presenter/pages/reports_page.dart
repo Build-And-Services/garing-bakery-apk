@@ -57,10 +57,6 @@ class ReportsPage extends StatelessWidget {
             //   title: "Laporan Persediaan",
             //   tap: () => Navigator.of(context).pushNamed(Routes.REPORTS_STOCKS),
             // ),
-            // const Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: 20.0),
-            //   child: Divider(),
-            // ),
           ],
         ),
       ),

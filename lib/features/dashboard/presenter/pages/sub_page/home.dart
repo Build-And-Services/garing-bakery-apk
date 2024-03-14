@@ -48,7 +48,7 @@ class HomeSubPage extends StatelessWidget {
             ),
             dashboardProvider.dashboardData.data!.categories.isEmpty
                 ? Container(
-                    padding: EdgeInsets.all(
+                    padding: const EdgeInsets.all(
                       20,
                     ),
                     child: const Text('category not found'),
@@ -67,6 +67,7 @@ class HomeSubPage extends StatelessWidget {
 
   Container _builderGridProduct(
       DashboardProvider dashboardProvider, BuildContext context) {
+    double w = MediaQuery.of(context).size.width;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -75,7 +76,7 @@ class HomeSubPage extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+          crossAxisCount: w > 480 ? 3 : 2,
           childAspectRatio: MediaQuery.of(context).size.width /
               (MediaQuery.of(context).size.height / 1.4),
           mainAxisSpacing: 20.0,
@@ -85,7 +86,7 @@ class HomeSubPage extends StatelessWidget {
         itemBuilder: (context, index) {
           final product = dashboardProvider.dashboardData.data?.products[index];
           if (product == null) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }

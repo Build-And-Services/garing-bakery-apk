@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
@@ -46,26 +47,33 @@ void selectInitialRoute() async {
         ChangeNotifierProvider(
           create: (_) => FormCategoryProvider(),
         ),
-        ChangeNotifierProvider(create: (_) => CartProvider())
+        ChangeNotifierProvider(
+          create: (_) => CartProvider(),
+        ),
       ],
-      child: MaterialApp(
-        theme: ThemeData(
-          appBarTheme: const AppBarTheme(
-            backgroundColor: MyTheme.primary,
-            iconTheme: IconThemeData(
-              color: Colors.white,
-            ),
-          ),
-        ),
-        debugShowCheckedModeBanner: false,
-        initialRoute:
-            pref.getString("token") == null && pref.getString("user") == null
-                ? Routes.SPLASH
-                : Routes.DASHBOARD,
-        onGenerateRoute: (settings) => Routes.generateRoute(
-          settings,
-        ),
-      ),
+      child: ScreenUtilInit(
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, child) {
+            return MaterialApp(
+              theme: ThemeData(
+                appBarTheme: const AppBarTheme(
+                  backgroundColor: MyTheme.primary,
+                  iconTheme: IconThemeData(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              debugShowCheckedModeBanner: false,
+              initialRoute: pref.getString("token") == null &&
+                      pref.getString("user") == null
+                  ? Routes.SPLASH
+                  : Routes.DASHBOARD,
+              onGenerateRoute: (settings) => Routes.generateRoute(
+                settings,
+              ),
+            );
+          }),
     ),
   );
 }
