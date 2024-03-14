@@ -109,3 +109,5 @@ class MyTheme {
   //   leadingImage: 'assets/loading.gif',
   // );
 }
+
+enum TypeStock { decrease, increase }
