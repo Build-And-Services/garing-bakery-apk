@@ -140,30 +140,39 @@ class _EditProductPageState extends State<EditProductPage> {
                               color: Colors.white,
                             ),
                           ),
-                    tap: () async {
+                    tap: () {
                       if (_formKey.currentState!.validate()) {
                         product.setLoading = true;
                         final image = formProduct.image;
 
                         if (image != null) {
                           product.isProccess = true;
+                          product
+                              .editData(
+                            formProduct.body,
+                            image.path,
+                            widget.id,
+                          )
+                              .then((value) {
+                            product.isProccess = false;
 
-                          await product.addProduct(
-                              formProduct.body, image.path);
-                          product.isProccess = false;
-
-                          if (product.responseAdd.success) {
-                            // ignore: use_build_context_synchronously
-                            MyTheme.alertSucces(
-                                context, product.responseAdd.message);
-                          } else {
-                            // ignore: use_build_context_synchronously
-                            MyTheme.alertWarning(
-                                context, product.responseAdd.message);
-                          }
+                            if (product.responseAdd.success) {
+                              MyTheme.alertSucces(
+                                context,
+                                product.responseAdd.message,
+                              );
+                            } else {
+                              MyTheme.alertWarning(
+                                context,
+                                product.responseAdd.message,
+                              );
+                            }
+                          });
                         } else {
                           MyTheme.alertWarning(
-                              context, "Gambar belum dimasukan");
+                            context,
+                            "Gambar belum dimasukan",
+                          );
                         }
                       }
                     },
