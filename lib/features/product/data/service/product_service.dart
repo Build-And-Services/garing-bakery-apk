@@ -23,16 +23,21 @@ class ProductService {
   }
 
   static Future<ProductAddResponse> addImage(
-      Map<String, String> body, String filepath) async {
+    Map<String, String> body,
+    String filepath, {
+    String id = '',
+  }) async {
     try {
       Map<String, String> headers = {
         'Content-Type': 'multipart/form-data',
       };
-      var request =
-          http.MultipartRequest('POST', Uri.parse(RemoteApi().PRODUCTS))
-            ..fields.addAll(body)
-            ..headers.addAll(headers)
-            ..files.add(await http.MultipartFile.fromPath('image', filepath));
+      var request = http.MultipartRequest(
+          'POST',
+          Uri.parse(
+              id == '' ? RemoteApi().PRODUCTS : '${RemoteApi().PRODUCTS}/$id'))
+        ..fields.addAll(body)
+        ..headers.addAll(headers)
+        ..files.add(await http.MultipartFile.fromPath('image', filepath));
       var response = await request.send();
       var decoded = await response.stream.bytesToString().then(json.decode);
       late ProductAddResponse result;
