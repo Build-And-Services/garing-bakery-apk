@@ -22,6 +22,28 @@ class MyTheme {
     );
   }
 
+  static AppBar secondaryAppBar(String title, BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      leading: IconButton(
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          color: MyTheme.primary,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: MyTheme.primary,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+
   static alertSucces(BuildContext context, String message) {
     return QuickAlert.show(
       context: context,
