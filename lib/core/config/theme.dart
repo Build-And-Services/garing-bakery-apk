@@ -74,6 +74,21 @@ class MyTheme {
     );
   }
 
+  static Future<void> showLoadingDialog(BuildContext context) async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        });
+  }
+
   // final infoAlert = buildButton(
   //   onTap: () {
   //     QuickAlert.show(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:garing_bakery_apk/core/config/remote.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
+import 'package:garing_bakery_apk/features/product/data/model/request_product.dart';
 import 'package:garing_bakery_apk/features/product/data/model/response_product.dart';
 import 'package:http/http.dart' as http;
 
@@ -122,6 +123,27 @@ class ProductService {
     } catch (e) {
       print(e.toString());
       return null;
+    }
+  }
+
+  static Future<bool> updateStock(EditStockRequest body) async {
+    try {
+      final result = await http.post(
+        Uri.parse(RemoteApi().STOCKS),
+        body: jsonEncode(
+          body.toJson(),
+        ),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+      if (result.statusCode != 201) {
+        return false;
+      }
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
     }
   }
 }
