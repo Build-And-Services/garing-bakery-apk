@@ -39,7 +39,9 @@ class ReportPerDayWidget extends StatelessWidget {
         if (snapshot.data?.data != null) {
           spots = snapshot.data!.data.map((item) {
             final jam = item.hour.split(':');
-            return FlSpot(double.parse(jam[0]), double.parse(item.revenue));
+            final belakang = (int.parse(jam[1]) / 120 * 100).toString();
+            return FlSpot(double.parse('${jam[0]}.${belakang.split('.')[0]}'),
+                double.parse(item.revenue));
           }).toList();
           for (var y in snapshot.data!.data) {
             if (maxY < double.parse(y.revenue)) {
@@ -55,7 +57,17 @@ class ReportPerDayWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ChartDinamisWidget(maxX: 0, maxY: maxY, spots: spots),
+              ChartDinamisWidget(
+                maxX: 24,
+                maxY: maxY,
+                spots: spots,
+                bottomTitles: const AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    interval: 2,
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 20,
               ),

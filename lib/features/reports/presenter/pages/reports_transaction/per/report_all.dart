@@ -1,7 +1,12 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/features/reports/data/model/response.dart';
 import 'package:garing_bakery_apk/features/reports/data/service/reports_service.dart';
+import 'package:garing_bakery_apk/features/reports/presenter/widgets/chart_dinamis_widget.dart';
+import 'package:garing_bakery_apk/features/reports/presenter/widgets/loading_widget.dart';
+import 'package:garing_bakery_apk/features/reports/presenter/widgets/no_data_widget.dart';
+import 'package:garing_bakery_apk/features/reports/presenter/widgets/problem_get_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ReportAllWidget extends StatelessWidget {
@@ -15,31 +20,35 @@ class ReportAllWidget extends StatelessWidget {
         future: ReportsService.getAllTransactions(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
+            return const LoadingWidget();
           }
           if (snapshot.hasError) {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: const Center(
-                child: Text("Something went wrong!, check your connection"),
-              ),
-            );
+            return const ProblemWidget();
           }
           if (!snapshot.hasData) {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: const Center(
-                child: Text("Data tidak ada"),
-              ),
-            );
+            return const NoDataWidget();
+          }
+
+          double maxX = 2000;
+          double maxY = 0;
+          List<FlSpot> spots = [];
+          if (snapshot.data?.data != null) {
+            spots = snapshot.data!.data.map((item) {
+              return FlSpot(
+                item.transactionYear.toDouble(),
+                double.parse(item.revenue),
+              );
+            }).toList();
+            for (var y in snapshot.data!.data) {
+              if (maxY < double.parse(y.revenue)) {
+                maxY = double.parse(y.revenue);
+              }
+            }
+            for (var y in snapshot.data!.data) {
+              if (maxX < y.transactionYear.toDouble()) {
+                maxX = y.transactionYear.toDouble();
+              }
+            }
           }
           return Container(
             padding: const EdgeInsets.all(
@@ -48,7 +57,44 @@ class ReportAllWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ChartDinamisWidget(),
+                ChartDinamisWidget(
+                  minX: 2020,
+                  minY: 100000,
+                  maxX: maxX + 16,
+                  maxY: maxY + 100000,
+                  spots: spots,
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 4,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          value.toString().split('.')[0],
+                          style: GoogleFonts.poppins(
+                            fontSize: 10,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      reservedSize: 60,
+                      showTitles: true,
+                      interval: 400000,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          formatRupiah(
+                            value.toInt(),
+                          ).split('Rp')[1].split(',00')[0],
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
