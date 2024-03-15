@@ -2,12 +2,12 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/models/arguments/ArgumentReportTransaction.dart';
+import 'package:garing_bakery_apk/core/widgets/loading_widget.dart';
+import 'package:garing_bakery_apk/core/widgets/no_data_widget.dart';
+import 'package:garing_bakery_apk/core/widgets/problem_get_widget.dart';
 import 'package:garing_bakery_apk/features/reports/data/model/response.dart';
 import 'package:garing_bakery_apk/features/reports/data/service/reports_service.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/widgets/chart_dinamis_widget.dart';
-import 'package:garing_bakery_apk/features/reports/presenter/widgets/loading_widget.dart';
-import 'package:garing_bakery_apk/features/reports/presenter/widgets/no_data_widget.dart';
-import 'package:garing_bakery_apk/features/reports/presenter/widgets/problem_get_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ReportPerDayWidget extends StatelessWidget {

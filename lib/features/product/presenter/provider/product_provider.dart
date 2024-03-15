@@ -79,10 +79,21 @@ class ProductProvider with ChangeNotifier {
 
   Future<ProductModel> getProductBy(String id) async {
     try {
+      // check apakah id ada di dalam state _products
+      if (_products.any((product) => product.id.toString() == id)) {
+        // jika ada mengembalikan product yang dari state tanpa perlu mereload
+        int index =
+            _products.indexWhere((element) => element.id.toString() == id);
+        return _products[index];
+      }
+
+      // get data jika belum ada
       final product = await ProductService.getProductById(id);
       if (product.data == null) {
         throw "Something wrong";
       }
+
+      // return data
       return product.data!;
     } catch (e) {
       rethrow;
