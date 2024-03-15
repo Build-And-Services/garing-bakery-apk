@@ -8,6 +8,7 @@ class FormStokProvider with ChangeNotifier {
   bool _isLoading = false;
   EditStockRequest? _body;
 
+  EditStockRequest? get body => _body;
   bool get isDone => _isDone;
   bool get isLoading => _isLoading;
 
