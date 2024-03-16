@@ -41,6 +41,7 @@ class TransactionService {
         },
         body: jsonEncode(order.toJson()),
       );
+      print(jsonDecode(result.body));
       return result;
     } catch (e) {
       rethrow;

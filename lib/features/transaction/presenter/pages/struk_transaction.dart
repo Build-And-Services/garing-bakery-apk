@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -37,6 +39,7 @@ class StrukTransactionPage extends StatelessWidget {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       "Gading Bakery",
@@ -110,10 +113,55 @@ class StrukTransactionPage extends StatelessWidget {
                       indent: 20,
                       endIndent: 20,
                     ),
-                    const ItemDetailWidget(),
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 3,
+                            child: headerDetailInvoice('Produk'),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: headerDetailInvoice('Harga'),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: headerDetailInvoice('QTY'),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: headerDetailInvoice('Total',
+                                align: TextAlign.end),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    const ItemDetailWidget(),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        children: [
+                          footerDetailInvoice('Total', 60000),
+                          footerDetailInvoice('Uang', 100000),
+                          footerDetailInvoice('Kembalian', 40000),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -121,6 +169,53 @@ class StrukTransactionPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget headerDetailInvoice(String title, {TextAlign? align}) {
+    return Container(
+      // color: Colors.grey,
+      child: Text(
+        title,
+        style: GoogleFonts.poppins(
+          color: Colors.black,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.bold,
+        ),
+        textAlign: align,
+      ),
+    );
+  }
+
+  Widget footerDetailInvoice(String title, int value) {
+    return Container(
+      // color: Colors.grey,
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 12.sp,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value.toString(),
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 12.sp,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.end,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -135,20 +230,78 @@ class ItemDetailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: const Column(
         children: [
-          Text(
-            'Item Detail',
-            style: GoogleFonts.poppins(
-              color: Colors.black,
-              fontSize: 12.sp,
-              fontWeight: FontWeight.bold,
-            ),
+          Column(
+            children: [
+              InvoiceItemWidget(),
+              InvoiceItemWidget(),
+              InvoiceItemWidget()
+            ],
           ),
         ],
       ),
+    );
+  }
+}
+
+class InvoiceItemWidget extends StatelessWidget {
+  const InvoiceItemWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Text(
+            'Roti Bolu',
+            style: GoogleFonts.poppins(
+              color: Colors.black,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Text(
+            '13000',
+            style: GoogleFonts.poppins(
+              color: Colors.black,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Text(
+            '2',
+            style: GoogleFonts.poppins(
+              color: Colors.black,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.normal,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Text(
+            '26000',
+            style: GoogleFonts.poppins(
+              color: Colors.black,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.normal,
+            ),
+            textAlign: TextAlign.end,
+          ),
+        ),
+      ],
     );
   }
 }
