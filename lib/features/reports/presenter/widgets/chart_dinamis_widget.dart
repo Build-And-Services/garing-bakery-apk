@@ -45,7 +45,7 @@ class ChartDinamisWidget extends StatelessWidget {
           right: 18,
           left: 12,
           top: 24,
-          bottom: 12,
+          bottom: 24,
         ),
         child: LineChart(
           LineChartData(
@@ -66,7 +66,7 @@ class ChartDinamisWidget extends StatelessWidget {
             minX: minX,
             maxX: maxX,
             minY: minY,
-            maxY: maxY + 10000,
+            maxY: maxY,
             lineBarsData: [
               LineChartBarData(
                 spots: spots,

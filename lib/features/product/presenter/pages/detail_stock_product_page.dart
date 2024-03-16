@@ -75,7 +75,7 @@ class _DetailStockProductPageState extends State<DetailStockProductPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Marlong",
+                      stockData.product.name,
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         color: Colors.black,

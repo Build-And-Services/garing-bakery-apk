@@ -89,4 +89,20 @@ class ReportsService {
       rethrow;
     }
   }
+
+  static Future<ReportSalesResponse> getReportSales(String filter) async {
+    try {
+      print(filter);
+      final result =
+          await http.get(Uri.parse("${RemoteApi().REPORTS}/$filter"));
+      if (result.statusCode != 200) {
+        throw 'Gagal';
+      }
+      ReportSalesResponse data =
+          ReportSalesResponse.fromJson(jsonDecode(result.body));
+      return data;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

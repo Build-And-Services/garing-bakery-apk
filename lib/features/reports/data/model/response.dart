@@ -168,3 +168,57 @@ class DetailTransaction {
         "profit": profit,
       };
 }
+
+class ReportSalesResponse {
+  int profit;
+  int revenue;
+  List<Detail> details;
+
+  ReportSalesResponse({
+    required this.profit,
+    required this.revenue,
+    required this.details,
+  });
+
+  factory ReportSalesResponse.fromJson(Map<String, dynamic> json) =>
+      ReportSalesResponse(
+        profit: json["profit"],
+        revenue: json["revenue"],
+        details:
+            List<Detail>.from(json["details"].map((x) => Detail.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "profit": profit,
+        "revenue": revenue,
+        "details": List<dynamic>.from(details.map((x) => x.toJson())),
+      };
+}
+
+class Detail {
+  String indicator;
+  int profit;
+  int revenue;
+  int totalTransactions;
+
+  Detail({
+    required this.indicator,
+    required this.profit,
+    required this.revenue,
+    required this.totalTransactions,
+  });
+
+  factory Detail.fromJson(Map<String, dynamic> json) => Detail(
+        indicator: json["indicator"],
+        profit: json["profit"],
+        revenue: json["revenue"],
+        totalTransactions: json["total_transactions"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "indicator": indicator,
+        "profit": profit,
+        "revenue": revenue,
+        "total_transactions": totalTransactions,
+      };
+}

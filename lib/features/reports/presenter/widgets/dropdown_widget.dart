@@ -1,33 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
-import 'package:intl/intl.dart';
+import 'package:garing_bakery_apk/features/reports/presenter/provider/reports_sales_provider.dart';
+import 'package:provider/provider.dart';
 
-class DropdownWidget extends StatefulWidget {
+class DropdownWidget extends StatelessWidget {
   const DropdownWidget({super.key});
 
   @override
-  State<DropdownWidget> createState() => _DropdownWidgetState();
-}
-
-class _DropdownWidgetState extends State<DropdownWidget> {
-  String dropdownvalue = 'Today';
-  DateTime currentDate = DateTime.now();
-  String today =
-      DateFormat("EEEE, d MMMM yyyy", "id_ID").format(DateTime.now());
-  var filter = [
-    'Today',
-    'Yesterday',
-    'Custom',
-  ];
-
-  @override
-  void initState() {
-    today = DateFormat("EEEE, d MMMM yyyy", "id_ID").format(currentDate);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    ReportsSalesProvider reportsSalesProvider =
+        context.watch<ReportsSalesProvider>();
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -42,8 +24,8 @@ class _DropdownWidgetState extends State<DropdownWidget> {
             alignedDropdown: true,
             child: DropdownButton(
               borderRadius: BorderRadius.circular(8),
-              value: dropdownvalue,
-              items: filter.map((String items) {
+              value: reportsSalesProvider.dropdownValue,
+              items: reportsSalesProvider.filter.map((String items) {
                 return DropdownMenuItem(
                   value: items,
                   child: Row(
@@ -58,36 +40,32 @@ class _DropdownWidgetState extends State<DropdownWidget> {
                 );
               }).toList(),
               onChanged: (String? newValue) {
-                setState(() {
-                  dropdownvalue = newValue!;
-                  if (dropdownvalue == 'Yesterday') {
-                    currentDate =
-                        DateTime.now().subtract(const Duration(days: 1));
-                  } else if (dropdownvalue == 'Today') {
-                    currentDate = DateTime.now();
-                  } else {
-                    _selectDate(context);
-                  }
-                });
+                if (newValue == 'Yesterday') {
+                  reportsSalesProvider.dateTime =
+                      DateTime.now().subtract(const Duration(days: 1));
+                  reportsSalesProvider.dropdownValue = 'Yesterday';
+                } else if (newValue == 'Today') {
+                  reportsSalesProvider.dateTime = DateTime.now();
+                  reportsSalesProvider.dropdownValue = 'Today';
+                } else {
+                  _selectDate(context, reportsSalesProvider);
+                  reportsSalesProvider.dropdownValue = 'Custom';
+                }
               },
             )),
       ),
     );
   }
 
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDate(
+      BuildContext context, ReportsSalesProvider reportsSalesProvider) async {
     await showDatePicker(
             context: context,
-            initialDate: currentDate,
+            initialDate: reportsSalesProvider.dateTime,
             firstDate: DateTime(2015),
             lastDate: DateTime(2050))
         .then((value) => {
-              if (value != null)
-                {
-                  setState(() {
-                    currentDate = value;
-                  })
-                }
+              if (value != null) {reportsSalesProvider.dateTime = value}
             });
   }
 }

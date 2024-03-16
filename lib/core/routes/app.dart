@@ -10,7 +10,7 @@ import 'package:garing_bakery_apk/features/product/presenter/pages/detail_produc
 import 'package:garing_bakery_apk/features/product/presenter/pages/detail_stock_product_page.dart';
 import 'package:garing_bakery_apk/features/product/presenter/pages/edit_product_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_page.dart';
-import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_sales_page.dart';
+import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_sales/reports_sales_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_stocks/reports_stocks_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_transaction/report_per_transaction.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_transaction/reports_transaction_page.dart';
