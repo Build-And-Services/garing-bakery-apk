@@ -41,7 +41,6 @@ class ReportsService {
           ReportTahunTransactionsResponse.fromJson(jsonDecode(result.body));
       return data;
     } catch (e) {
-      print(e.toString());
       rethrow;
     }
   }

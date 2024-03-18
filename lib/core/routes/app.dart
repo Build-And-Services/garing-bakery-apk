@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/models/arguments/ArgumentReportTransaction.dart';
+import 'package:garing_bakery_apk/core/models/arguments/ArgumentStruck.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/pages/auth_page.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/pages/splash_page.dart';
 import 'package:garing_bakery_apk/features/category/presenter/pages/add_category_page.dart';
@@ -14,6 +15,7 @@ import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_sales
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_stocks/reports_stocks_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_transaction/report_per_transaction.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_transaction/reports_transaction_page.dart';
+import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/next_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/history/show_transaction_page.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/struk_transaction.dart';
@@ -77,10 +79,10 @@ class Routes {
           type: PageTransitionType.rightToLeft,
         );
       case Routes.TRANSACTIONS_SUCCESS:
-        final kembalian = settings.arguments;
+        TransactionAddResponse result = settings.arguments;
         return PageTransition(
           child: SuccessTransaction(
-            kembalian: kembalian,
+            result: result,
           ),
           type: PageTransitionType.fade,
         );
@@ -93,8 +95,9 @@ class Routes {
           type: PageTransitionType.rightToLeft,
         );
       case Routes.TRANSACTIONS_STRUK:
+        ArgumentStruct data = settings.arguments as ArgumentStruct;
         return PageTransition(
-          child: const StrukTransactionPage(),
+          child: StrukTransactionPage(data: data),
           type: PageTransitionType.bottomToTop,
         );
       case Routes.ADD_PRODUCT:

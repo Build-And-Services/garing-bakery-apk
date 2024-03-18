@@ -5,9 +5,9 @@ import 'package:garing_bakery_apk/core/models/user_model.dart';
 import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
 import 'package:garing_bakery_apk/features/product/data/service/product_service.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/cart_model.dart';
+import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/requests/request_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/data/service/transaction_service.dart';
-import 'package:http/http.dart';
 
 class CartProvider with ChangeNotifier {
   bool _isLoading = false;
@@ -156,7 +156,7 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Response?> addTransaction() async {
+  Future<TransactionAddResponse?> addTransaction() async {
     List<OrderItem> orderitems = [];
     for (var cart in _cartList) {
       orderitems.add(
@@ -166,23 +166,20 @@ class CartProvider with ChangeNotifier {
         ),
       );
     }
-
     UserModel user = await TokenService.getCacheUser();
-
     OrderRequest body = OrderRequest(
       userId: user.id,
       nominal: nominal,
       orderItems: orderitems,
     );
-
     try {
       final result = await TransactionService.addTransaction(body);
       clear();
       return result;
     } catch (e) {
       print(e);
-      return null;
     }
+    return null;
   }
 
   CartModel getCart(ProductModel product) {

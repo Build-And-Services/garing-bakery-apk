@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
+import 'package:garing_bakery_apk/core/models/arguments/ArgumentStruck.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/response_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/transaction_provider.dart';
@@ -59,8 +60,14 @@ class _TransactionShowPageState extends State<TransactionShowPage> {
                         return ListTile(
                           onTap: () => Navigator.of(context).pushNamed(
                             Routes.TRANSACTIONS_STRUK,
+                            arguments: ArgumentStruct(
+                              transaction.id,
+                              null,
+                            ),
                           ),
-                          leading: const Icon(Icons.person),
+                          leading: const Icon(
+                            Icons.person,
+                          ),
                           title: Text(
                             transaction.userId,
                             style: GoogleFonts.poppins(

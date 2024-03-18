@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
+import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -52,12 +51,17 @@ class NextTransaction extends StatelessWidget {
         ),
         centerTitle: true,
         bottom: PreferredSize(
-          preferredSize:
-              const Size.fromHeight(4.0), // Set the height of the border bottom
+          preferredSize: const Size.fromHeight(
+            4.0,
+          ),
           child: Container(
             color: const Color.fromARGB(
-                255, 182, 182, 182), // Set the color of the border bottom
-            height: 0.5, // Set the height of the border bottom
+              255,
+              182,
+              182,
+              182,
+            ),
+            height: 0.5,
           ),
         ),
       ),
@@ -97,24 +101,27 @@ class NextTransaction extends StatelessWidget {
                                   ? InkWell(
                                       onTap: () async {
                                         if (cartProvider.checkNominal()) {
-                                          cartProvider.loading = true;
                                           cartProvider
                                               .addTransaction()
                                               .then((result) {
-                                            if (result!.statusCode == 201) {
-                                              final kembalian = int.parse(
-                                                      jsonDecode(result.body)[
-                                                          "data"]["nominal"]) -
-                                                  jsonDecode(result.body)[
-                                                      "data"]["total_price"];
-                                              cartProvider.loading = false;
+                                            TransactionAddResponse? data =
+                                                result;
+                                            if (data != null) {
                                               Navigator.pushReplacementNamed(
                                                 context,
                                                 Routes.TRANSACTIONS_SUCCESS,
-                                                arguments: kembalian,
+                                                arguments: data,
                                               );
+                                            } else {
+                                              Navigator.popUntil(context,
+                                                  (route) {
+                                                return route.isFirst;
+                                              });
                                             }
-                                          });
+                                            // }
+                                          }).catchError(
+                                            (onError) => print(onError),
+                                          );
                                         }
                                       },
                                       child: Container(
