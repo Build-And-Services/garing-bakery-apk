@@ -30,7 +30,7 @@ class ReportPerDayWidget extends StatelessWidget {
         if (snapshot.hasError) {
           return const ProblemWidget();
         }
-        if (!snapshot.hasData) {
+        if (snapshot.data!.data.isEmpty) {
           return const NoDataWidget();
         }
 

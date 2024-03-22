@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/core/widgets/shimmer/wrapper_shimmer_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,7 +17,7 @@ class ProductCardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color.fromARGB(255, 232, 232, 232),
+      color: const Color.fromARGB(255, 253, 253, 253),
       shadowColor: Colors.black12,
       borderOnForeground: true,
       semanticContainer: true,
@@ -28,12 +30,12 @@ class ProductCardItem extends StatelessWidget {
             placeholder: (context, url) => WrapperShimmer(
               child: Container(
                 width: double.infinity,
-                height: 150,
+                height: 140,
                 decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
+                  // borderRadius: BorderRadius.all(
+                  //   Radius.circular(10),
+                  // ),
                 ),
               ),
             ),
@@ -42,9 +44,9 @@ class ProductCardItem extends StatelessWidget {
                 width: double.infinity,
                 height: 150,
                 decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
+                  // borderRadius: const BorderRadius.all(
+                  //   Radius.circular(10),
+                  // ),
                   image: DecorationImage(
                     image: imageProvider,
                     fit: BoxFit.fill,
@@ -70,7 +72,7 @@ class ProductCardItem extends StatelessWidget {
                           children: [
                             Text(
                               product.name,
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w600,
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -90,8 +92,8 @@ class ProductCardItem extends StatelessWidget {
                       Text(
                         "${product.quantity}",
                         style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          color: const Color.fromARGB(255, 32, 138, 35),
+                          fontSize: 14.sp,
+                          color: MyTheme.brown,
                           fontWeight: FontWeight.bold,
                         ),
                       )
@@ -100,7 +102,6 @@ class ProductCardItem extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("harga: "),
                       Text("Rp. ${product.sellingPrice}"),
                     ],
                   ),

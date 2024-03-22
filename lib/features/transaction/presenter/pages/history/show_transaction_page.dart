@@ -3,6 +3,7 @@ import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/models/arguments/ArgumentStruck.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
+import 'package:garing_bakery_apk/core/widgets/no_data_widget.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/response_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/transaction_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -48,9 +49,7 @@ class _TransactionShowPageState extends State<TransactionShowPage> {
                     }
 
                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(
-                        child: Text("Tidak ditemukan data"),
-                      );
+                      return const NoDataWidget();
                     }
                     return ListView.builder(
                       itemCount: snapshot.data?.length,

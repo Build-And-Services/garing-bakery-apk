@@ -67,6 +67,49 @@ class ProductService {
     }
   }
 
+  static Future<ProductAddResponse> updateProduct(
+      Map<String, String> body, String filepath,
+      {String id = ''}) async {
+    try {
+      Map<String, String> headers = {
+        'Content-Type': 'multipart/form-data',
+      };
+      var request = http.MultipartRequest(
+          'POST',
+          Uri.parse(
+              id == '' ? RemoteApi().PRODUCTS : '${RemoteApi().PRODUCTS}/$id'))
+        ..fields.addAll(body)
+        ..headers.addAll(headers)
+        ..files.add(await http.MultipartFile.fromPath('image', filepath));
+      var response = await request.send();
+      var decoded = await response.stream.bytesToString().then(json.decode);
+      late ProductModel? data;
+      if (response.statusCode == 202) {
+        data = ProductModel(
+          id: decoded["data"]["id"],
+          name: decoded["data"]["name"],
+          image: decoded["data"]["image"],
+          productCode: decoded["data"]["product_code"],
+          category: decoded["data"]["category"],
+          quantity: int.parse(decoded["data"]["selling_price"]),
+          purchasePrice: int.parse(decoded["data"]["selling_price"]),
+          sellingPrice: int.parse(decoded["data"]["selling_price"]),
+        );
+      } else {
+        data = null;
+      }
+      var result = ProductAddResponse(
+        success: decoded["success"],
+        message: decoded["message"],
+        data: data,
+      );
+      return result;
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
   static Future<ProductDelResponse> delete(int id) async {
     try {
       final response =

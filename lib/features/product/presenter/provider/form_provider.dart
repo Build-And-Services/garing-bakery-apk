@@ -1,5 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:garing_bakery_apk/features/product/data/model/response_product.dart';
+import 'package:garing_bakery_apk/features/product/data/service/product_service.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class FormProductProvider with ChangeNotifier {
   final ImagePicker picker = ImagePicker();
@@ -27,6 +35,14 @@ class FormProductProvider with ChangeNotifier {
     _selling.clear();
     _category.clear();
     _image = null;
+  }
+
+  Future setImage(String url) async {
+    final file = await DefaultCacheManager().getSingleFile(url);
+
+    XFile result = XFile(file.path);
+    _image = result;
+    notifyListeners();
   }
 
   //we can upload image from camera or from gallery based on parameter
@@ -84,5 +100,21 @@ class FormProductProvider with ChangeNotifier {
       return mandatory;
     }
     return null;
+  }
+
+  Future<ProductAddResponse> editData(String id) async {
+    try {
+      final service = await ProductService.updateProduct(
+        body,
+        image!.path,
+        id: id,
+      );
+      return service;
+    } catch (e) {
+      return ProductAddResponse(
+        success: false,
+        message: "Product failed to update",
+      );
+    }
   }
 }

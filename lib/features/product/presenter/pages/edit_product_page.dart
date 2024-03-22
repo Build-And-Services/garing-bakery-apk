@@ -33,7 +33,7 @@ class _EditProductPageState extends State<EditProductPage> {
   @override
   Widget build(BuildContext context) {
     final product = context.read<ProductProvider>();
-    final formProduct = context.watch<FormProductProvider>();
+    final formProduct = context.read<FormProductProvider>();
 
     return Scaffold(
       appBar: AppBar(
@@ -102,7 +102,7 @@ class _EditProductPageState extends State<EditProductPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            _imagePreview(formProduct, productModel, context),
+                            ImagesPreview(productModel: productModel),
                           ],
                         ),
                         const SizedBox(
@@ -142,30 +142,17 @@ class _EditProductPageState extends State<EditProductPage> {
                           ),
                     tap: () {
                       if (_formKey.currentState!.validate()) {
-                        product.setLoading = true;
+                        // product.setLoading = true;
                         final image = formProduct.image;
 
                         if (image != null) {
-                          product.isProccess = true;
-                          product
-                              .editData(
-                            formProduct.body,
-                            image.path,
-                            widget.id,
-                          )
-                              .then((value) {
-                            product.isProccess = false;
-
-                            if (product.responseAdd.success) {
-                              MyTheme.alertSucces(
-                                context,
-                                product.responseAdd.message,
-                              );
+                          // product.isProccess = true;
+                          formProduct.editData(widget.id).then((value) {
+                            if (value.success) {
+                              print(value.data);
+                              MyTheme.alertSucces(context, value.message);
                             } else {
-                              MyTheme.alertWarning(
-                                context,
-                                product.responseAdd.message,
-                              );
+                              MyTheme.alertError(context, value.message);
                             }
                           });
                         } else {
@@ -341,11 +328,47 @@ class _EditProductPageState extends State<EditProductPage> {
     );
   }
 
-  InkWell _imagePreview(
-    FormProductProvider formProduct,
-    ProductModel productModel,
-    BuildContext context,
-  ) {
+  Row logoImage(FormProductProvider formProduct) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () => formProduct.getImage(ImageSource.camera),
+          child: const Icon(
+            Icons.photo_camera_outlined,
+            size: 30,
+            color: MyTheme.primary,
+          ),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        GestureDetector(
+          onTap: () => formProduct.getImage(ImageSource.gallery),
+          child: const Icon(
+            Icons.image_outlined,
+            size: 30,
+            color: MyTheme.primary,
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class ImagesPreview extends StatelessWidget {
+  const ImagesPreview({
+    super.key,
+    required this.productModel,
+  });
+  final ProductModel productModel;
+
+  @override
+  Widget build(BuildContext context) {
+    final formProduct = context.watch<FormProductProvider>();
+    if (formProduct.image == null) {
+      formProduct.setImage(productModel.image);
+    }
     return InkWell(
       onTap: () => formProduct.getImage(ImageSource.gallery),
       child: Container(
@@ -388,33 +411,6 @@ class _EditProductPageState extends State<EditProductPage> {
                     ),
         ),
       ),
-    );
-  }
-
-  Row logoImage(FormProductProvider formProduct) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: () => formProduct.getImage(ImageSource.camera),
-          child: const Icon(
-            Icons.photo_camera_outlined,
-            size: 30,
-            color: MyTheme.primary,
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        GestureDetector(
-          onTap: () => formProduct.getImage(ImageSource.gallery),
-          child: const Icon(
-            Icons.image_outlined,
-            size: 30,
-            color: MyTheme.primary,
-          ),
-        )
-      ],
     );
   }
 }

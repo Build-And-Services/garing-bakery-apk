@@ -86,8 +86,10 @@ class _MainDetailProductWidgetState extends State<MainDetailProductWidget> {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8.0))),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                          ),
                           contentPadding: const EdgeInsets.only(top: 10.0),
                           content: SizedBox(
                             width: MediaQuery.of(context).size.width,

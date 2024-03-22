@@ -77,25 +77,6 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  Future editData(Map<String, String> body, String image, String id) async {
-    try {
-      final service = await ProductService.addImage(
-        body,
-        image,
-        id: id,
-      );
-      if (service.success) {
-        _products.insert(0, service.data as ProductModel);
-      }
-      _responseAdd = service;
-      notifyListeners();
-    } catch (e) {
-      _responseAdd =
-          ProductAddResponse(success: false, message: "Terjadi kesalahan");
-      notifyListeners();
-    }
-  }
-
   Future<ProductModel> getProductBy(String id) async {
     try {
       // check apakah id ada di dalam state _products
@@ -117,5 +98,15 @@ class ProductProvider with ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+  }
+
+  editProduct(ProductModel data) {
+    _products.map((e) {
+      if (e.id == data.id) {
+        return data;
+      }
+      return e;
+    });
+    notifyListeners();
   }
 }

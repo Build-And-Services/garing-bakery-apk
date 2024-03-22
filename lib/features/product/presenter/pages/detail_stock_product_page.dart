@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
+import 'package:garing_bakery_apk/core/widgets/no_data_widget.dart';
 import 'package:garing_bakery_apk/features/product/data/model/response_product.dart';
 import 'package:garing_bakery_apk/features/product/data/service/product_service.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -58,13 +59,7 @@ class _DetailStockProductPageState extends State<DetailStockProductPage> {
               }
               final StockProductResponse? stockData = snapshot.data;
               if (stockData == null) {
-                return SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: const Center(
-                    child: Text("Data tidak ada"),
-                  ),
-                );
+                return const NoDataWidget();
               }
 
               return Container(
