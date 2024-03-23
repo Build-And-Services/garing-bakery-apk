@@ -11,6 +11,7 @@ import 'package:garing_bakery_apk/features/product/presenter/provider/form_provi
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/provider/reports_sales_provider.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';
+import 'package:garing_bakery_apk/features/transaction/presenter/provider/print_provider.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/transaction_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
@@ -57,6 +58,9 @@ void selectInitialRoute() async {
         ),
         ChangeNotifierProvider(
           create: (_) => ReportsSalesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => PrintProvider(),
         ),
       ],
       child: ScreenUtilInit(

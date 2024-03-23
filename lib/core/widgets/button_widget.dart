@@ -3,9 +3,9 @@ import 'package:garing_bakery_apk/core/config/theme.dart';
 
 // ignore: must_be_immutable
 class ButtonWidget extends StatelessWidget {
-  Widget title;
-  Function()? tap;
-  ButtonWidget({
+  final Widget title;
+  final Function()? tap;
+  const ButtonWidget({
     super.key,
     required this.title,
     this.tap,

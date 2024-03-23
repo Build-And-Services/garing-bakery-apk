@@ -149,7 +149,9 @@ class _EditProductPageState extends State<EditProductPage> {
                           // product.isProccess = true;
                           formProduct.editData(widget.id).then((value) {
                             if (value.success) {
-                              print(value.data);
+                              if (value.data != null) {
+                                product.editProduct(value.data!);
+                              }
                               MyTheme.alertSucces(context, value.message);
                             } else {
                               MyTheme.alertError(context, value.message);
