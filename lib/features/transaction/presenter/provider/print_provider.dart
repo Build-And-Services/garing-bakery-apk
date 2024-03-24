@@ -7,12 +7,14 @@ class PrintProvider with ChangeNotifier {
   final BluetoothPrint _bluetoothPrint = BluetoothPrint.instance;
   bool _connected = false;
   BluetoothDevice? _device;
+  String _tips = "Hubungkan";
   List<BluetoothDevice> _devices = [];
 
   BluetoothPrint get bluetoothPrint => _bluetoothPrint;
   bool get connected => _connected;
   BluetoothDevice? get device => _device;
   List<BluetoothDevice> get devices => _devices;
+  String get tips => _tips;
 
   set setDevice(BluetoothDevice? device) {
     _device = device;
@@ -45,5 +47,14 @@ class PrintProvider with ChangeNotifier {
     if (isConnected) {
       _connected = true;
     }
+  }
+
+  Future connect(BluetoothDevice device) async {
+    final result = await bluetoothPrint.connect(device);
+    if (result) {
+      _tips = "Connected";
+    }
+    notifyListeners();
+    return result;
   }
 }

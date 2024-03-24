@@ -120,7 +120,8 @@ class NextTransaction extends StatelessWidget {
                                             }
                                             // }
                                           }).catchError(
-                                            (onError) => print(onError),
+                                            // ignore: invalid_return_type_for_catch_error
+                                            (onError) => debugPrint(onError),
                                           );
                                         }
                                       },

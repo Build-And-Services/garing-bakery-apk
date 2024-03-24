@@ -9,7 +9,6 @@ import 'package:garing_bakery_apk/core/widgets/no_data_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/problem_get_widget.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
 import 'package:garing_bakery_apk/features/transaction/data/service/transaction_service.dart';
-import 'package:garing_bakery_apk/features/transaction/presenter/pages/print_page.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/print_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -280,7 +279,7 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
                 height: 100,
               ),
               const DropdownPrint(),
-              const ButtonPrint()
+              ButtonPrint(detail: data.details)
             ],
           ),
         );
@@ -452,15 +451,117 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
 class ButtonPrint extends StatelessWidget {
   const ButtonPrint({
     super.key,
+    required this.detail,
   });
+
+  final List<DetailTransactionsResponse> detail;
 
   @override
   Widget build(BuildContext context) {
     final printProvider = context.watch<PrintProvider>();
+
     return InkWell(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => const PrintPage()));
+      onTap: () async {
+        if (!printProvider.connected) {
+          debugPrint("belum connect");
+          if (printProvider.device != null) {
+            debugPrint("mencoba connect");
+            printProvider.connect(printProvider.device!);
+          }
+        } else {
+          debugPrint("connected");
+          debugPrint(printProvider.device!.name);
+          Map<String, dynamic> config = {};
+          List<LineText> list = [];
+          list.add(LineText(linefeed: 1));
+
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: "Gading Bakery",
+              weight: 2,
+              width: 2,
+              height: 2,
+              align: LineText.ALIGN_CENTER,
+              linefeed: 1,
+            ),
+          );
+          list.add(LineText(linefeed: 1));
+
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: "Address: jln. Pattimura, Kab. Gresik, Prov. Jawa Timur",
+              align: LineText.ALIGN_CENTER,
+              linefeed: 1,
+            ),
+          );
+          list.add(LineText(linefeed: 1));
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: "No. telp: 083853797950",
+              weight: 0,
+              align: LineText.ALIGN_CENTER,
+              linefeed: 1,
+            ),
+          );
+          list.add(LineText(linefeed: 1));
+
+          list.add(LineText(linefeed: 1));
+
+          for (var i = 0; i < detail.length; i++) {
+            list.add(
+              LineText(
+                type: LineText.TYPE_TEXT,
+                content: detail[i].productsName,
+                weight: 0,
+                align: LineText.ALIGN_LEFT,
+                linefeed: 1,
+              ),
+            );
+
+            list.add(
+              LineText(
+                type: LineText.TYPE_TEXT,
+                content: "${detail[i].sellingPrice} x ${detail[i].quantity}",
+                align: LineText.ALIGN_LEFT,
+                linefeed: 0,
+                x: 0,
+              ),
+            );
+            final total =
+                formatRupiah(detail[i].sellingPrice * detail[i].quantity);
+            debugPrint(total.length.toString());
+            list.add(
+              LineText(
+                type: LineText.TYPE_TEXT,
+                content: total,
+                align: LineText.ALIGN_RIGHT,
+                linefeed: 0,
+                x: 200 - total.length,
+              ),
+            );
+            list.add(LineText(linefeed: 1));
+          }
+          list.add(LineText(linefeed: 1));
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: "Terima Kasih sudah berbelanja.",
+              align: LineText.ALIGN_CENTER,
+              linefeed: 1,
+            ),
+          );
+          list.add(LineText(linefeed: 1));
+          list.add(LineText(linefeed: 1));
+
+          debugPrint(list.toString());
+
+          await printProvider.bluetoothPrint.printReceipt(config, list);
+        }
+        // Navigator.push(
+        //     context, MaterialPageRoute(builder: (_) => const PrintPage()));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(
@@ -470,8 +571,11 @@ class ButtonPrint extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         decoration: const BoxDecoration(
-            color: MyTheme.brown,
-            borderRadius: BorderRadius.all(Radius.circular(16))),
+          color: MyTheme.brown,
+          borderRadius: BorderRadius.all(
+            Radius.circular(16),
+          ),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -483,7 +587,7 @@ class ButtonPrint extends StatelessWidget {
               width: 10,
             ),
             Text(
-              printProvider.connected ? 'PRINT' : 'CONNECT',
+              printProvider.tips,
               style: GoogleFonts.poppins(
                 color: Colors.white,
                 fontSize: 16.sp,

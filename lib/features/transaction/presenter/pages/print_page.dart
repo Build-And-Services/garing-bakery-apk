@@ -157,84 +157,115 @@ class _PrintPageState extends State<PrintPage> {
 
                                 List<LineText> list = [];
 
-                                list.add(LineText(
+                                list.add(
+                                  LineText(
                                     type: LineText.TYPE_TEXT,
-                                    content:
-                                        '**********************************************',
+                                    content: '********************************',
                                     weight: 1,
                                     align: LineText.ALIGN_CENTER,
-                                    linefeed: 1));
+                                    linefeed: 1,
+                                  ),
+                                );
                                 list.add(LineText(
                                     type: LineText.TYPE_TEXT,
-                                    content: '打印单据头',
+                                    content: 'Transaksi',
                                     weight: 1,
                                     align: LineText.ALIGN_CENTER,
                                     fontZoom: 2,
                                     linefeed: 1));
                                 list.add(LineText(linefeed: 1));
 
-                                list.add(LineText(
+                                list.add(
+                                  LineText(
                                     type: LineText.TYPE_TEXT,
-                                    content:
-                                        '----------------------明细---------------------',
+                                    content: '-----------------------------',
                                     weight: 1,
                                     align: LineText.ALIGN_CENTER,
-                                    linefeed: 1));
-                                list.add(LineText(
+                                    linefeed: 1,
+                                  ),
+                                );
+                                list.add(
+                                  LineText(
                                     type: LineText.TYPE_TEXT,
-                                    content: '物资名称规格型号',
+                                    content: 'cadbury',
                                     weight: 1,
                                     align: LineText.ALIGN_LEFT,
                                     x: 0,
                                     relativeX: 0,
-                                    linefeed: 0));
-                                list.add(LineText(
+                                    linefeed: 0,
+                                  ),
+                                );
+                                list.add(
+                                  LineText(
                                     type: LineText.TYPE_TEXT,
-                                    content: '单位',
+                                    content: 'RP. 12.000,00',
                                     weight: 1,
                                     align: LineText.ALIGN_LEFT,
                                     x: 350,
                                     relativeX: 0,
-                                    linefeed: 0));
-                                list.add(LineText(
+                                    linefeed: 0,
+                                  ),
+                                );
+                                list.add(
+                                  LineText(
                                     type: LineText.TYPE_TEXT,
-                                    content: '数量',
+                                    content: 'test',
                                     weight: 1,
                                     align: LineText.ALIGN_LEFT,
                                     x: 500,
-                                    relativeX: 0,
-                                    linefeed: 1));
+                                    relativeX: 40,
+                                    linefeed: 1,
+                                  ),
+                                );
 
-                                list.add(LineText(
+                                list.add(
+                                  LineText(
                                     type: LineText.TYPE_TEXT,
-                                    content: '混凝土C30',
+                                    content: 'test2',
                                     align: LineText.ALIGN_LEFT,
                                     x: 0,
                                     relativeX: 0,
-                                    linefeed: 0));
-                                list.add(LineText(
+                                    linefeed: 0,
+                                  ),
+                                );
+                                list.add(
+                                  LineText(
                                     type: LineText.TYPE_TEXT,
-                                    content: '吨',
+                                    content: 'Rp. 20.000',
                                     align: LineText.ALIGN_LEFT,
                                     x: 350,
                                     relativeX: 0,
-                                    linefeed: 0));
-                                list.add(LineText(
+                                    linefeed: 0,
+                                  ),
+                                );
+                                list.add(
+                                  LineText(
                                     type: LineText.TYPE_TEXT,
                                     content: '12.0',
                                     align: LineText.ALIGN_LEFT,
                                     x: 500,
                                     relativeX: 0,
-                                    linefeed: 1));
+                                    linefeed: 1,
+                                  ),
+                                );
 
-                                list.add(LineText(
+                                list.add(
+                                  LineText(
                                     type: LineText.TYPE_TEXT,
                                     content:
                                         '**********************************************',
                                     weight: 1,
                                     align: LineText.ALIGN_CENTER,
-                                    linefeed: 1));
-                                list.add(LineText(linefeed: 1));
+                                    linefeed: 1,
+                                  ),
+                                );
+                                list.add(
+                                  LineText(linefeed: 1),
+                                );
+
+                                list.add(
+                                  LineText(linefeed: 1),
+                                );
 
                                 // list.add(LineText(type: LineText.TYPE_IMAGE, content: base64Image, align: LineText.ALIGN_CENTER, linefeed: 1));
 
