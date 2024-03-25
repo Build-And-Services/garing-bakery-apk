@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
+import 'package:garing_bakery_apk/core/models/arguments/ArgumentReportTransaction.dart';
+import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/core/widgets/no_data_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/problem_get_widget.dart';
 import 'package:garing_bakery_apk/features/reports/data/model/response.dart';
@@ -14,7 +16,6 @@ import 'package:garing_bakery_apk/features/reports/presenter/widgets/dropdown_wi
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ReportsSalesPage extends StatefulWidget {
   const ReportsSalesPage({super.key});
@@ -40,21 +41,22 @@ class _ReportsSalesPageState extends State<ReportsSalesPage> {
         ),
         actions: [
           PopupMenuButton(
-            itemBuilder: (_) => [
-              const PopupMenuItem(
-                value: 'Import',
-                child: Text('Import Excel'),
-              ),
-              const PopupMenuItem(
-                value: 'Share',
-                child: Text('Share Excel'),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'Export',
+                child: const Text('Export Excel'),
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    Routes.REPORT_SALES_TO_EXCEL,
+                    arguments: ArgumentReportTransaction(
+                      reportsSalesProvider.dateTime.day.toString(),
+                      reportsSalesProvider.dateTime.month.toString(),
+                      reportsSalesProvider.dateTime.year.toString(),
+                    ),
+                  );
+                },
               ),
             ],
-            onSelected: (value) async {
-              if (value == 'Share') {
-                await Share.share('check out my website https://example.com');
-              }
-            },
           ),
         ],
         title: const Center(

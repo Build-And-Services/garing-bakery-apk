@@ -44,13 +44,14 @@ class MyTheme {
     );
   }
 
-  static alertSucces(BuildContext context, String message) {
+  static alertSucces(BuildContext context, String message,
+      {bool confirm = false, Duration? duration = const Duration(seconds: 1)}) {
     return QuickAlert.show(
       context: context,
       type: QuickAlertType.success,
       text: message,
-      autoCloseDuration: const Duration(seconds: 1),
-      showConfirmBtn: false,
+      autoCloseDuration: duration,
+      showConfirmBtn: confirm,
     );
   }
 

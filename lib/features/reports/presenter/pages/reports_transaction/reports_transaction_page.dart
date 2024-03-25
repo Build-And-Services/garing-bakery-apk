@@ -3,7 +3,6 @@ import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/models/arguments/ArgumentReportTransaction.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ReportsTransactionPage extends StatelessWidget {
   const ReportsTransactionPage({super.key});
@@ -21,25 +20,6 @@ class ReportsTransactionPage extends StatelessWidget {
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        actions: [
-          PopupMenuButton(
-            itemBuilder: (_) => [
-              const PopupMenuItem(
-                value: 'Import',
-                child: Text('Import Excel'),
-              ),
-              const PopupMenuItem(
-                value: 'Share',
-                child: Text('Share Excel'),
-              ),
-            ],
-            onSelected: (value) async {
-              if (value == 'Share') {
-                await Share.share('check out my website https://example.com');
-              }
-            },
-          ),
-        ],
         title: const Text(
           'Laporan Transaksi',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),

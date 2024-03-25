@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/models/arguments/ArgumentReportTransaction.dart';
+import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_transaction/per/report_all.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_transaction/per/report_per_day.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_transaction/per/report_per_month_year.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ReportPerTransaction extends StatelessWidget {
   const ReportPerTransaction({
@@ -39,20 +39,15 @@ class ReportPerTransaction extends StatelessWidget {
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => [
-              const PopupMenuItem(
-                value: 'Import',
-                child: Text('Import Excel'),
-              ),
-              const PopupMenuItem(
-                value: 'Share',
-                child: Text('Share Excel'),
+              PopupMenuItem(
+                value: 'Export',
+                child: const Text('Export Excel'),
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(Routes.REPORT_SALES_TO_EXCEL, arguments: date);
+                },
               ),
             ],
-            onSelected: (value) async {
-              if (value == 'Share') {
-                await Share.share('check out my website https://example.com');
-              }
-            },
           ),
         ],
         title: Text(

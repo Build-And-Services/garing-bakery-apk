@@ -104,4 +104,31 @@ class ReportsService {
       rethrow;
     }
   }
+
+  static Future<ReportTransactionSalesResponse> getReportSalestoExcel(
+      String date, String month, String tahun) async {
+    try {
+      http.Response result;
+      String url = RemoteApi().REPORTSTOEXCEL;
+
+      if (tahun != '' && month == '' && date == '') {
+        url += "/$tahun";
+      } else if (tahun != '' && month != '' && date == '') {
+        url += "/$month/$tahun";
+      } else if (tahun != '' && month != '' && date != '') {
+        url += "/$date/$month/$tahun";
+      } else {
+        url;
+      }
+      result = await http.get(Uri.parse(url));
+      if (result.statusCode != 200) {
+        throw 'Gagal mengambil data';
+      }
+      ReportTransactionSalesResponse data =
+          ReportTransactionSalesResponse.fromJson(jsonDecode(result.body));
+      return data;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

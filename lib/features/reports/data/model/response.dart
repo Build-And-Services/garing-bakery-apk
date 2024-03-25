@@ -222,3 +222,57 @@ class Detail {
         "total_transactions": totalTransactions,
       };
 }
+
+class ReportTransactionSalesResponse {
+  bool status;
+  String message;
+  List<DetailSales> data;
+
+  ReportTransactionSalesResponse({
+    required this.status,
+    required this.message,
+    required this.data,
+  });
+
+  factory ReportTransactionSalesResponse.fromJson(Map<String, dynamic> json) =>
+      ReportTransactionSalesResponse(
+        status: json["status"],
+        message: json["message"],
+        data: List<DetailSales>.from(
+            json["data"].map((x) => DetailSales.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "status": status,
+        "message": message,
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
+}
+
+class DetailSales {
+  String productName;
+  int sellingPrice;
+  String tanggal;
+  int quantity;
+
+  DetailSales({
+    required this.productName,
+    required this.sellingPrice,
+    required this.tanggal,
+    required this.quantity,
+  });
+
+  factory DetailSales.fromJson(Map<String, dynamic> json) => DetailSales(
+        productName: json["product_name"],
+        sellingPrice: json["selling_price"],
+        tanggal: json["tanggal"],
+        quantity: json["quantity"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "product_name": productName,
+        "selling_price": sellingPrice,
+        "tanggal": tanggal,
+        "quantity": quantity,
+      };
+}

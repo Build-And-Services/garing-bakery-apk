@@ -22,6 +22,7 @@ import 'package:garing_bakery_apk/features/transaction/presenter/pages/struk_tra
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/success_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/transaction_page.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_to_excel/report_sales_to_excel.dart';
 
 class Routes {
   static const String SPLASH = '/splash';
@@ -50,6 +51,7 @@ class Routes {
   static const String REPORTS_PER_TRANSACTIONS = '/reports_per_transactions';
 
   static const String REPORTS_STOCKS = '/reports_stocks';
+  static const String REPORT_SALES_TO_EXCEL = '/reports_to_excel';
 
   static Route<dynamic> generateRoute(settings) {
     switch (settings.name) {
@@ -156,6 +158,11 @@ class Routes {
           child: const ReportsStocksPage(),
           type: PageTransitionType.fade,
         );
+      case Routes.REPORT_SALES_TO_EXCEL:
+        final argument = settings.arguments as ArgumentReportTransaction;
+        return PageTransition(
+            child: ReportSalesToExcel(date: argument),
+            type: PageTransitionType.fade);
       default:
         return PageTransition(
           child: const DashboardPage(),
