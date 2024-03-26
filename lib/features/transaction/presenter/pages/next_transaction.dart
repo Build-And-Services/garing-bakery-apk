@@ -74,6 +74,7 @@ class NextTransaction extends StatelessWidget {
             InputNominal(
               cartProvider: cartProvider,
             ),
+            // TODO: not responsive for tablet, just hp heri which support
             Expanded(
               child: GridView.count(
                 crossAxisCount: 4,
