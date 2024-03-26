@@ -1,6 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
+import 'package:garing_bakery_apk/core/models/arguments/ArgumentReportTransaction.dart';
+import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/core/widgets/loading_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/no_data_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/problem_get_widget.dart';
@@ -102,7 +104,17 @@ class ReportAllWidget extends StatelessWidget {
                   children: snapshot.data!.data
                       .map(
                         (e) => InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            debugPrint(e.toJson().toString());
+                            Navigator.of(context).pushNamed(
+                              Routes.REPORTS_PER_TRANSACTIONS,
+                              arguments: ArgumentReportTransaction(
+                                '',
+                                '',
+                                e.transactionYear.toString(),
+                              ),
+                            );
+                          },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                               vertical: 10,

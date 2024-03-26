@@ -1,12 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/features/product/data/model/response_product.dart';
 import 'package:garing_bakery_apk/features/product/data/service/product_service.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class FormProductProvider with ChangeNotifier {

@@ -119,10 +119,7 @@ class NextTransaction extends StatelessWidget {
                                                 return route.isFirst;
                                               });
                                             }
-                                            // }
-                                          }).catchError(
-                                            (onError) => print(onError),
-                                          );
+                                          });
                                         }
                                       },
                                       child: Container(
