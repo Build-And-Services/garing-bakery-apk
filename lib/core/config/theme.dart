@@ -67,27 +67,36 @@ class MyTheme {
     );
   }
 
-  static alertWarning(BuildContext context, String message) {
+  static alertWarning(
+    BuildContext context,
+    String message, {
+    bool showCancelBtn = false,
+    Function()? onConfirmBtnTap,
+  }) {
     return QuickAlert.show(
       context: context,
       type: QuickAlertType.warning,
       text: message,
+      confirmBtnColor: primary,
+      showCancelBtn: showCancelBtn,
+      onConfirmBtnTap: onConfirmBtnTap,
     );
   }
 
   static Future<void> showLoadingDialog(BuildContext context) async {
     return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        });
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
   }
 
   // final infoAlert = buildButton(

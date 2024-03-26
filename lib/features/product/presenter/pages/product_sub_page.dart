@@ -1,15 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
-import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/search_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/shimmer/wrapper_shimmer_widget.dart';
+import 'package:garing_bakery_apk/features/product/presenter/widgets/product_card_widget.dart';
 import 'package:garing_bakery_apk/features/product/presenter/widgets/shimmer_loading.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class ProductSubPage extends StatelessWidget {
@@ -54,157 +53,24 @@ class ProductSubPage extends StatelessWidget {
               productProvider.setLoading = true;
             },
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const SearchWidget(),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Column(
-                    children: productProvider.products
-                        .map((e) => InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, Routes.DETAIL_PRODUCT,
-                                    arguments: e.id);
-                              },
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: Card(
-                                  semanticContainer: true,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  shadowColor: Colors.black,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    // mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ImageProduct(e: e, width: width),
-                                      Expanded(
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 20,
-                                            horizontal: 15,
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          e.name,
-                                                          style: GoogleFonts
-                                                              .poppins(
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            color: Colors.black,
-                                                            fontSize: 16,
-                                                          ),
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                        Text(
-                                                          e.productCode,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 10,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 30,
-                                                  ),
-                                                  Expanded(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
-                                                      children: [
-                                                        Text(
-                                                          e.quantity.toString(),
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 10,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          "${formatRupiah(e.purchasePrice)} _ ${formatRupiah(e.sellingPrice)}",
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 10,
-                                                          ),
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                height: 15,
-                                              ),
-                                              InkWell(
-                                                onTap: () {
-                                                  print(
-                                                      "delete product id ${e.id}");
-                                                },
-                                                child: SizedBox(
-                                                  width: 80,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        "Delete",
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          color: Colors.red,
-                                                          fontSize: 10,
-                                                        ),
-                                                      ),
-                                                      const Icon(
-                                                        Icons.delete,
-                                                        color: Colors.red,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ))
-                        .toList(),
-                  )
-                ],
+              child: Container(
+                color: const Color.fromARGB(255, 255, 250, 244),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const SearchWidget(),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Column(
+                      children: productProvider.products.map((e) {
+                        return ProductCardWidget(product: e);
+                      }).toList(),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -213,6 +79,143 @@ class ProductSubPage extends StatelessWidget {
     );
   }
 }
+// InkWell(
+//                               onTap: () {
+//                                 Navigator.pushNamed(
+//                                     context, Routes.DETAIL_PRODUCT,
+//                                     arguments: e.id);
+//                               },
+//                               child: Container(
+//                                 margin:
+//                                     const EdgeInsets.symmetric(horizontal: 10),
+//                                 child: Card(
+//                                   semanticContainer: true,
+//                                   clipBehavior: Clip.antiAliasWithSaveLayer,
+//                                   shape: RoundedRectangleBorder(
+//                                     borderRadius: BorderRadius.circular(10.0),
+//                                   ),
+//                                   shadowColor: Colors.black,
+//                                   child: Row(
+//                                     crossAxisAlignment:
+//                                         CrossAxisAlignment.start,
+//                                     // mainAxisAlignment: MainAxisAlignment.center,
+//                                     children: [
+//                                       ImageProduct(e: e, width: width),
+//                                       Expanded(
+//                                         child: Container(
+//                                           padding: const EdgeInsets.symmetric(
+//                                             vertical: 20,
+//                                             horizontal: 15,
+//                                           ),
+//                                           child: Column(
+//                                             crossAxisAlignment:
+//                                                 CrossAxisAlignment.end,
+//                                             children: [
+//                                               Row(
+//                                                 mainAxisAlignment:
+//                                                     MainAxisAlignment
+//                                                         .spaceBetween,
+//                                                 children: [
+//                                                   Expanded(
+//                                                     child: Column(
+//                                                       crossAxisAlignment:
+//                                                           CrossAxisAlignment
+//                                                               .start,
+//                                                       children: [
+//                                                         Text(
+//                                                           e.name,
+//                                                           style: GoogleFonts
+//                                                               .poppins(
+//                                                             fontWeight:
+//                                                                 FontWeight.w700,
+//                                                             color: Colors.black,
+//                                                             fontSize: 16,
+//                                                           ),
+//                                                           maxLines: 1,
+//                                                           overflow: TextOverflow
+//                                                               .ellipsis,
+//                                                         ),
+//                                                         Text(
+//                                                           e.productCode,
+//                                                           style:
+//                                                               const TextStyle(
+//                                                             fontSize: 10,
+//                                                           ),
+//                                                         ),
+//                                                       ],
+//                                                     ),
+//                                                   ),
+//                                                   const SizedBox(
+//                                                     width: 30,
+//                                                   ),
+//                                                   Expanded(
+//                                                     child: Column(
+//                                                       crossAxisAlignment:
+//                                                           CrossAxisAlignment
+//                                                               .end,
+//                                                       children: [
+//                                                         Text(
+//                                                           e.quantity.toString(),
+//                                                           style:
+//                                                               const TextStyle(
+//                                                             fontSize: 10,
+//                                                           ),
+//                                                         ),
+//                                                         Text(
+//                                                           "${formatRupiah(e.purchasePrice)} _ ${formatRupiah(e.sellingPrice)}",
+//                                                           style:
+//                                                               const TextStyle(
+//                                                             fontSize: 10,
+//                                                           ),
+//                                                           maxLines: 1,
+//                                                           overflow: TextOverflow
+//                                                               .ellipsis,
+//                                                         ),
+//                                                       ],
+//                                                     ),
+//                                                   )
+//                                                 ],
+//                                               ),
+//                                               const SizedBox(
+//                                                 height: 15,
+//                                               ),
+//                                               InkWell(
+//                                                 onTap: () {
+//                                                   print(
+//                                                       "delete product id ${e.id}");
+//                                                 },
+//                                                 child: SizedBox(
+//                                                   width: 80,
+//                                                   child: Row(
+//                                                     mainAxisAlignment:
+//                                                         MainAxisAlignment
+//                                                             .center,
+//                                                     children: [
+//                                                       Text(
+//                                                         "Delete",
+//                                                         style:
+//                                                             GoogleFonts.poppins(
+//                                                           color: Colors.red,
+//                                                           fontSize: 10,
+//                                                         ),
+//                                                       ),
+//                                                       const Icon(
+//                                                         Icons.delete,
+//                                                         color: Colors.red,
+//                                                       ),
+//                                                     ],
+//                                                   ),
+//                                                 ),
+//                                               )
+//                                             ],
+//                                           ),
+//                                         ),
+//                                       )
+//                                     ],
+//                                   ),
+//                                 ),
+//                               ),
+//                             )
 
 class ImageProduct extends StatelessWidget {
   const ImageProduct({
