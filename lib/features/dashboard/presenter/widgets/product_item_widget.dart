@@ -16,11 +16,22 @@ class ProductCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: const Color.fromARGB(255, 253, 253, 253),
-      shadowColor: Colors.black12,
-      borderOnForeground: true,
-      semanticContainer: true,
+    double w = MediaQuery.of(context).size.width;
+    debugPrint("product item: $w");
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(
+            6.sp,
+          ),
+        ),
+        border: Border.all(
+          color: Colors.grey,
+          width: 0.1.sp,
+          style: BorderStyle.solid,
+        ),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,9 +44,9 @@ class ProductCardItem extends StatelessWidget {
                 height: 140,
                 decoration: const BoxDecoration(
                   color: Colors.white,
-                  // borderRadius: BorderRadius.all(
-                  //   Radius.circular(10),
-                  // ),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
                 ),
               ),
             ),
@@ -44,12 +55,12 @@ class ProductCardItem extends StatelessWidget {
                 width: double.infinity,
                 height: 150,
                 decoration: BoxDecoration(
-                  // borderRadius: const BorderRadius.all(
-                  //   Radius.circular(10),
-                  // ),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
                   image: DecorationImage(
                     image: imageProvider,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
                 ),
               );
@@ -72,14 +83,18 @@ class ProductCardItem extends StatelessWidget {
                           children: [
                             Text(
                               product.name,
-                              style: GoogleFonts.inter(
+                              style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w600,
+                                fontSize: 9.sp,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
                             Text(
                               product.category ?? '',
+                              style: GoogleFonts.poppins(
+                                fontSize: 8.sp,
+                              ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -92,7 +107,7 @@ class ProductCardItem extends StatelessWidget {
                       Text(
                         "${product.quantity}",
                         style: GoogleFonts.poppins(
-                          fontSize: 14.sp,
+                          fontSize: 8.sp,
                           color: MyTheme.brown,
                           fontWeight: FontWeight.bold,
                         ),
@@ -102,7 +117,14 @@ class ProductCardItem extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Rp. ${product.sellingPrice}"),
+                      Text(
+                        "Rp. ${product.sellingPrice}",
+                        style: GoogleFonts.poppins(
+                          fontSize: 8.sp,
+                          color: MyTheme.brown,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 ],

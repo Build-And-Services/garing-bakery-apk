@@ -101,13 +101,12 @@ class ProductProvider with ChangeNotifier {
   }
 
   editProduct(ProductModel data) {
-    _products.map((e) {
+    _products = _products.map((e) {
       if (e.id == data.id) {
-        debugPrint("mantap");
         return data;
       }
       return e;
-    });
+    }).toList();
     notifyListeners();
   }
 }

@@ -76,9 +76,8 @@ class HomeSubPage extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: w > 480 ? 3 : 2,
-          childAspectRatio: MediaQuery.of(context).size.width /
-              (MediaQuery.of(context).size.height / 1.4),
+          crossAxisCount: w > 480 ? 4 : 2,
+          childAspectRatio: w > 1000 ? 0.8 : 0.65,
           mainAxisSpacing: 20.0,
           crossAxisSpacing: 10.0,
         ),

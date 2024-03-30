@@ -30,7 +30,7 @@ class ProductCardWidget extends StatelessWidget {
         );
       },
       child: Container(
-        width: MediaQuery.of(context).size.width,
+        width: double.infinity,
         height: 100.sp,
         margin: const EdgeInsets.symmetric(
           vertical: 5,
@@ -40,17 +40,18 @@ class ProductCardWidget extends StatelessWidget {
           8.sp,
         ),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(
-                16.sp,
-              ),
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              16.sp,
             ),
-            border: Border.all(
-              color: Colors.grey,
-              width: 0.5.sp,
-              style: BorderStyle.solid,
-            )),
+          ),
+          border: Border.all(
+            color: Colors.grey,
+            width: 0.5.sp,
+            style: BorderStyle.solid,
+          ),
+        ),
         child: Row(
           children: [
             CachedNetworkImage(

@@ -65,109 +65,228 @@ class NextTransaction extends StatelessWidget {
           ),
         ),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(
-          10,
-        ),
-        child: Column(
-          children: [
-            InputNominal(
-              cartProvider: cartProvider,
-            ),
-            // TODO: not responsive for tablet, just hp heri which support
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 4,
-                childAspectRatio: 0.69,
-                children: List.generate(keys.length, (index) {
-                  return InkWell(
-                    onTap: () {
-                      cartProvider.setNominal = keys[index];
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                      ),
-                      child: keys[index] == "x"
-                          ? const Icon(
-                              Icons.backspace_outlined,
-                              color: MyTheme.primary,
-                            )
-                          : keys[index] == "z"
-                              ? const Icon(
-                                  Icons.money,
-                                  color: MyTheme.primary,
-                                )
-                              : keys[index] == "selesai"
-                                  ? InkWell(
-                                      onTap: () async {
-                                        if (cartProvider.checkNominal()) {
-                                          cartProvider
-                                              .addTransaction()
-                                              .then((result) {
-                                            TransactionAddResponse? data =
-                                                result;
-                                            if (data != null) {
-                                              Navigator.pushReplacementNamed(
-                                                context,
-                                                Routes.TRANSACTIONS_SUCCESS,
-                                                arguments: data,
-                                              );
-                                            } else {
-                                              Navigator.popUntil(context,
-                                                  (route) {
-                                                return route.isFirst;
-                                              });
-                                            }
-                                          });
-                                        }
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: cartProvider.checkNominal()
-                                              ? const Color.fromARGB(
-                                                  255, 95, 204, 98)
-                                              : const Color.fromARGB(
-                                                  255, 209, 239, 210),
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(5),
-                                          ),
-                                        ),
-                                        child: !cartProvider.isLoading
-                                            ? const Icon(
-                                                Icons.check,
-                                                color: Colors.white,
-                                                size: 60,
-                                              )
-                                            : const Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              ),
-                                      ),
-                                    )
-                                  : Center(
-                                      child: Text(
-                                        keys[index],
-                                        style: const TextStyle(
-                                          fontSize: 34.0,
-                                          fontWeight: FontWeight.w700,
-                                          color: Color.fromARGB(
-                                            255,
-                                            118,
-                                            115,
-                                            115,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                    ),
-                  );
-                }),
+      body: Container(child: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth > 900) {
+            return _inputNominalTabletView(cartProvider, keys, context);
+          } else {
+            return _inputNominalAndroidView(cartProvider, keys, context);
+          }
+        },
+      )),
+    );
+  }
+
+  Row _inputNominalTabletView(
+      CartProvider cartProvider, List<String> keys, BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width / 3,
+          padding: const EdgeInsets.symmetric(
+            vertical: 40,
+          ),
+          child: Center(
+            child: Text(
+              formatRupiah(cartProvider.nominal),
+              style: TextStyle(
+                color: Colors.green[800],
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ],
+          ),
         ),
-      ),
+        Expanded(
+          child: GridView.count(
+            crossAxisCount: 4,
+            childAspectRatio: MediaQuery.of(context).size.width /
+                MediaQuery.of(context).size.height /
+                1.34,
+            physics: const NeverScrollableScrollPhysics(),
+            children: List.generate(keys.length, (index) {
+              return InkWell(
+                onTap: () {
+                  cartProvider.setNominal = keys[index];
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                  ),
+                  child: keys[index] == "x"
+                      ? const Icon(
+                          Icons.backspace_outlined,
+                          color: MyTheme.primary,
+                        )
+                      : keys[index] == "z"
+                          ? const Icon(
+                              Icons.money,
+                              color: MyTheme.primary,
+                            )
+                          : keys[index] == "selesai"
+                              ? InkWell(
+                                  onTap: () async {
+                                    if (cartProvider.checkNominal()) {
+                                      cartProvider
+                                          .addTransaction()
+                                          .then((result) {
+                                        TransactionAddResponse? data = result;
+                                        if (data != null) {
+                                          Navigator.pushReplacementNamed(
+                                            context,
+                                            Routes.TRANSACTIONS_SUCCESS,
+                                            arguments: data,
+                                          );
+                                        } else {
+                                          Navigator.popUntil(context, (route) {
+                                            return route.isFirst;
+                                          });
+                                        }
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: cartProvider.checkNominal()
+                                          ? const Color.fromARGB(
+                                              255, 95, 204, 98)
+                                          : const Color.fromARGB(
+                                              255, 209, 239, 210),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                    ),
+                                    child: !cartProvider.isLoading
+                                        ? const Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                            size: 60,
+                                          )
+                                        : const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                  ),
+                                )
+                              : Center(
+                                  child: Text(
+                                    keys[index],
+                                    style: const TextStyle(
+                                      fontSize: 34.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: Color.fromARGB(
+                                        255,
+                                        118,
+                                        115,
+                                        115,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                ),
+              );
+            }),
+          ),
+        )
+      ],
+    );
+  }
+
+  Column _inputNominalAndroidView(
+      CartProvider cartProvider, List<String> keys, BuildContext context) {
+    return Column(
+      children: [
+        InputNominal(
+          cartProvider: cartProvider,
+        ),
+        Expanded(
+          child: GridView.count(
+            crossAxisCount: 4,
+            childAspectRatio: 1,
+            physics: const NeverScrollableScrollPhysics(),
+            children: List.generate(keys.length, (index) {
+              return InkWell(
+                onTap: () {
+                  cartProvider.setNominal = keys[index];
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                  ),
+                  child: keys[index] == "x"
+                      ? const Icon(
+                          Icons.backspace_outlined,
+                          color: MyTheme.primary,
+                        )
+                      : keys[index] == "z"
+                          ? const Icon(
+                              Icons.money,
+                              color: MyTheme.primary,
+                            )
+                          : keys[index] == "selesai"
+                              ? InkWell(
+                                  onTap: () async {
+                                    if (cartProvider.checkNominal()) {
+                                      cartProvider
+                                          .addTransaction()
+                                          .then((result) {
+                                        TransactionAddResponse? data = result;
+                                        if (data != null) {
+                                          Navigator.pushReplacementNamed(
+                                            context,
+                                            Routes.TRANSACTIONS_SUCCESS,
+                                            arguments: data,
+                                          );
+                                        } else {
+                                          Navigator.popUntil(context, (route) {
+                                            return route.isFirst;
+                                          });
+                                        }
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: cartProvider.checkNominal()
+                                          ? const Color.fromARGB(
+                                              255, 95, 204, 98)
+                                          : const Color.fromARGB(
+                                              255, 209, 239, 210),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                    ),
+                                    child: !cartProvider.isLoading
+                                        ? const Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                            size: 60,
+                                          )
+                                        : const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                  ),
+                                )
+                              : Center(
+                                  child: Text(
+                                    keys[index],
+                                    style: const TextStyle(
+                                      fontSize: 34.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: Color.fromARGB(
+                                        255,
+                                        118,
+                                        115,
+                                        115,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                ),
+              );
+            }),
+          ),
+        ),
+      ],
     );
   }
 }

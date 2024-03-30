@@ -13,109 +13,110 @@ class SuccessTransaction extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartProvider = context.read<CartProvider>();
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: 50,
-        ),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        color: Colors.white,
-        child: Column(
-          children: [
-            const SuccessBanner(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Total Pembelian",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            vertical: 50,
+          ),
+          width: MediaQuery.of(context).size.width,
+          color: Colors.white,
+          child: Column(
+            children: [
+              const SuccessBanner(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Total Pembelian",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                  Text(
-                    formatRupiah(result.totalPrice),
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
+                    Text(
+                      formatRupiah(result.totalPrice),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Nominal",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Nominal",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                  Text(
-                    formatRupiah(result.nominal),
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
+                    Text(
+                      formatRupiah(result.nominal),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            KembalianWidget(
-              kembalian: result.change,
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                children: [
-                  const ButtonNewTransaction(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const PrintButtonWidget(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ButtonSuccessWidget(
-                      title: "Lihat Struk",
+              KembalianWidget(
+                kembalian: result.change,
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  children: [
+                    const ButtonNewTransaction(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const PrintButtonWidget(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ButtonSuccessWidget(
+                        title: "Lihat Struk",
+                        aksi: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.TRANSACTIONS_STRUK,
+                            arguments: ArgumentStruct(
+                              result.id,
+                              null,
+                            ),
+                          );
+                        }),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ButtonSuccessWidget(
+                      title: "Back to Dashboard",
                       aksi: () {
-                        Navigator.pushNamed(
+                        print("jalan ga");
+                        cartProvider.setCartList = [];
+                        cartProvider.setNominal = "C";
+                        Navigator.popUntil(
                           context,
-                          Routes.TRANSACTIONS_STRUK,
-                          arguments: ArgumentStruct(
-                            result.id,
-                            null,
-                          ),
+                          (route) => route.isFirst,
                         );
-                      }),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ButtonSuccessWidget(
-                    title: "Back to Dashboard",
-                    aksi: () {
-                      print("jalan ga");
-                      cartProvider.setCartList = [];
-                      cartProvider.setNominal = "C";
-                      Navigator.popUntil(
-                        context,
-                        (route) => route.isFirst,
-                      );
-                    },
-                  ),
-                ],
-              ),
-            )
-          ],
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

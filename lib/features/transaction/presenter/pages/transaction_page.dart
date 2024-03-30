@@ -341,7 +341,7 @@ class ButtonCheckout extends StatelessWidget {
         horizontal: 40,
       ),
       width: MediaQuery.of(context).size.width - 20,
-      height: MediaQuery.of(context).size.height / 12,
+      height: 80,
       child: InkWell(
         onTap: () {
           if (cardProvider.cartList.isNotEmpty) {
