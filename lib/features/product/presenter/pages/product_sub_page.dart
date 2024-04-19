@@ -59,7 +59,11 @@ class ProductSubPage extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  const SearchWidget(),
+                  SearchWidget(
+                    fn: (String keyword) {
+                      debugPrint(keyword);
+                    },
+                  ),
                   const SizedBox(
                     height: 30,
                   ),

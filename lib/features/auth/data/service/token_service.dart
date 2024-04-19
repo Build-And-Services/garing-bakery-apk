@@ -35,4 +35,9 @@ class TokenService {
     final token = "Bearer ${prefs.getString('token')}";
     return token;
   }
+
+  static Future<void> logout() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
 }
