@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
+import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DrawerPage extends StatelessWidget {
@@ -45,7 +46,14 @@ class DrawerPage extends StatelessWidget {
                 Routes.REPORTS,
               ),
             ),
-            _tapSidebar(Icons.logout_outlined, "Logout", () {}),
+            _tapSidebar(Icons.logout_outlined, "Logout", () {
+              TokenService.logout().then(
+                (value) => Navigator.pushReplacementNamed(
+                  context,
+                  Routes.LOGIN,
+                ),
+              );
+            }),
           ],
         ),
       ),

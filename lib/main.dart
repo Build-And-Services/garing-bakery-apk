@@ -77,8 +77,7 @@ void selectInitialRoute() async {
                 ),
               ),
               debugShowCheckedModeBanner: false,
-              initialRoute: pref.getString("token") == null &&
-                      pref.getString("user") == null
+              initialRoute: pref.getString("token") == null
                   ? Routes.SPLASH
                   : Routes.DASHBOARD,
               onGenerateRoute: (settings) => Routes.generateRoute(

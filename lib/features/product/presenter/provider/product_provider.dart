@@ -36,6 +36,10 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void filter(String keyword) {
+    debugPrint(keyword);
+  }
+
   Future<List<ProductModel>> getProduct() async {
     try {
       List<ProductModel> productsResp = await ProductService.allProducts();

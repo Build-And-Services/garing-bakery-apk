@@ -15,6 +15,7 @@ class ProfileSubPage extends StatefulWidget {
 
 class _ProfileSubPageState extends State<ProfileSubPage> {
   UserModel? user;
+
   Future getStringValuesSF() async {
     UserModel userCache = await TokenService.getCacheUser();
     setState(() {
@@ -176,7 +177,7 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _contentProfile(width),
+                  _contentProfile(width, user),
                   const SizedBox(
                     height: 20,
                   ),
@@ -287,7 +288,7 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
     );
   }
 
-  Container _contentProfile(double width) {
+  Container _contentProfile(double width, UserModel user) {
     return Container(
       width: width / 3,
       height: width / 3,
@@ -300,8 +301,9 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
         borderRadius: const BorderRadius.all(
           Radius.circular(100),
         ),
-        image: const DecorationImage(
-          image: AssetImage('assets/profile.jpeg'),
+        image: DecorationImage(
+          image: NetworkImage(user.image),
+          fit: BoxFit.fill,
         ),
       ),
     );
