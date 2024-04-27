@@ -6,6 +6,7 @@ import 'package:garing_bakery_apk/core/models/arguments/ArgumentStruck.dart';
 import 'package:garing_bakery_apk/core/widgets/loading_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/no_data_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/problem_get_widget.dart';
+import 'package:garing_bakery_apk/features/printer/data/service/struck_service.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
 import 'package:garing_bakery_apk/features/transaction/data/service/transaction_service.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/print_provider.dart';
@@ -25,6 +26,20 @@ class StrukTransactionPage extends StatefulWidget {
 
 class _StrukTransactionPageState extends State<StrukTransactionPage> {
   PrintProvider? printProvider;
+  late Map<String, dynamic> struck;
+
+  Future getDataStruck() async {
+    final dataStruck = await SettingStruckService.getData();
+    setState(() {
+      struck = dataStruck;
+    });
+  }
+
+  @override
+  void initState() {
+    getDataStruck();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +152,9 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "Gading Bakery",
+                            struck != null
+                                ? struck["company"]
+                                : "Gading Bakery",
                             style: GoogleFonts.poppins(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
@@ -147,7 +164,7 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
                             height: 10,
                           ),
                           Text(
-                            'Address: Jln. Pattimura, Kab. Gresik, Prov. Jawa Timur',
+                            struck != null ? struck["alamat"] : " ",
                             style: GoogleFonts.poppins(
                               color: Colors.grey,
                               fontSize: 8.sp,
@@ -157,7 +174,9 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
                             height: 10,
                           ),
                           Text(
-                            'No Telp: 083853797950',
+                            struck != null
+                                ? "No Hp: " + struck["notelp"]
+                                : "No Hp: ",
                             style: GoogleFonts.poppins(
                               color: Colors.grey,
                               fontSize: 8.sp,
@@ -179,21 +198,7 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'No. Faktur: 786324-23423-33434',
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.grey,
-                                    fontSize: 10.sp,
-                                  ),
-                                ),
-                                Text(
                                   'Tanggal : ${DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(data.createdAt)}',
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.grey,
-                                    fontSize: 10.sp,
-                                  ),
-                                ),
-                                Text(
-                                  'Alamat : Jln. Pattimura',
                                   style: GoogleFonts.poppins(
                                     color: Colors.grey,
                                     fontSize: 10.sp,

@@ -35,7 +35,14 @@ class DrawerPage extends StatelessWidget {
                 Routes.DASHBOARD,
               ),
             ),
-            _tapSidebar(Icons.print_outlined, "Printer dan struk", () {}),
+            _tapSidebar(
+              Icons.print_outlined,
+              "Printer dan struk",
+              () => Navigator.pushReplacementNamed(
+                context,
+                Routes.STRUCK_SETTING,
+              ),
+            ),
             // _tapSidebar(Icons.money_sharp, "Keuangan", () {}),
             _tapSidebar(
               Icons.note_outlined,

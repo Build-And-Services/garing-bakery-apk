@@ -6,6 +6,7 @@ import 'package:garing_bakery_apk/features/auth/presenter/pages/auth_page.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/pages/splash_page.dart';
 import 'package:garing_bakery_apk/features/category/presenter/pages/add_category_page.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/pages/dashboard_page.dart';
+import 'package:garing_bakery_apk/features/printer/presenter/pages/setting_struck.dart';
 import 'package:garing_bakery_apk/features/product/presenter/pages/add_product_page.dart';
 import 'package:garing_bakery_apk/features/product/presenter/pages/detail_product_page.dart';
 import 'package:garing_bakery_apk/features/product/presenter/pages/detail_stock_product_page.dart';
@@ -52,6 +53,9 @@ class Routes {
 
   static const String REPORTS_STOCKS = '/reports_stocks';
   static const String REPORT_SALES_TO_EXCEL = '/reports_to_excel';
+
+  // Printer and Struck
+  static const String STRUCK_SETTING = '/struck_setting';
 
   static Route<dynamic> generateRoute(settings) {
     switch (settings.name) {
@@ -161,8 +165,14 @@ class Routes {
       case Routes.REPORT_SALES_TO_EXCEL:
         final argument = settings.arguments as ArgumentReportTransaction;
         return PageTransition(
-            child: ReportSalesToExcel(date: argument),
-            type: PageTransitionType.fade);
+          child: ReportSalesToExcel(date: argument),
+          type: PageTransitionType.fade,
+        );
+      case Routes.STRUCK_SETTING:
+        return PageTransition(
+          child: const StruckSetting(),
+          type: PageTransitionType.fade,
+        );
       default:
         return PageTransition(
           child: const DashboardPage(),

@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 class RemoteApi {
-  final String API_BASE_URL = "https://stagging.gading-bakery.com";
+  final String API_BASE_URL = "https://gading-bakery.com";
 
   String get LOGIN => '$API_BASE_URL/api/login';
   String get PRODUCTS => '$API_BASE_URL/api/v1/products';
