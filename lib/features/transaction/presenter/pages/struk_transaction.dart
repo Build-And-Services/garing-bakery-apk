@@ -512,6 +512,7 @@ class ButtonPrint extends StatelessWidget {
 
           list.add(LineText(linefeed: 1));
 
+          var pembayaran = 0;
           for (var i = 0; i < detail.length; i++) {
             list.add(
               LineText(
@@ -534,6 +535,7 @@ class ButtonPrint extends StatelessWidget {
             );
             final total =
                 formatRupiah(detail[i].sellingPrice * detail[i].quantity);
+            pembayaran += detail[i].sellingPrice * detail[i].quantity;
             debugPrint(total.length.toString());
             list.add(
               LineText(
@@ -547,6 +549,25 @@ class ButtonPrint extends StatelessWidget {
             list.add(LineText(linefeed: 1));
           }
           list.add(LineText(linefeed: 1));
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: "Total dibeli",
+              weight: 0,
+              align: LineText.ALIGN_LEFT,
+              linefeed: 1,
+            ),
+          );
+
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: "$pembayaran",
+              align: LineText.ALIGN_LEFT,
+              linefeed: 0,
+              x: 0,
+            ),
+          );
           list.add(
             LineText(
               type: LineText.TYPE_TEXT,
