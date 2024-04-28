@@ -1,28 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:garing_bakery_apk/core/config/theme.dart';
 
-class SearchWidget extends StatelessWidget {
+class SearchWidget extends StatefulWidget {
   const SearchWidget({
     super.key,
+    required this.fn,
   });
+
+  final Function(String keyword) fn;
+
+  @override
+  State<SearchWidget> createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          TextButton(
-            onPressed: () {},
-            child: const Icon(
-              Icons.notifications_outlined,
-              color: MyTheme.primary,
-            ),
-          ),
-          const Expanded(
+          Expanded(
             // width: double.infinity,
             child: TextField(
-              decoration: InputDecoration(
+              onChanged: (value) {
+                widget.fn(value);
+                debugPrint("widget search: $value");
+              },
+              decoration: const InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
                   vertical: 1,
                 ),
@@ -36,13 +48,6 @@ class SearchWidget extends StatelessWidget {
                   Icons.search,
                 ),
               ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: const Icon(
-              Icons.filter_list_rounded,
-              color: MyTheme.primary,
             ),
           ),
         ],

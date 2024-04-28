@@ -7,6 +7,7 @@ import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/core/widgets/button_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/input_widget.dart';
+import 'package:garing_bakery_apk/core/widgets/loading_widget.dart';
 import 'package:garing_bakery_apk/features/category/presenter/provider/category_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/form_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
@@ -15,25 +16,54 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:select_form_field/select_form_field.dart';
 
-class EditProductPage extends StatefulWidget {
+class EditProductPage extends StatelessWidget {
   final String id;
 
-  const EditProductPage({
+  EditProductPage({
     super.key,
     required this.id,
   });
 
-  @override
-  State<EditProductPage> createState() => _EditProductPageState();
-}
-
-class _EditProductPageState extends State<EditProductPage> {
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final product = context.read<ProductProvider>();
+    final product = context.watch<ProductProvider>();
     final formProduct = context.read<FormProductProvider>();
+    final category = context.watch<CategoryProvider>();
+    if (category.isLoading) {
+      category.getCategories().then((value) {
+        if (value.where((element) => element['value'] == 'no').length != 1) {
+          category.setItems = [
+            {'value': 'no', 'label': 'No selected'},
+            ...value,
+          ];
+        }
+      });
+      return Container(
+        color: Colors.white,
+        child: const LoadingWidget(),
+      );
+    }
+
+    if (product.isLoadingDetail) {
+      product.getProductBy(
+        id,
+        formProductProvider: formProduct,
+        items: category.items,
+      );
+      return Scaffold(
+        body: Container(
+          color: Colors.white,
+          height: MediaQuery.of(context).size.height,
+          child: const Column(
+            children: [
+              LoadingWidget(),
+            ],
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -56,121 +86,131 @@ class _EditProductPageState extends State<EditProductPage> {
           ),
         ),
       ),
-      body: FutureBuilder<ProductModel>(
-        future: product.getProductBy(widget.id),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text("Terjadi Kesalahan silakan reload aplikasi"),
-            );
-          }
-          final productModel = snapshot.data;
-          if (productModel == null) {
-            return const Center(
-              child: Text("Terjadi Kesalahan silakan reload aplikasi"),
-            );
-          }
-          formProduct.name.text = productModel.name;
-          formProduct.stock.text = productModel.quantity.toString();
-          formProduct.code.text = productModel.productCode;
-          formProduct.purchase.text = productModel.purchasePrice.toString();
-          formProduct.selling.text = productModel.sellingPrice.toString();
-          if (productModel.category != null) {
-            formProduct.category.text = productModel.category!;
-          }
-
-          return Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 20,
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: ListView(
+                  children: [
+                    const SizedBox(
+                      height: 20,
                     ),
-                    child: ListView(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ImagesPreview(productModel: productModel),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        logoImage(formProduct),
-                        sectionName(formProduct),
-                        sectionMore(formProduct),
-                        sectionPrice(formProduct),
-                        sectionCategory(formProduct, context),
+                        product.product != null
+                            ? ImagesPreview(productModel: product.product!)
+                            : Container(),
                       ],
                     ),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 80,
-                  color: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal: 20,
-                  ),
-                  child: ButtonWidget(
-                    title: !product.isLoading
-                        ? Text(
-                            "Update Barang",
-                            style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
-                        : const Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    logoImage(formProduct),
+                    sectionName(formProduct),
+                    sectionMore(formProduct),
+                    sectionPrice(formProduct),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          50,
+                        ),
+                        border: Border.all(
+                          color: Colors.black,
+                        ),
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      child: DropdownButtonHideUnderline(
+                        child: ButtonTheme(
+                          alignedDropdown: true,
+                          child: DropdownButton(
+                            value: formProduct.category,
+                            items: category.items
+                                .map(
+                                  (e) => DropdownMenuItem(
+                                    value: e['value'].toString(),
+                                    child: Text(
+                                      e['label'],
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (String? newValue) {
+                              print(newValue);
+                              // if (newValue != null) {
+                              //   formProduct.setCategory = newValue;
+                              // }
+                            },
                           ),
-                    tap: () {
-                      if (_formKey.currentState!.validate()) {
-                        // product.setLoading = true;
-                        final image = formProduct.image;
+                        ),
+                      ),
+                    )
 
-                        if (image != null) {
-                          // product.isProccess = true;
-                          formProduct.editData(widget.id).then((value) {
-                            if (value.success) {
-                              if (value.data != null) {
-                                product.editProduct(value.data!);
-                              }
-                              MyTheme.alertSucces(context, value.message);
-                            } else {
-                              MyTheme.alertError(context, value.message);
-                            }
-                          });
-                        } else {
-                          MyTheme.alertWarning(
-                            context,
-                            "Gambar belum dimasukan",
-                          );
-                        }
-                      }
-                    },
-                  ),
-                )
-              ],
+                    // sectionCategory(formProduct, context),
+                  ],
+                ),
+              ),
             ),
-          );
-        },
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 80,
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(
+                vertical: 15,
+                horizontal: 20,
+              ),
+              child: ButtonWidget(
+                title: !product.isLoading
+                    ? Text(
+                        "Update Barang",
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    : const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
+                tap: () {
+                  if (_formKey.currentState!.validate()) {
+                    // product.setLoading = true;
+                    final image = formProduct.image;
+
+                    if (image != null) {
+                      // product.isProccess = true;
+                      formProduct.editData(id).then((value) {
+                        if (value.success) {
+                          if (value.data != null) {
+                            product.editProduct(value.data!);
+                          }
+                          MyTheme.alertSucces(context, value.message);
+                        } else {
+                          MyTheme.alertError(context, value.message);
+                        }
+                      });
+                    } else {
+                      MyTheme.alertWarning(
+                        context,
+                        "Gambar belum dimasukan",
+                      );
+                    }
+                  }
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -258,7 +298,7 @@ class _EditProductPageState extends State<EditProductPage> {
                   children: [
                     Flexible(
                       child: SelectFormField(
-                        controller: formProduct.category,
+                        // controller: formProduct.category,
                         validator: formProduct.validateSelect,
                         type: SelectFormFieldType.dialog,
                         labelText: 'kategori',

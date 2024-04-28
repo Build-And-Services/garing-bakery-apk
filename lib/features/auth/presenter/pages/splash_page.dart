@@ -2,8 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
+import 'package:garing_bakery_apk/core/models/user_model.dart';
+import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/pages/auth_page.dart';
+import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
+import 'package:garing_bakery_apk/features/dashboard/presenter/pages/dashboard_page.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -14,7 +20,7 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   late Timer _timer;
-  int duration = 2;
+  int duration = 1;
   late final AnimationController _animate = AnimationController(
     duration: Duration(seconds: duration),
     vsync: this,
@@ -27,20 +33,42 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     curve: Curves.fastOutSlowIn,
   );
 
-  removeScreen() {
+  Future removeScreen() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    UserModel? userModel;
+    if (prefs.getString("token") != null) {
+      userModel = await TokenService.getCacheUser();
+    }
     return _timer = Timer(
       Duration(seconds: duration + 1),
       () {
-        Navigator.of(context).pushAndRemoveUntil(
-          PageTransition(
-            child: const AuthLogin(),
-            type: PageTransitionType.fade,
-            duration: const Duration(
-              milliseconds: 900,
+        if (prefs.getString("token") != null) {
+          AuthProvider authProvider = context.read<AuthProvider>();
+          if (userModel != null) {
+            authProvider.setUserCache = userModel;
+          }
+          Navigator.of(context).pushAndRemoveUntil(
+            PageTransition(
+              child: const DashboardPage(),
+              type: PageTransitionType.fade,
+              duration: const Duration(
+                milliseconds: 900,
+              ),
             ),
-          ),
-          (route) => false,
-        );
+            (route) => false,
+          );
+        } else {
+          Navigator.of(context).pushAndRemoveUntil(
+            PageTransition(
+              child: const AuthLogin(),
+              type: PageTransitionType.fade,
+              duration: const Duration(
+                milliseconds: 900,
+              ),
+            ),
+            (route) => false,
+          );
+        }
       },
     );
   }

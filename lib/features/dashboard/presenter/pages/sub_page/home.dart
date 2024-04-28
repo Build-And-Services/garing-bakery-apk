@@ -77,7 +77,7 @@ class HomeSubPage extends StatelessWidget {
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: w > 480 ? 4 : 2,
-          childAspectRatio: w > 1000 ? 0.8 : 0.65,
+          childAspectRatio: w > 1000 ? 0.8 : 0.75,
           mainAxisSpacing: 20.0,
           crossAxisSpacing: 10.0,
         ),

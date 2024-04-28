@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:open_file/open_file.dart' as open_file;
-// import 'package:path_provider/path_provider.dart' as path_provider;
-// ignore: depend_on_referenced_packages
 
 Future<void> saveAndLaunchFile(List<int> bytes, String fileName) async {
   String? path;
@@ -12,8 +10,6 @@ Future<void> saveAndLaunchFile(List<int> bytes, String fileName) async {
       Platform.isIOS ||
       Platform.isLinux ||
       Platform.isWindows) {
-    // final Directory directory =
-    //     await path_provider.getApplicationSupportDirectory();
     var status = await Permission.storage.status;
     if (!status.isGranted) {
       await Permission.storage.request();

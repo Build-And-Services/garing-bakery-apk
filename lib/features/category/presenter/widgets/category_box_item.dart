@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
 import 'package:garing_bakery_apk/features/category/presenter/provider/category_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,11 @@ class CategoryBoxItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.read<AuthProvider>();
+    String? role;
+    if (authProvider.userCache != null) {
+      role = authProvider.userCache!.role;
+    }
     return GestureDetector(
       onTap: () {},
       child: Card(
@@ -42,19 +48,21 @@ class CategoryBoxItem extends StatelessWidget {
                   color: const Color.fromARGB(135, 0, 0, 0),
                 ),
               ),
-              Positioned(
-                right: 5,
-                top: 5,
-                child: InkWell(
-                  onTap: () =>
-                      Provider.of<CategoryProvider>(context, listen: false)
-                          .delete(id),
-                  child: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
+              role == "cashier"
+                  ? Container()
+                  : Positioned(
+                      right: 5,
+                      top: 5,
+                      child: InkWell(
+                        onTap: () => Provider.of<CategoryProvider>(context,
+                                listen: false)
+                            .delete(id),
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -66,6 +74,7 @@ class CategoryBoxItem extends StatelessWidget {
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),

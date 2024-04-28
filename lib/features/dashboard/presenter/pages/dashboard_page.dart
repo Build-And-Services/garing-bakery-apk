@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
+import 'package:garing_bakery_apk/features/profile/presenter/pages/profile_page.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/history/transactions.dart';
 import 'package:garing_bakery_apk/features/category/presenter/pages/category_sub_page.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/pages/sub_page/home.dart';
 import 'package:garing_bakery_apk/features/product/presenter/pages/product_sub_page.dart';
-import 'package:garing_bakery_apk/features/dashboard/presenter/pages/sub_page/profile.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
