@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
@@ -8,6 +7,7 @@ import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/search_widget.dart';
+import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/widgets/product_card_widget.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,34 +19,42 @@ class ProductSubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.read<AuthProvider>();
+    String? role;
+    if (authProvider.userCache != null) {
+      role = authProvider.userCache!.role;
+    }
     return Consumer<ProductProvider>(
       builder: (context, productProvider, child) {
         if (productProvider.eventLoadingStatus) {
           productProvider.getProduct();
         }
+        List<Widget> action = [
+          GestureDetector(
+            onTap: () async {
+              productProvider.setLoading = true;
+            },
+            child: const Icon(Icons.refresh_rounded),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          role == "cashier"
+              ? Container()
+              : GestureDetector(
+                  onTap: () =>
+                      Navigator.of(context).pushNamed(Routes.ADD_PRODUCT),
+                  child: const Icon(Icons.add),
+                ),
+          const SizedBox(
+            width: 20,
+          ),
+        ];
         return Scaffold(
           drawer: const DrawerPage(),
           appBar: MyTheme.appBar(
             "Produk / Barang",
-            [
-              GestureDetector(
-                onTap: () async {
-                  productProvider.setLoading = true;
-                },
-                child: const Icon(Icons.refresh_rounded),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              GestureDetector(
-                onTap: () =>
-                    Navigator.of(context).pushNamed(Routes.ADD_PRODUCT),
-                child: const Icon(Icons.add),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-            ],
+            action,
           ),
           body: RefreshIndicator(
             onRefresh: () async {
@@ -85,7 +93,9 @@ class ProductSubPage extends StatelessWidget {
                               ? const ProductSimmer()
                               : Column(
                                   children: productProvider.products.map((e) {
-                                    return ProductCardWidget(product: e);
+                                    return ProductCardWidget(
+                                      product: e,
+                                    );
                                   }).toList(),
                                 );
                         }

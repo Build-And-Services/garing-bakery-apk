@@ -6,6 +6,7 @@ import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/core/widgets/shimmer/wrapper_shimmer_widget.dart';
+import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/form_edit_stok_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/widgets/button_detail_widget.dart';
@@ -34,6 +35,11 @@ class _MainDetailProductWidgetState extends State<MainDetailProductWidget> {
     // provider
     final formStokProvider = context.watch<FormStokProvider>();
     final productProvider = context.watch<ProductProvider>();
+    final authProvider = context.read<AuthProvider>();
+    String? role;
+    if (authProvider.userCache != null) {
+      role = authProvider.userCache!.role;
+    }
 
     // product for show from provider
     List<ProductModel> products = productProvider.products;
@@ -64,75 +70,81 @@ class _MainDetailProductWidgetState extends State<MainDetailProductWidget> {
               const SizedBox(
                 height: 20,
               ),
-              ButtonDetailWidget(
-                title: 'Edit Kue',
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.EDIT_PRODUCT,
-                    arguments: widget.id,
-                  );
-                },
-                icon: Icons.edit,
-              ),
+              role == "cashier"
+                  ? Container()
+                  : ButtonDetailWidget(
+                      title: 'Edit Kue',
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.EDIT_PRODUCT,
+                          arguments: widget.id,
+                        );
+                      },
+                      icon: Icons.edit,
+                    ),
               const SizedBox(
                 height: 20,
               ),
-              ButtonDetailWidget(
-                title: 'Edit Stock',
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8.0),
-                            ),
-                          ),
-                          contentPadding: const EdgeInsets.only(top: 10.0),
-                          content: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: FormEditStockWidget(id: widget.id),
-                          ),
-                        );
-                      }).then((value) {
-                    if (formStokProvider.isLoading) {
-                      formStokProvider.updateStok(context).then((value) {
-                        formStokProvider.loading = false;
-                        Navigator.pop(context);
-                        if (value) {
-                          MyTheme.alertSucces(context, 'Success');
-                          productProvider.setProduct =
-                              productProvider.products.map((e) {
-                            if (e.id.toString() == widget.id) {
-                              return ProductModel(
-                                id: e.id,
-                                name: e.name,
-                                image: e.image,
-                                productCode: e.productCode,
-                                category: e.category,
-                                quantity:
-                                    formStokProvider.body!.type == 'increase'
-                                        ? e.quantity +
-                                            formStokProvider.body!.quantity
-                                        : e.quantity -
-                                            formStokProvider.body!.quantity,
-                                purchasePrice: e.purchasePrice,
-                                sellingPrice: e.sellingPrice,
+              role == "cashier"
+                  ? Container()
+                  : ButtonDetailWidget(
+                      title: 'Edit Stock',
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                contentPadding:
+                                    const EdgeInsets.only(top: 10.0),
+                                content: SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: FormEditStockWidget(id: widget.id),
+                                ),
                               );
-                            }
-                            return e;
-                          }).toList();
-                        } else {
-                          MyTheme.alertError(context, 'Gagal update stock');
-                        }
-                      });
-                    }
-                  });
-                },
-                icon: Icons.edit,
-              ),
+                            }).then((value) {
+                          if (formStokProvider.isLoading) {
+                            formStokProvider.updateStok(context).then((value) {
+                              formStokProvider.loading = false;
+                              Navigator.pop(context);
+                              if (value) {
+                                MyTheme.alertSucces(context, 'Success');
+                                productProvider.setProduct =
+                                    productProvider.products.map((e) {
+                                  if (e.id.toString() == widget.id) {
+                                    return ProductModel(
+                                      id: e.id,
+                                      name: e.name,
+                                      image: e.image,
+                                      productCode: e.productCode,
+                                      category: e.category,
+                                      quantity: formStokProvider.body!.type ==
+                                              'increase'
+                                          ? e.quantity +
+                                              formStokProvider.body!.quantity
+                                          : e.quantity -
+                                              formStokProvider.body!.quantity,
+                                      purchasePrice: e.purchasePrice,
+                                      sellingPrice: e.sellingPrice,
+                                    );
+                                  }
+                                  return e;
+                                }).toList();
+                              } else {
+                                MyTheme.alertError(
+                                    context, 'Gagal update stock');
+                              }
+                            });
+                          }
+                        });
+                      },
+                      icon: Icons.edit,
+                    ),
             ],
           ),
         ),

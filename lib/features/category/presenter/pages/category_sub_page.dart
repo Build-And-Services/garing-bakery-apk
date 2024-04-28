@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
+import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
 import 'package:garing_bakery_apk/features/category/presenter/provider/category_provider.dart';
 import 'package:garing_bakery_apk/features/category/presenter/widgets/category_box_item.dart';
 import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
@@ -14,6 +15,11 @@ class CategorySubPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CategoryProvider category = context.watch<CategoryProvider>();
+    final authProvider = context.read<AuthProvider>();
+    String? role;
+    if (authProvider.userCache != null) {
+      role = authProvider.userCache!.role;
+    }
     if (category.isLoading) {
       category.getCategories();
       return Scaffold(
@@ -51,10 +57,13 @@ class CategorySubPage extends StatelessWidget {
     return Scaffold(
       drawer: const DrawerPage(),
       appBar: MyTheme.appBar("Kategori", [
-        GestureDetector(
-          onTap: () => Navigator.of(context).pushNamed(Routes.ADD_CATEGORY),
-          child: const Icon(Icons.add),
-        ),
+        role == "cashier"
+            ? Container()
+            : GestureDetector(
+                onTap: () =>
+                    Navigator.of(context).pushNamed(Routes.ADD_CATEGORY),
+                child: const Icon(Icons.add),
+              ),
         const SizedBox(
           width: 20,
         ),

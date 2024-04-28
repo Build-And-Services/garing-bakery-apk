@@ -4,22 +4,27 @@ import 'package:flutter/foundation.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/features/product/data/model/response_product.dart';
 import 'package:garing_bakery_apk/features/product/data/service/product_service.dart';
+import 'package:garing_bakery_apk/features/product/presenter/provider/form_provider.dart';
 
 class ProductProvider with ChangeNotifier {
   List<ProductModel> _products = [];
+  ProductModel? _product;
 
   bool _eventLoadingStatus = true;
   bool _isLoading = false;
+  bool _isLoadingDetail = true;
   ProductAddResponse _responseAdd =
       ProductAddResponse(success: false, message: "");
   ProductDelResponse _responseDel =
       ProductDelResponse(success: false, message: '');
 
   List<ProductModel> get products => _products;
+  ProductModel? get product => _product;
   bool get eventLoadingStatus => _eventLoadingStatus;
   ProductAddResponse get responseAdd => _responseAdd;
   ProductDelResponse get responseDel => _responseDel;
   bool get isLoading => _isLoading;
+  bool get isLoadingDetail => _isLoadingDetail;
 
   set isProccess(bool loading) {
     _isLoading = loading;
@@ -81,24 +86,50 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  Future<ProductModel> getProductBy(String id) async {
+  Future<ProductModel> getProductBy(String id,
+      {FormProductProvider? formProductProvider,
+      List<Map<String, dynamic>>? items}) async {
     try {
-      // check apakah id ada di dalam state _products
-      if (_products.any((product) => product.id.toString() == id)) {
-        // jika ada mengembalikan product yang dari state tanpa perlu mereload
-        int index =
-            _products.indexWhere((element) => element.id.toString() == id);
-        return _products[index];
-      }
+      print("edit");
+      late ProductModel product;
 
       // get data jika belum ada
-      final product = await ProductService.getProductById(id);
-      if (product.data == null) {
+      final productResponse = await ProductService.getProductById(id);
+      if (productResponse.data == null) {
         throw "Something wrong";
       }
 
+      product = productResponse.data!;
+
+      if (items != null) {
+        if (items.isNotEmpty) {
+          if (items
+                  .where((element) => element['label'] == product.category)
+                  .isNotEmpty &&
+              formProductProvider != null) {
+            if (product.category == null) {
+              formProductProvider.setCategory = 'no';
+            } else {
+              formProductProvider.setCategory = items
+                  .where((element) => element['label'] == product.category)
+                  .toList()[0]["value"]
+                  .toString();
+            }
+            formProductProvider.name.text = product.name;
+            formProductProvider.stock.text = product.quantity.toString();
+            formProductProvider.code.text = product.productCode;
+            formProductProvider.purchase.text =
+                product.purchasePrice.toString();
+            formProductProvider.selling.text = product.sellingPrice.toString();
+          }
+        }
+      }
+      _isLoadingDetail = false;
+      _product = product;
+      notifyListeners();
+
       // return data
-      return product.data!;
+      return product;
     } catch (e) {
       rethrow;
     }

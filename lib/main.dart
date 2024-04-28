@@ -15,7 +15,6 @@ import 'package:garing_bakery_apk/features/transaction/presenter/provider/print_
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/transaction_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +23,6 @@ void main() {
 }
 
 void selectInitialRoute() async {
-  final pref = await SharedPreferences.getInstance();
   await initializeDateFormatting('id_ID', null);
   runApp(
     MultiProvider(
@@ -77,9 +75,7 @@ void selectInitialRoute() async {
                 ),
               ),
               debugShowCheckedModeBanner: false,
-              initialRoute: pref.getString("token") == null
-                  ? Routes.SPLASH
-                  : Routes.DASHBOARD,
+              initialRoute: Routes.SPLASH,
               onGenerateRoute: (settings) => Routes.generateRoute(
                 settings,
               ),

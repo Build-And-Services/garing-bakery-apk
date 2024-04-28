@@ -5,6 +5,7 @@ import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
+import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,12 @@ class ProductCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productProvider = context.watch<ProductProvider>();
+    final authProvider = context.read<AuthProvider>();
+    String? role;
+    if (authProvider.userCache != null) {
+      role = authProvider.userCache!.role;
+    }
+
     return InkWell(
       onTap: () {
         Navigator.pushNamed(
@@ -140,25 +147,27 @@ class ProductCardWidget extends StatelessWidget {
             ),
             Column(
               children: [
-                InkWell(
-                  onTap: () {
-                    debugPrint(product.id.toString());
-                    MyTheme.alertWarning(
-                      context,
-                      "Apakah anda yakin menghapus",
-                      showCancelBtn: true,
-                      onConfirmBtnTap: () {
-                        Navigator.pop(context);
-                        productProvider.delete(product.id);
-                      },
-                    );
-                  },
-                  child: Icon(
-                    Icons.delete,
-                    color: const Color(0xffc39777),
-                    size: 26.sp,
-                  ),
-                ),
+                role == "cashier"
+                    ? Container()
+                    : InkWell(
+                        onTap: () {
+                          debugPrint(product.id.toString());
+                          MyTheme.alertWarning(
+                            context,
+                            "Apakah anda yakin menghapus",
+                            showCancelBtn: true,
+                            onConfirmBtnTap: () {
+                              Navigator.pop(context);
+                              productProvider.delete(product.id);
+                            },
+                          );
+                        },
+                        child: Icon(
+                          Icons.delete,
+                          color: const Color(0xffc39777),
+                          size: 26.sp,
+                        ),
+                      ),
               ],
             ),
           ],

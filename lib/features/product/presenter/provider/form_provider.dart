@@ -11,7 +11,7 @@ class FormProductProvider with ChangeNotifier {
   final TextEditingController _code = TextEditingController();
   final TextEditingController _purchase = TextEditingController();
   final TextEditingController _selling = TextEditingController();
-  final TextEditingController _category = TextEditingController();
+  String _category = 'no';
   XFile? _image;
 
   TextEditingController get name => _name;
@@ -19,7 +19,7 @@ class FormProductProvider with ChangeNotifier {
   TextEditingController get code => _code;
   TextEditingController get purchase => _purchase;
   TextEditingController get selling => _selling;
-  TextEditingController get category => _category;
+  String get category => _category;
   XFile? get image => _image;
 
   void clearController() {
@@ -28,8 +28,14 @@ class FormProductProvider with ChangeNotifier {
     _code.clear();
     _purchase.clear();
     _selling.clear();
-    _category.clear();
+    _category = 'no';
+    print("dispose");
     _image = null;
+  }
+
+  set setCategory(String category) {
+    _category = category;
+    notifyListeners();
   }
 
   Future setImage(String url) async {
@@ -58,7 +64,7 @@ class FormProductProvider with ChangeNotifier {
         "product_code": _code.text,
         "purchase_price": _purchase.text,
         "selling_price": _selling.text,
-        "category_id": _category.text,
+        "category_id": _category,
       };
 
   String? required(value) {
