@@ -3,6 +3,7 @@ import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/widgets/button_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/input_widget.dart';
+import 'package:garing_bakery_apk/core/widgets/loading_widget.dart';
 import 'package:garing_bakery_apk/features/printer/presenter/provider/setting_struck_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +35,11 @@ class _StruckSettingState extends State<StruckSetting> {
       ),
       body: Consumer<SettingStruckProvider>(
         builder: (context, struckProvider, _) {
+          if (struckProvider.isLoading) {
+            struckProvider.getData();
+            return const LoadingWidget();
+          }
+          struckProvider.getData();
           return Form(
             key: _formKey,
             child: Column(
