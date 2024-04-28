@@ -7,6 +7,7 @@ import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart'
 import 'package:garing_bakery_apk/features/auth/presenter/pages/auth_page.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/pages/dashboard_page.dart';
+import 'package:garing_bakery_apk/features/printer/data/service/struck_service.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,6 +36,15 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   Future removeScreen() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final company = prefs.getString("company");
+    final alamat = prefs.getString("alamat");
+    final notelp = prefs.getString("notelp");
+    final footer = prefs.getString("footer");
+    if (company == null || alamat == null || notelp == null || footer == null) {
+      await SettingStruckService.saveData("PT. kosong", "Candradimuka No. 10",
+          "08xxxx", "Terima Kasih sudah belanja");
+    }
     UserModel? userModel;
     if (prefs.getString("token") != null) {
       userModel = await TokenService.getCacheUser();

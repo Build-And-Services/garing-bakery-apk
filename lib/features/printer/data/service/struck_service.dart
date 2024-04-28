@@ -16,7 +16,6 @@ class SettingStruckService {
     final alamat = prefs.getString("alamat");
     final notelp = prefs.getString("notelp");
     final footer = prefs.getString("footer");
-    print(company);
 
     return {
       "company": company,
