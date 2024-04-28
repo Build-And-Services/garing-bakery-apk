@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:garing_bakery_apk/core/models/user_model.dart';
 import 'package:garing_bakery_apk/features/auth/data/model/auth_model.dart';
 import 'package:garing_bakery_apk/features/auth/data/service/auth_service.dart';
 import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
@@ -9,6 +10,7 @@ class AuthProvider with ChangeNotifier {
   bool _isloading = false;
   String? _message;
   String? _error;
+  UserModel? _userCache;
   // initialization input
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
@@ -18,9 +20,17 @@ class AuthProvider with ChangeNotifier {
   bool get isloading => _isloading;
   String? get message => _message;
   String? get error => _error;
+  UserModel? get userCache => _userCache;
+
   // get method input
   TextEditingController get email => _email;
   TextEditingController get password => _password;
+
+  // set method
+  set setUserCache(UserModel user) {
+    _userCache = user;
+    notifyListeners();
+  }
 
   // all method
   startLoading() {
@@ -41,6 +51,7 @@ class AuthProvider with ChangeNotifier {
             "${result.tokenType} ${result.accessToken}", result.data!);
         _isLogin = true;
         _message = result.message;
+        setUserCache = await TokenService.getCacheUser();
         notifyListeners();
       } else {
         _message = result.message;

@@ -17,6 +17,11 @@ class CategoryProvider with ChangeNotifier {
   CategoryAddResponse get responseAdd => _responseAdd;
   List<Map<String, dynamic>> get items => _items;
 
+  set setItems(List<Map<String, dynamic>> items) {
+    _items = items;
+    notifyListeners();
+  }
+
   set isProccess(bool proccess) {
     _proccess = proccess;
     notifyListeners();
@@ -38,6 +43,10 @@ class CategoryProvider with ChangeNotifier {
           };
         },
       ).toList();
+      _items = [
+        {'value': 'no', 'label': 'No selected'},
+        ..._items
+      ];
       _isLoading = false;
       notifyListeners();
       return _items;
@@ -53,6 +62,10 @@ class CategoryProvider with ChangeNotifier {
       _responseAdd = response;
       if (response.data != null) {
         _categories.insert(0, response.data as CategoryModel);
+        _items.insert(_items.length, {
+          'value': response.data!.id,
+          'label': response.data!.name,
+        });
       }
       notifyListeners();
     } catch (e) {

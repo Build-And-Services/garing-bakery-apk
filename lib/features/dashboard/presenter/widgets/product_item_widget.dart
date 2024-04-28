@@ -16,8 +16,6 @@ class ProductCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double w = MediaQuery.of(context).size.width;
-    debugPrint("product item: $w");
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
