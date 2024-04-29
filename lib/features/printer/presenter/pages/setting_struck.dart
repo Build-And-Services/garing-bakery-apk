@@ -39,7 +39,6 @@ class _StruckSettingState extends State<StruckSetting> {
             struckProvider.getData();
             return const LoadingWidget();
           }
-          struckProvider.getData();
           return Form(
             key: _formKey,
             child: Column(
@@ -93,7 +92,11 @@ class _StruckSettingState extends State<StruckSetting> {
                     ),
                     tap: () {
                       if (_formKey.currentState!.validate()) {
-                        struckProvider.saveData();
+                        struckProvider.saveData().then((value) {
+                          if (value) {
+                            MyTheme.alertSucces(context, "Berhasil disimpan");
+                          }
+                        });
                       }
                     },
                   ),

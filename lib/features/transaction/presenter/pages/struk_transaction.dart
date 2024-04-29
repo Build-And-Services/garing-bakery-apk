@@ -281,7 +281,7 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
                 height: 100,
               ),
               const DropdownPrint(),
-              ButtonPrint(detail: data.details)
+              ButtonPrint(detail: data)
             ],
           ),
         );
@@ -289,174 +289,194 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
     );
   }
 
-  Widget withoutArgumentWidget(
-      BuildContext context, TransactionAddResponse data) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      color: Colors.green,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              // height: 200,
-              padding: const EdgeInsets.all(20),
-              margin: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Gading Bakery",
-                    style: GoogleFonts.poppins(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'Address: Jln. Pattimura, Kab. Gresik, Prov. Jawa Timur',
-                    style: GoogleFonts.poppins(
-                      color: Colors.grey,
-                      fontSize: 8.sp,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'No Telp: 083853797950',
-                    style: GoogleFonts.poppins(
-                      color: Colors.grey,
-                      fontSize: 8.sp,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Divider(
-                    color: Colors.grey,
-                    thickness: 1,
-                    indent: 20,
-                    endIndent: 20,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'No. Faktur: 786324-23423-33434',
-                          style: GoogleFonts.poppins(
-                            color: Colors.grey,
-                            fontSize: 10.sp,
-                          ),
-                        ),
-                        Text(
-                          'Tanggal : ${DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(data.createdAt)}',
-                          style: GoogleFonts.poppins(
-                            color: Colors.grey,
-                            fontSize: 10.sp,
-                          ),
-                        ),
-                        Text(
-                          'Alamat : Jln. Pattimura',
-                          style: GoogleFonts.poppins(
-                            color: Colors.grey,
-                            fontSize: 10.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Divider(
-                    color: Colors.grey,
-                    thickness: 1,
-                    indent: 20,
-                    endIndent: 20,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          flex: 3,
-                          child: headerDetailInvoice('Produk'),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: headerDetailInvoice('Harga'),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: headerDetailInvoice('QTY'),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: headerDetailInvoice('Total',
-                              align: TextAlign.end),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Divider(
-                    color: Colors.grey,
-                    thickness: 1,
-                    indent: 20,
-                    endIndent: 20,
-                  ),
-                  ItemDetailWidget(detail: data.details),
-                  const Divider(
-                    color: Colors.grey,
-                    thickness: 1,
-                    indent: 20,
-                    endIndent: 20,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        footerDetailInvoice(
-                            'Total', formatRupiah(data.totalPrice)),
-                        footerDetailInvoice('Uang', formatRupiah(data.nominal)),
-                        footerDetailInvoice(
-                            'Kembalian', formatRupiah(data.change)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget withoutArgumentWidget(
+  //     BuildContext context, TransactionAddResponse data) {
+  //   return Container(
+  //     width: MediaQuery.of(context).size.width,
+  //     height: MediaQuery.of(context).size.height,
+  //     color: Colors.green,
+  //     child: SingleChildScrollView(
+  //       child: Column(
+  //         children: [
+  //           Container(
+  //             width: MediaQuery.of(context).size.width,
+  //             // height: 200,
+  //             padding: const EdgeInsets.all(20),
+  //             margin: const EdgeInsets.all(20),
+  //             decoration: const BoxDecoration(
+  //               color: Colors.white,
+  //               borderRadius: BorderRadius.all(
+  //                 Radius.circular(10),
+  //               ),
+  //             ),
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               crossAxisAlignment: CrossAxisAlignment.center,
+  //               children: [
+  //                 Text(
+  //                   "Gading Bakery",
+  //                   style: GoogleFonts.poppins(
+  //                     fontSize: 18.sp,
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                 ),
+  //                 const SizedBox(
+  //                   height: 10,
+  //                 ),
+  //                 Text(
+  //                   'Address: Jln. Pattimura, Kab. Gresik, Prov. Jawa Timur',
+  //                   style: GoogleFonts.poppins(
+  //                     color: Colors.grey,
+  //                     fontSize: 8.sp,
+  //                   ),
+  //                 ),
+  //                 const SizedBox(
+  //                   height: 10,
+  //                 ),
+  //                 Text(
+  //                   'No Telp: 083853797950',
+  //                   style: GoogleFonts.poppins(
+  //                     color: Colors.grey,
+  //                     fontSize: 8.sp,
+  //                   ),
+  //                 ),
+  //                 const SizedBox(
+  //                   height: 10,
+  //                 ),
+  //                 const Divider(
+  //                   color: Colors.grey,
+  //                   thickness: 1,
+  //                   indent: 20,
+  //                   endIndent: 20,
+  //                 ),
+  //                 Container(
+  //                   width: MediaQuery.of(context).size.width,
+  //                   padding: const EdgeInsets.all(20),
+  //                   child: Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       Text(
+  //                         'No. Faktur: 786324-23423-33434',
+  //                         style: GoogleFonts.poppins(
+  //                           color: Colors.grey,
+  //                           fontSize: 10.sp,
+  //                         ),
+  //                       ),
+  //                       Text(
+  //                         'Tanggal : ${DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(data.createdAt)}',
+  //                         style: GoogleFonts.poppins(
+  //                           color: Colors.grey,
+  //                           fontSize: 10.sp,
+  //                         ),
+  //                       ),
+  //                       Text(
+  //                         'Alamat : Jln. Pattimura',
+  //                         style: GoogleFonts.poppins(
+  //                           color: Colors.grey,
+  //                           fontSize: 10.sp,
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //                 const Divider(
+  //                   color: Colors.grey,
+  //                   thickness: 1,
+  //                   indent: 20,
+  //                   endIndent: 20,
+  //                 ),
+  //                 Container(
+  //                   width: MediaQuery.of(context).size.width,
+  //                   padding: const EdgeInsets.symmetric(horizontal: 20),
+  //                   child: Row(
+  //                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                     children: <Widget>[
+  //                       Expanded(
+  //                         flex: 3,
+  //                         child: headerDetailInvoice('Produk'),
+  //                       ),
+  //                       const SizedBox(
+  //                         width: 10,
+  //                       ),
+  //                       Expanded(
+  //                         flex: 2,
+  //                         child: headerDetailInvoice('Harga'),
+  //                       ),
+  //                       Expanded(
+  //                         flex: 1,
+  //                         child: headerDetailInvoice('QTY'),
+  //                       ),
+  //                       Expanded(
+  //                         flex: 2,
+  //                         child: headerDetailInvoice('Total',
+  //                             align: TextAlign.end),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //                 const Divider(
+  //                   color: Colors.grey,
+  //                   thickness: 1,
+  //                   indent: 20,
+  //                   endIndent: 20,
+  //                 ),
+  //                 ItemDetailWidget(detail: data.details),
+  //                 const Divider(
+  //                   color: Colors.grey,
+  //                   thickness: 1,
+  //                   indent: 20,
+  //                   endIndent: 20,
+  //                 ),
+  //                 Container(
+  //                   width: MediaQuery.of(context).size.width,
+  //                   padding: const EdgeInsets.symmetric(horizontal: 20),
+  //                   child: Column(
+  //                     children: [
+  //                       footerDetailInvoice(
+  //                           'Total', formatRupiah(data.totalPrice)),
+  //                       footerDetailInvoice('Uang', formatRupiah(data.nominal)),
+  //                       footerDetailInvoice(
+  //                           'Kembalian', formatRupiah(data.change)),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
-class ButtonPrint extends StatelessWidget {
+class ButtonPrint extends StatefulWidget {
   const ButtonPrint({
     super.key,
     required this.detail,
   });
 
-  final List<DetailTransactionsResponse> detail;
+  final TransactionAddResponse detail;
+
+  @override
+  State<ButtonPrint> createState() => _ButtonPrintState();
+}
+
+class _ButtonPrintState extends State<ButtonPrint> {
+  late Map<String, dynamic> struck;
+
+  Future getDataStruck() async {
+    final dataStruck = await SettingStruckService.getData();
+    setState(() {
+      struck = dataStruck;
+    });
+  }
+
+  @override
+  void initState() {
+    getDataStruck();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -480,7 +500,7 @@ class ButtonPrint extends StatelessWidget {
           list.add(
             LineText(
               type: LineText.TYPE_TEXT,
-              content: "Gading Bakery",
+              content: struck != null ? struck["company"] : "Gading Bakery",
               weight: 2,
               width: 2,
               height: 2,
@@ -493,7 +513,8 @@ class ButtonPrint extends StatelessWidget {
           list.add(
             LineText(
               type: LineText.TYPE_TEXT,
-              content: "Address: jln. Pattimura, Kab. Gresik, Prov. Jawa Timur",
+              // ignore: unnecessary_null_comparison, prefer_interpolation_to_compose_strings
+              content: struck != null ? struck["alamat"] : "Gading Bakery",
               align: LineText.ALIGN_CENTER,
               linefeed: 1,
             ),
@@ -502,22 +523,33 @@ class ButtonPrint extends StatelessWidget {
           list.add(
             LineText(
               type: LineText.TYPE_TEXT,
-              content: "No. telp: 083853797950",
+              content:
+                  struck != null ? "No Hp: " + struck["notelp"] : "No Hp: ",
               weight: 0,
               align: LineText.ALIGN_CENTER,
               linefeed: 1,
             ),
           );
           list.add(LineText(linefeed: 1));
-
+          DateFormat formatter = DateFormat('EEEE, dd MMMM yyyy', 'id_ID');
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: formatter.format(widget.detail.createdAt),
+              weight: 0,
+              align: LineText.ALIGN_LEFT,
+              linefeed: 1,
+            ),
+          );
           list.add(LineText(linefeed: 1));
 
           var pembayaran = 0;
-          for (var i = 0; i < detail.length; i++) {
+
+          for (var i = 0; i < widget.detail.details.length; i++) {
             list.add(
               LineText(
                 type: LineText.TYPE_TEXT,
-                content: detail[i].productsName,
+                content: widget.detail.details[i].productsName,
                 weight: 0,
                 align: LineText.ALIGN_LEFT,
                 linefeed: 1,
@@ -527,15 +559,17 @@ class ButtonPrint extends StatelessWidget {
             list.add(
               LineText(
                 type: LineText.TYPE_TEXT,
-                content: "${detail[i].sellingPrice} x ${detail[i].quantity}",
+                content:
+                    "${widget.detail.details[i].sellingPrice} x ${widget.detail.details[i].quantity}",
                 align: LineText.ALIGN_LEFT,
                 linefeed: 0,
                 x: 0,
               ),
             );
-            final total =
-                formatRupiah(detail[i].sellingPrice * detail[i].quantity);
-            pembayaran += detail[i].sellingPrice * detail[i].quantity;
+            final total = formatRupiah(widget.detail.details[i].sellingPrice *
+                widget.detail.details[i].quantity);
+            pembayaran += widget.detail.details[i].sellingPrice *
+                widget.detail.details[i].quantity;
             debugPrint(total.length.toString());
             list.add(
               LineText(
@@ -552,26 +586,76 @@ class ButtonPrint extends StatelessWidget {
           list.add(
             LineText(
               type: LineText.TYPE_TEXT,
-              content: "Total dibeli",
-              weight: 0,
+              content: "Total",
               align: LineText.ALIGN_LEFT,
-              linefeed: 1,
+              linefeed: 0,
+              x: 0,
             ),
           );
 
           list.add(
             LineText(
               type: LineText.TYPE_TEXT,
-              content: "$pembayaran",
+              content: formatRupiah(pembayaran),
+              align: LineText.ALIGN_LEFT,
+              linefeed: 0,
+              x: 200 - formatRupiah(pembayaran).length,
+            ),
+          );
+          list.add(LineText(linefeed: 1));
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: "CASH",
               align: LineText.ALIGN_LEFT,
               linefeed: 0,
               x: 0,
             ),
           );
+
           list.add(
             LineText(
               type: LineText.TYPE_TEXT,
-              content: "Terima Kasih sudah berbelanja.",
+              content: formatRupiah(widget.detail.nominal),
+              align: LineText.ALIGN_LEFT,
+              linefeed: 0,
+              x: 200 - formatRupiah(widget.detail.nominal).length,
+            ),
+          );
+
+          list.add(LineText(linefeed: 1));
+          list.add(LineText(linefeed: 1));
+
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: "Kembalian",
+              align: LineText.ALIGN_LEFT,
+              linefeed: 0,
+              x: 0,
+            ),
+          );
+
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: formatRupiah(widget.detail.change),
+              align: LineText.ALIGN_LEFT,
+              linefeed: 0,
+              x: 200 - formatRupiah(widget.detail.change).length,
+            ),
+          );
+
+          list.add(LineText(linefeed: 1));
+          list.add(LineText(linefeed: 1));
+          list.add(LineText(linefeed: 1));
+
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: struck != null
+                  ? struck["footer"]
+                  : "Terima Kasih Sudah berbelanja",
               align: LineText.ALIGN_CENTER,
               linefeed: 1,
             ),

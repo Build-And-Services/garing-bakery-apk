@@ -1,9 +1,13 @@
+import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
+import 'package:garing_bakery_apk/features/printer/data/service/struck_service.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';
+import 'package:garing_bakery_apk/features/transaction/presenter/provider/print_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class NextTransaction extends StatelessWidget {
@@ -79,6 +83,8 @@ class NextTransaction extends StatelessWidget {
 
   Row _inputNominalTabletView(
       CartProvider cartProvider, List<String> keys, BuildContext context) {
+    final printProvider = context.read<PrintProvider>();
+
     return Row(
       children: [
         Container(
@@ -132,6 +138,198 @@ class NextTransaction extends StatelessWidget {
                                           .then((result) {
                                         TransactionAddResponse? data = result;
                                         if (data != null) {
+                                          if (printProvider.connected) {
+                                            SettingStruckService.getData()
+                                                .then((struck) {
+                                              Map<String, dynamic> config = {};
+                                              List<LineText> list = [];
+                                              list.add(LineText(linefeed: 1));
+
+                                              list.add(
+                                                LineText(
+                                                  type: LineText.TYPE_TEXT,
+                                                  content: struck != null
+                                                      ? "Address: " +
+                                                          struck["company"]
+                                                      : "Address: Gading Bakery",
+                                                  weight: 2,
+                                                  width: 2,
+                                                  height: 2,
+                                                  align: LineText.ALIGN_CENTER,
+                                                  linefeed: 1,
+                                                ),
+                                              );
+                                              list.add(LineText(linefeed: 1));
+
+                                              list.add(
+                                                LineText(
+                                                  type: LineText.TYPE_TEXT,
+                                                  // ignore: unnecessary_null_comparison, prefer_interpolation_to_compose_strings
+                                                  content: struck != null
+                                                      ? "Address: " +
+                                                          struck["alamat"]
+                                                      : "Address: Gading Bakery",
+                                                  align: LineText.ALIGN_CENTER,
+                                                  linefeed: 1,
+                                                ),
+                                              );
+                                              list.add(LineText(linefeed: 1));
+                                              list.add(
+                                                LineText(
+                                                  type: LineText.TYPE_TEXT,
+                                                  content: struck != null
+                                                      ? "No Hp: " +
+                                                          struck["notelp"]
+                                                      : "No Hp: ",
+                                                  weight: 0,
+                                                  align: LineText.ALIGN_CENTER,
+                                                  linefeed: 1,
+                                                ),
+                                              );
+                                              list.add(LineText(linefeed: 1));
+
+                                              list.add(LineText(linefeed: 1));
+
+                                              var pembayaran = 0;
+
+                                              for (var i = 0;
+                                                  i < data.details.length;
+                                                  i++) {
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content: data.details[i]
+                                                        .productsName,
+                                                    weight: 0,
+                                                    align: LineText.ALIGN_LEFT,
+                                                    linefeed: 1,
+                                                  ),
+                                                );
+
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content:
+                                                        "${data.details[i].sellingPrice} x ${data.details[i].quantity}",
+                                                    align: LineText.ALIGN_LEFT,
+                                                    linefeed: 0,
+                                                    x: 0,
+                                                  ),
+                                                );
+                                                final total = formatRupiah(data
+                                                        .details[i]
+                                                        .sellingPrice *
+                                                    data.details[i].quantity);
+                                                pembayaran += data.details[i]
+                                                        .sellingPrice *
+                                                    data.details[i].quantity;
+                                                debugPrint(
+                                                    total.length.toString());
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content: total,
+                                                    align: LineText.ALIGN_RIGHT,
+                                                    linefeed: 0,
+                                                    x: 200 - total.length,
+                                                  ),
+                                                );
+                                                list.add(LineText(linefeed: 1));
+                                              }
+                                              list.add(LineText(linefeed: 1));
+                                              list.add(
+                                                LineText(
+                                                  type: LineText.TYPE_TEXT,
+                                                  content: "Total",
+                                                  align: LineText.ALIGN_LEFT,
+                                                  linefeed: 0,
+                                                  x: 0,
+                                                ),
+                                              );
+
+                                              list.add(
+                                                LineText(
+                                                  type: LineText.TYPE_TEXT,
+                                                  content:
+                                                      formatRupiah(pembayaran),
+                                                  align: LineText.ALIGN_LEFT,
+                                                  linefeed: 0,
+                                                  x: formatRupiah(pembayaran)
+                                                      .length,
+                                                ),
+                                              );
+                                              // list.add(LineText(linefeed: 1));
+                                              list.add(
+                                                LineText(
+                                                  type: LineText.TYPE_TEXT,
+                                                  content: "CASH",
+                                                  align: LineText.ALIGN_LEFT,
+                                                  linefeed: 0,
+                                                  x: 0,
+                                                ),
+                                              );
+
+                                              list.add(
+                                                LineText(
+                                                  type: LineText.TYPE_TEXT,
+                                                  content: formatRupiah(
+                                                      data.nominal),
+                                                  align: LineText.ALIGN_LEFT,
+                                                  linefeed: 0,
+                                                  x: 200 -
+                                                      formatRupiah(data.nominal)
+                                                          .length,
+                                                ),
+                                              );
+
+                                              list.add(LineText(linefeed: 1));
+
+                                              list.add(
+                                                LineText(
+                                                  type: LineText.TYPE_TEXT,
+                                                  content: "Kembalian",
+                                                  align: LineText.ALIGN_LEFT,
+                                                  linefeed: 0,
+                                                  x: 0,
+                                                ),
+                                              );
+                                              list.add(LineText(linefeed: 1));
+
+                                              list.add(
+                                                LineText(
+                                                  type: LineText.TYPE_TEXT,
+                                                  content:
+                                                      formatRupiah(data.change),
+                                                  align: LineText.ALIGN_LEFT,
+                                                  linefeed: 0,
+                                                  x: 200 -
+                                                      formatRupiah(data.change)
+                                                          .length,
+                                                ),
+                                              );
+
+                                              list.add(LineText(linefeed: 1));
+                                              list.add(LineText(linefeed: 1));
+
+                                              list.add(
+                                                LineText(
+                                                  type: LineText.TYPE_TEXT,
+                                                  content: struck != null
+                                                      ? struck["footer"]
+                                                      : "Terima Kasih Sudah berbelanja",
+                                                  align: LineText.ALIGN_CENTER,
+                                                  linefeed: 1,
+                                                ),
+                                              );
+                                              list.add(LineText(linefeed: 1));
+                                              list.add(LineText(linefeed: 1));
+
+                                              debugPrint(list.toString());
+
+                                              printProvider.bluetoothPrint
+                                                  .printReceipt(config, list);
+                                            });
+                                          }
                                           Navigator.pushReplacementNamed(
                                             context,
                                             Routes.TRANSACTIONS_SUCCESS,
@@ -193,6 +391,8 @@ class NextTransaction extends StatelessWidget {
 
   Column _inputNominalAndroidView(
       CartProvider cartProvider, List<String> keys, BuildContext context) {
+    final printProvider = context.watch<PrintProvider>();
+
     return Column(
       children: [
         InputNominal(
@@ -226,22 +426,242 @@ class NextTransaction extends StatelessWidget {
                               ? InkWell(
                                   onTap: () async {
                                     if (cartProvider.checkNominal()) {
-                                      cartProvider
-                                          .addTransaction()
-                                          .then((result) {
-                                        TransactionAddResponse? data = result;
-                                        if (data != null) {
-                                          Navigator.pushReplacementNamed(
-                                            context,
-                                            Routes.TRANSACTIONS_SUCCESS,
-                                            arguments: data,
-                                          );
-                                        } else {
-                                          Navigator.popUntil(context, (route) {
-                                            return route.isFirst;
-                                          });
-                                        }
-                                      });
+                                      cartProvider.addTransaction().then(
+                                        (result) {
+                                          TransactionAddResponse? data = result;
+                                          if (data != null) {
+                                            if (printProvider.connected) {
+                                              SettingStruckService.getData()
+                                                  .then((struck) {
+                                                Map<String, dynamic> config =
+                                                    {};
+                                                List<LineText> list = [];
+                                                list.add(LineText(linefeed: 1));
+
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content: struck != null
+                                                        ? "Address: " +
+                                                            struck["company"]
+                                                        : "Address: Gading Bakery",
+                                                    weight: 2,
+                                                    width: 2,
+                                                    height: 2,
+                                                    align:
+                                                        LineText.ALIGN_CENTER,
+                                                    linefeed: 1,
+                                                  ),
+                                                );
+                                                list.add(LineText(linefeed: 1));
+
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    // ignore: unnecessary_null_comparison, prefer_interpolation_to_compose_strings
+                                                    content: struck != null
+                                                        ? struck["alamat"]
+                                                        : "Gading Bakery",
+                                                    align:
+                                                        LineText.ALIGN_CENTER,
+                                                    linefeed: 1,
+                                                  ),
+                                                );
+                                                list.add(LineText(linefeed: 1));
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content: struck != null
+                                                        ? "No Hp: " +
+                                                            struck["notelp"]
+                                                        : "No Hp: ",
+                                                    weight: 0,
+                                                    align:
+                                                        LineText.ALIGN_CENTER,
+                                                    linefeed: 1,
+                                                  ),
+                                                );
+                                                list.add(LineText(linefeed: 1));
+                                                DateFormat formatter =
+                                                    DateFormat(
+                                                        'EEEE, dd MMMM yyyy',
+                                                        'id_ID');
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content: formatter
+                                                        .format(data.createdAt),
+                                                    weight: 0,
+                                                    align: LineText.ALIGN_LEFT,
+                                                    linefeed: 1,
+                                                  ),
+                                                );
+                                                list.add(LineText(linefeed: 1));
+
+                                                var pembayaran = 0;
+
+                                                for (var i = 0;
+                                                    i < data.details.length;
+                                                    i++) {
+                                                  list.add(
+                                                    LineText(
+                                                      type: LineText.TYPE_TEXT,
+                                                      content: data.details[i]
+                                                          .productsName,
+                                                      weight: 0,
+                                                      align:
+                                                          LineText.ALIGN_LEFT,
+                                                      linefeed: 1,
+                                                    ),
+                                                  );
+
+                                                  list.add(
+                                                    LineText(
+                                                      type: LineText.TYPE_TEXT,
+                                                      content:
+                                                          "${data.details[i].sellingPrice} x ${data.details[i].quantity}",
+                                                      align:
+                                                          LineText.ALIGN_LEFT,
+                                                      linefeed: 0,
+                                                      x: 0,
+                                                    ),
+                                                  );
+                                                  final total = formatRupiah(
+                                                      data.details[i]
+                                                              .sellingPrice *
+                                                          data.details[i]
+                                                              .quantity);
+                                                  pembayaran += data.details[i]
+                                                          .sellingPrice *
+                                                      data.details[i].quantity;
+                                                  debugPrint(
+                                                      total.length.toString());
+                                                  list.add(
+                                                    LineText(
+                                                      type: LineText.TYPE_TEXT,
+                                                      content: total,
+                                                      align:
+                                                          LineText.ALIGN_RIGHT,
+                                                      linefeed: 0,
+                                                      x: 200 - total.length,
+                                                    ),
+                                                  );
+                                                  list.add(
+                                                      LineText(linefeed: 1));
+                                                }
+                                                list.add(LineText(linefeed: 1));
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content: "Total",
+                                                    align: LineText.ALIGN_LEFT,
+                                                    linefeed: 0,
+                                                    x: 0,
+                                                  ),
+                                                );
+
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content: formatRupiah(
+                                                        pembayaran),
+                                                    align: LineText.ALIGN_LEFT,
+                                                    linefeed: 0,
+                                                    x: 200 -
+                                                        formatRupiah(pembayaran)
+                                                            .length,
+                                                  ),
+                                                );
+                                                list.add(LineText(linefeed: 1));
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content: "CASH",
+                                                    align: LineText.ALIGN_LEFT,
+                                                    linefeed: 0,
+                                                    x: 0,
+                                                  ),
+                                                );
+
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content: formatRupiah(
+                                                        data.nominal),
+                                                    align: LineText.ALIGN_LEFT,
+                                                    linefeed: 0,
+                                                    x: 200 -
+                                                        formatRupiah(
+                                                                data.nominal)
+                                                            .length,
+                                                  ),
+                                                );
+
+                                                list.add(LineText(linefeed: 1));
+                                                list.add(LineText(linefeed: 1));
+
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content: "Kembalian",
+                                                    align: LineText.ALIGN_LEFT,
+                                                    linefeed: 0,
+                                                    x: 0,
+                                                  ),
+                                                );
+
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content: formatRupiah(
+                                                        data.change),
+                                                    align: LineText.ALIGN_LEFT,
+                                                    linefeed: 0,
+                                                    x: 200 -
+                                                        formatRupiah(
+                                                                data.change)
+                                                            .length,
+                                                  ),
+                                                );
+
+                                                list.add(LineText(linefeed: 1));
+                                                list.add(LineText(linefeed: 1));
+                                                list.add(LineText(linefeed: 1));
+
+                                                list.add(
+                                                  LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    content: struck != null
+                                                        ? struck["footer"]
+                                                        : "Terima Kasih Sudah berbelanja",
+                                                    align:
+                                                        LineText.ALIGN_CENTER,
+                                                    linefeed: 1,
+                                                  ),
+                                                );
+                                                list.add(LineText(linefeed: 1));
+                                                list.add(LineText(linefeed: 1));
+
+                                                debugPrint(list.toString());
+
+                                                printProvider.bluetoothPrint
+                                                    .printReceipt(config, list);
+                                              });
+                                            }
+
+                                            Navigator.pushReplacementNamed(
+                                              context,
+                                              Routes.TRANSACTIONS_SUCCESS,
+                                              arguments: data,
+                                            );
+                                          } else {
+                                            Navigator.popUntil(context,
+                                                (route) {
+                                              return route.isFirst;
+                                            });
+                                          }
+                                        },
+                                      );
                                     }
                                   },
                                   child: Container(

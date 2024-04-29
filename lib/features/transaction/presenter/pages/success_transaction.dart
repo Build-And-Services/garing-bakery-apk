@@ -1,9 +1,13 @@
+import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/models/arguments/ArgumentStruck.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
+import 'package:garing_bakery_apk/features/printer/data/service/struck_service.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';
+import 'package:garing_bakery_apk/features/transaction/presenter/provider/print_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class SuccessTransaction extends StatelessWidget {
@@ -81,7 +85,9 @@ class SuccessTransaction extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    const PrintButtonWidget(),
+                    PrintButtonWidget(
+                      result: result,
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -167,11 +173,191 @@ class ButtonSuccessWidget extends StatelessWidget {
 class PrintButtonWidget extends StatelessWidget {
   const PrintButtonWidget({
     super.key,
+    required this.result,
   });
+  final TransactionAddResponse result;
 
   @override
   Widget build(BuildContext context) {
+    final printProvider = context.watch<PrintProvider>();
     return InkWell(
+      onTap: () async {
+        if (!printProvider.connected) {
+          return;
+        }
+        final struck = await SettingStruckService.getData();
+
+        Map<String, dynamic> config = {};
+        List<LineText> list = [];
+        list.add(LineText(linefeed: 1));
+
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: struck != null ? struck["company"] : "xxxx",
+            weight: 2,
+            width: 2,
+            height: 2,
+            align: LineText.ALIGN_CENTER,
+            linefeed: 1,
+          ),
+        );
+        list.add(LineText(linefeed: 1));
+
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            // ignore: unnecessary_null_comparison, prefer_interpolation_to_compose_strings
+            content: struck != null ? struck["alamat"] : "Gading Bakery",
+            align: LineText.ALIGN_CENTER,
+            linefeed: 1,
+          ),
+        );
+        list.add(LineText(linefeed: 1));
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: struck != null ? "No Hp: " + struck["notelp"] : "No Hp: ",
+            weight: 0,
+            align: LineText.ALIGN_CENTER,
+            linefeed: 1,
+          ),
+        );
+        list.add(LineText(linefeed: 1));
+        DateFormat formatter = DateFormat('EEEE, dd MMMM yyyy', 'id_ID');
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: formatter.format(result.createdAt),
+            weight: 0,
+            align: LineText.ALIGN_LEFT,
+            linefeed: 1,
+          ),
+        );
+        list.add(LineText(linefeed: 1));
+
+        var pembayaran = 0;
+
+        for (var i = 0; i < result.details.length; i++) {
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: result.details[i].productsName,
+              weight: 0,
+              align: LineText.ALIGN_LEFT,
+              linefeed: 1,
+            ),
+          );
+
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content:
+                  "${result.details[i].sellingPrice} x ${result.details[i].quantity}",
+              align: LineText.ALIGN_LEFT,
+              linefeed: 0,
+              x: 0,
+            ),
+          );
+          final total = formatRupiah(
+              result.details[i].sellingPrice * result.details[i].quantity);
+          pembayaran +=
+              result.details[i].sellingPrice * result.details[i].quantity;
+          debugPrint(total.length.toString());
+          list.add(
+            LineText(
+              type: LineText.TYPE_TEXT,
+              content: total,
+              align: LineText.ALIGN_RIGHT,
+              linefeed: 0,
+              x: 200 - total.length,
+            ),
+          );
+          list.add(LineText(linefeed: 1));
+        }
+        list.add(LineText(linefeed: 1));
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: "Total",
+            align: LineText.ALIGN_LEFT,
+            linefeed: 0,
+            x: 0,
+          ),
+        );
+
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: formatRupiah(pembayaran),
+            align: LineText.ALIGN_LEFT,
+            linefeed: 0,
+            x: 200 - formatRupiah(pembayaran).length,
+          ),
+        );
+        list.add(LineText(linefeed: 1));
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: "CASH",
+            align: LineText.ALIGN_LEFT,
+            linefeed: 0,
+            x: 0,
+          ),
+        );
+
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: formatRupiah(result.nominal),
+            align: LineText.ALIGN_LEFT,
+            linefeed: 0,
+            x: 200 - formatRupiah(result.nominal).length,
+          ),
+        );
+
+        list.add(LineText(linefeed: 1));
+
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: "Kembalian",
+            align: LineText.ALIGN_LEFT,
+            linefeed: 0,
+            x: 0,
+          ),
+        );
+
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: formatRupiah(result.change),
+            align: LineText.ALIGN_LEFT,
+            linefeed: 0,
+            x: 200 - formatRupiah(result.change).length,
+          ),
+        );
+
+        list.add(LineText(linefeed: 1));
+        list.add(LineText(linefeed: 1));
+
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: struck != null
+                ? struck["footer"]
+                : "Terima Kasih Sudah berbelanja",
+            align: LineText.ALIGN_CENTER,
+            linefeed: 1,
+          ),
+        );
+        list.add(LineText(linefeed: 1));
+        list.add(LineText(linefeed: 1));
+
+        debugPrint(list.toString());
+
+        await printProvider.bluetoothPrint.printReceipt(config, list);
+      },
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -182,20 +368,20 @@ class PrintButtonWidget extends StatelessWidget {
             Radius.circular(20),
           ),
         ),
-        child: const Row(
+        child: Row(
           children: [
-            Icon(
+            const Icon(
               Icons.print_outlined,
               color: Color.fromARGB(255, 20, 120, 25),
               size: 30,
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Cetak Struk",
                   style: TextStyle(
                     color: Color.fromARGB(255, 20, 120, 25),
@@ -204,8 +390,10 @@ class PrintButtonWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Printer belum di setting",
-                  style: TextStyle(
+                  printProvider.connected
+                      ? "Langsung Cetak"
+                      : "Printer belum di setting",
+                  style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 10,
                   ),

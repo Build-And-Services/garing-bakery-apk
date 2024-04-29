@@ -30,16 +30,16 @@ class SettingStruckProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> saveData() async {
+  Future<bool> saveData() async {
     try {
       await SettingStruckService.saveData(
           _namaPerusahaan.text, _alamat.text, _noTelp.text, _footer.text);
       await SettingStruckService.getData();
       notifyListeners();
-      print('Success');
+      return true;
       // print()
     } catch (e) {
-      debugPrint(e.toString());
+      return false;
     }
   }
 }

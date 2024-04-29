@@ -52,7 +52,7 @@ class PrintProvider with ChangeNotifier {
   Future connect(BluetoothDevice device) async {
     final result = await bluetoothPrint.connect(device);
     if (result) {
-      _tips = "Connected";
+      _tips = "Cetak";
     }
     notifyListeners();
     return result;
