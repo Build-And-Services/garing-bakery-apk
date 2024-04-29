@@ -21,8 +21,6 @@ class _TransactionShowPageState extends State<TransactionShowPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final transactionProvider = context.watch<TransactionProvider>();
-    // transactionProvider.getTransaction(widget.filter);
     return Scaffold(
       appBar: widget.filter == 'all'
           ? MyTheme.appBar("Riwayat Semua Transaksi", [])
@@ -40,68 +38,68 @@ class _TransactionShowPageState extends State<TransactionShowPage> {
             ),
             Expanded(
               child: FutureBuilder<List<RespTransactionModel>>(
-                  future: transactionProvider.getTransaction(widget.filter),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-
-                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const NoDataWidget();
-                    }
-                    return ListView.builder(
-                      itemCount: snapshot.data?.length,
-                      itemBuilder: (context, index) {
-                        RespTransactionModel transaction =
-                            snapshot.data![index];
-                        return ListTile(
-                          onTap: () => Navigator.of(context).pushNamed(
-                            Routes.TRANSACTIONS_STRUK,
-                            arguments: ArgumentStruct(
-                              transaction.id,
-                              null,
-                            ),
-                          ),
-                          leading: const Icon(
-                            Icons.person,
-                          ),
-                          title: Text(
-                            transaction.userId,
-                            style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          subtitle: Text(
-                            "Jumlah: ${transaction.productLength}",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          trailing: Column(
-                            children: [
-                              Text(
-                                formatRupiah(transaction.totalPembelian),
-                                style: GoogleFonts.poppins(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                transaction.createdAt,
-                              )
-                            ],
-                          ),
-                        );
-                      },
+                future: transactionProvider.getTransaction(widget.filter),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
-                  }),
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const NoDataWidget();
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data?.length,
+                    itemBuilder: (context, index) {
+                      RespTransactionModel transaction = snapshot.data![index];
+                      return ListTile(
+                        onTap: () => Navigator.of(context).pushNamed(
+                          Routes.TRANSACTIONS_STRUK,
+                          arguments: ArgumentStruct(
+                            transaction.id,
+                            null,
+                          ),
+                        ),
+                        leading: const Icon(
+                          Icons.person,
+                        ),
+                        title: Text(
+                          transaction.userId,
+                          style: GoogleFonts.poppins(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        subtitle: Text(
+                          "Jumlah: ${transaction.productLength}",
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        trailing: Column(
+                          children: [
+                            Text(
+                              formatRupiah(transaction.totalPembelian),
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              transaction.createdAt,
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),

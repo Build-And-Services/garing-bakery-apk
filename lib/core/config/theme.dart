@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
@@ -99,62 +100,26 @@ class MyTheme {
     );
   }
 
-  // final infoAlert = buildButton(
-  //   onTap: () {
-  //     QuickAlert.show(
-  //       context: context,
-  //       type: QuickAlertType.info,
-  //       text: 'Buy two, get one free',
-  //     );
-  //   },
-  //   title: 'Info',
-  //   text: 'Buy two, get one free',
-  //   leadingImage: 'assets/info.gif',
-  // );
+  static showSnackBarFun(context, String message, Color color) {
+    SnackBar snackBar = SnackBar(
+      content: Text(
+        message,
+        style: GoogleFonts.poppins(
+          fontSize: 12,
+        ),
+      ),
+      backgroundColor: color,
+      dismissDirection: DismissDirection.up,
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.only(
+        bottom: MediaQuery.of(context).size.height - 150,
+        left: 10,
+        right: 10,
+      ),
+    );
 
-  // final confirmAlert = buildButton(
-  //   onTap: () {
-  //     QuickAlert.show(
-  //       onCancelBtnTap: () {
-  //         Navigator.pop(context);
-  //       },
-  //       context: context,
-  //       type: QuickAlertType.confirm,
-  //       text: 'Do you want to logout',
-  //       titleAlignment: TextAlign.right,
-  //       textAlignment: TextAlign.right,
-  //       confirmBtnText: 'Yes',
-  //       cancelBtnText: 'No',
-  //       confirmBtnColor: Colors.white,
-  //       backgroundColor: Colors.black,
-  //       headerBackgroundColor: Colors.grey,
-  //       confirmBtnTextStyle: const TextStyle(
-  //         color: Colors.black,
-  //         fontWeight: FontWeight.bold,
-  //       ),
-  //       barrierColor: Colors.white,
-  //       titleColor: Colors.white,
-  //       textColor: Colors.white,
-  //     );
-  //   },
-  //   title: 'Confirm',
-  //   text: 'Do you want to logout',
-  //   leadingImage: 'assets/confirm.gif',
-  // );
-
-  // final loadingAlert = buildButton(
-  //   onTap: () {
-  //     QuickAlert.show(
-  //       context: context,
-  //       type: QuickAlertType.loading,
-  //       title: 'Loading',
-  //       text: 'Fetching your data',
-  //     );
-  //   },
-  //   title: 'Loading',
-  //   text: 'Fetching your data',
-  //   leadingImage: 'assets/loading.gif',
-  // );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }
 
 enum TypeStock { decrease, increase }

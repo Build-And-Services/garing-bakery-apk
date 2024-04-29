@@ -19,7 +19,7 @@ import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_trans
 import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/next_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/history/show_transaction_page.dart';
-import 'package:garing_bakery_apk/features/transaction/presenter/pages/struk_transaction.dart';
+import 'package:garing_bakery_apk/features/transaction/presenter/pages/history/struk_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/success_transaction.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/transaction_page.dart';
 import 'package:page_transition/page_transition.dart';
