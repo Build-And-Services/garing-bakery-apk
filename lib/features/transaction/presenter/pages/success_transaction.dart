@@ -194,7 +194,7 @@ class PrintButtonWidget extends StatelessWidget {
         list.add(
           LineText(
             type: LineText.TYPE_TEXT,
-            content: struck != null ? struck["company"] : "xxxx",
+            content: struck != null ? struck["company"] : "xxxxxxxx",
             weight: 2,
             width: 2,
             height: 2,
