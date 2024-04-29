@@ -69,7 +69,7 @@ class NextTransaction extends StatelessWidget {
           ),
         ),
       ),
-      body: Container(child: LayoutBuilder(
+      body: LayoutBuilder(
         builder: (context, constraints) {
           if (constraints.maxWidth > 900) {
             return _inputNominalTabletView(cartProvider, keys, context);
@@ -77,7 +77,7 @@ class NextTransaction extends StatelessWidget {
             return _inputNominalAndroidView(cartProvider, keys, context);
           }
         },
-      )),
+      ),
     );
   }
 
@@ -148,10 +148,10 @@ class NextTransaction extends StatelessWidget {
                                               list.add(
                                                 LineText(
                                                   type: LineText.TYPE_TEXT,
-                                                  content: struck != null
-                                                      ? "Address: " +
-                                                          struck["company"]
-                                                      : "Address: Gading Bakery",
+                                                  content: struck["company"] !=
+                                                          null
+                                                      ? "${struck["company"]}"
+                                                      : "Gading Bakery",
                                                   weight: 2,
                                                   width: 2,
                                                   height: 2,
@@ -164,10 +164,9 @@ class NextTransaction extends StatelessWidget {
                                               list.add(
                                                 LineText(
                                                   type: LineText.TYPE_TEXT,
-                                                  // ignore: unnecessary_null_comparison, prefer_interpolation_to_compose_strings
-                                                  content: struck != null
-                                                      ? "Address: " +
-                                                          struck["alamat"]
+                                                  content: struck["alamat"] !=
+                                                          null
+                                                      ? "Address: ${struck["alamat"]}"
                                                       : "Address: Gading Bakery",
                                                   align: LineText.ALIGN_CENTER,
                                                   linefeed: 1,
@@ -177,9 +176,9 @@ class NextTransaction extends StatelessWidget {
                                               list.add(
                                                 LineText(
                                                   type: LineText.TYPE_TEXT,
-                                                  content: struck != null
-                                                      ? "No Hp: " +
-                                                          struck["notelp"]
+                                                  content: struck["notelp"] !=
+                                                          null
+                                                      ? "No Hp: ${struck["notelp"]}"
                                                       : "No Hp: ",
                                                   weight: 0,
                                                   align: LineText.ALIGN_CENTER,
@@ -314,9 +313,8 @@ class NextTransaction extends StatelessWidget {
                                               list.add(
                                                 LineText(
                                                   type: LineText.TYPE_TEXT,
-                                                  content: struck != null
-                                                      ? struck["footer"]
-                                                      : "Terima Kasih Sudah berbelanja",
+                                                  content: struck["footer"] ??
+                                                      "Terima Kasih Sudah berbelanja",
                                                   align: LineText.ALIGN_CENTER,
                                                   linefeed: 1,
                                                 ),
@@ -441,10 +439,11 @@ class NextTransaction extends StatelessWidget {
                                                 list.add(
                                                   LineText(
                                                     type: LineText.TYPE_TEXT,
-                                                    content: struck != null
-                                                        ? "Address: " +
-                                                            struck["company"]
-                                                        : "Address: Gading Bakery",
+                                                    content: struck[
+                                                                "company"] !=
+                                                            null
+                                                        ? "${struck["company"]}"
+                                                        : "Gading Bakery",
                                                     weight: 2,
                                                     width: 2,
                                                     height: 2,
@@ -471,9 +470,8 @@ class NextTransaction extends StatelessWidget {
                                                 list.add(
                                                   LineText(
                                                     type: LineText.TYPE_TEXT,
-                                                    content: struck != null
-                                                        ? "No Hp: " +
-                                                            struck["notelp"]
+                                                    content: struck["notelp"]
+                                                        ? "No Hp: ${struck["notelp"]}"
                                                         : "No Hp: ",
                                                     weight: 0,
                                                     align:
@@ -631,9 +629,8 @@ class NextTransaction extends StatelessWidget {
                                                 list.add(
                                                   LineText(
                                                     type: LineText.TYPE_TEXT,
-                                                    content: struck != null
-                                                        ? struck["footer"]
-                                                        : "Terima Kasih Sudah berbelanja",
+                                                    content: struck["footer"] ??
+                                                        "Terima Kasih Sudah berbelanja",
                                                     align:
                                                         LineText.ALIGN_CENTER,
                                                     linefeed: 1,
