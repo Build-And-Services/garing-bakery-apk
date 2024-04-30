@@ -59,7 +59,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           }
           Navigator.of(context).pushAndRemoveUntil(
             PageTransition(
-              child: const DashboardPage(),
+              child: DashboardPage(),
               type: PageTransitionType.fade,
               duration: const Duration(
                 milliseconds: 900,

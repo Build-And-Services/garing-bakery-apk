@@ -42,7 +42,7 @@ class HomeSubPage extends StatelessWidget {
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _headerHome(),
-            _textTitle("Semua Kategori"),
+            _textTitle("Semua Kategori", () => dashboardProvider.changeTab = 3),
             const SizedBox(
               height: 20,
             ),
@@ -54,7 +54,7 @@ class HomeSubPage extends StatelessWidget {
                     child: const Text('category not found'),
                   )
                 : _carouselCategory(dashboardProvider),
-            _textTitle("Semua Barang"),
+            _textTitle("Semua Barang", () => dashboardProvider.changeTab = 1),
             const SizedBox(
               height: 20,
             ),
@@ -117,12 +117,30 @@ class HomeSubPage extends StatelessWidget {
     );
   }
 
-  Padding _textTitle(String text) {
+  Padding _textTitle(String text, Function() fn) {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, left: 20),
-      child: Text(
-        text,
-        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            text,
+            style:
+                GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
+          TextButton(
+            onPressed: fn,
+            child: Text(
+              "Lihat Semua",
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: MyTheme.primary,
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
