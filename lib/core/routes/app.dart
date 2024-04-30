@@ -61,7 +61,7 @@ class Routes {
     switch (settings.name) {
       case Routes.DASHBOARD:
         return PageTransition(
-          child: const DashboardPage(),
+          child: DashboardPage(),
           type: PageTransitionType.fade,
         );
       case Routes.SPLASH:
@@ -175,7 +175,7 @@ class Routes {
         );
       default:
         return PageTransition(
-          child: const DashboardPage(),
+          child: DashboardPage(),
           type: PageTransitionType.fade,
         );
     }

@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
+import 'package:garing_bakery_apk/features/dashboard/presenter/provider/dashboard_provider.dart';
 import 'package:garing_bakery_apk/features/profile/presenter/pages/profile_page.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/pages/history/transactions.dart';
 import 'package:garing_bakery_apk/features/category/presenter/pages/category_sub_page.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/pages/sub_page/home.dart';
 import 'package:garing_bakery_apk/features/product/presenter/pages/product_sub_page.dart';
+import 'package:provider/provider.dart';
 
-class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
-
-  @override
-  State<DashboardPage> createState() => _DashboardPageState();
-}
-
-class _DashboardPageState extends State<DashboardPage> {
-  int _selectedTab = 0;
+class DashboardPage extends StatelessWidget {
+  DashboardPage({super.key});
 
   final List _pages = [
     const HomeSubPage(),
@@ -25,17 +20,13 @@ class _DashboardPageState extends State<DashboardPage> {
     const ProfileSubPage(),
   ];
 
-  _changeTab(int index) {
-    setState(() {
-      _selectedTab = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    DashboardProvider dashboardProvider = context.watch<DashboardProvider>();
     return Scaffold(
-      body: _pages[_selectedTab],
-      floatingActionButton: _selectedTab == 0 || _selectedTab == 2
+      body: _pages[dashboardProvider.selectedTab],
+      floatingActionButton: dashboardProvider.selectedTab == 0 ||
+              dashboardProvider.selectedTab == 2
           ? FloatingActionButton(
               backgroundColor: MyTheme.primary,
               onPressed: () {
@@ -48,8 +39,8 @@ class _DashboardPageState extends State<DashboardPage> {
             )
           : null,
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedTab,
-        onTap: (index) => _changeTab(index),
+        currentIndex: dashboardProvider.selectedTab,
+        onTap: (index) => dashboardProvider.changeTab = index,
         selectedItemColor: MyTheme.primary,
         unselectedItemColor: Colors.grey,
         items: const [
