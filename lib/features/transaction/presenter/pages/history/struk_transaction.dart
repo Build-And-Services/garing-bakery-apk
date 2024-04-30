@@ -26,11 +26,14 @@ class StrukTransactionPage extends StatefulWidget {
 class _StrukTransactionPageState extends State<StrukTransactionPage> {
   PrintProvider? printProvider;
   late Map<String, dynamic> struck;
+  late TransactionAddResponse dataPrint;
 
   Future getDataStruck() async {
     final dataStruck = await SettingStruckService.getData();
+    final data = await TransactionService.detailTransaction(widget.data.id!);
     setState(() {
       struck = dataStruck;
+      dataPrint = data;
     });
   }
 
@@ -60,14 +63,23 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
           ),
         ),
         backgroundColor: MyTheme.primary,
-        actions: const [
+        actions: [
           InkWell(
-            // onTap: () => printProvider.print(data),
-            child: Icon(
+            onTap: () {
+              if (printProvider != null) {
+                printProvider
+                    ?.print(dataPrint)
+                    .catchError((onError) => MyTheme.alertWarning(
+                          context,
+                          "Anda Belum terkoneksi device",
+                        ));
+              }
+            },
+            child: const Icon(
               Icons.print,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
         ],

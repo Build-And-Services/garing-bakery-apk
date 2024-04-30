@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:garing_bakery_apk/core/config/remote.dart';
+import 'package:garing_bakery_apk/core/models/http/response.dart';
 import 'package:garing_bakery_apk/features/reports/data/model/response.dart';
 import 'package:http/http.dart' as http;
 
@@ -105,7 +106,7 @@ class ReportsService {
     }
   }
 
-  static Future<ReportTransactionSalesResponse> getReportSalestoExcel(
+  static Future<Response<DataReportExcel>> getReportSalestoExcel(
       String date, String month, String tahun) async {
     try {
       http.Response result;
@@ -124,8 +125,9 @@ class ReportsService {
       if (result.statusCode != 200) {
         throw 'Gagal mengambil data';
       }
-      ReportTransactionSalesResponse data =
-          ReportTransactionSalesResponse.fromJson(jsonDecode(result.body));
+      print(jsonDecode(result.body));
+      Response<DataReportExcel> data = Response.fromJson(
+          jsonDecode(result.body), (json) => DataReportExcel.fromJson(json));
       return data;
     } catch (e) {
       rethrow;
