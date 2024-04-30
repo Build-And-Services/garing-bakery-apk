@@ -60,23 +60,23 @@ class ProductSubPage extends StatelessWidget {
             onRefresh: () async {
               productProvider.setLoading = true;
             },
-            child: Container(
-              color: const Color.fromARGB(255, 255, 250, 244),
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SearchWidget(
-                    fn: (String keyword) {
-                      debugPrint(keyword);
-                    },
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Expanded(
-                    child: LayoutBuilder(
+            child: SingleChildScrollView(
+              child: Container(
+                color: const Color.fromARGB(255, 255, 250, 244),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SearchWidget(
+                      fn: (String keyword) {
+                        debugPrint(keyword);
+                      },
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    LayoutBuilder(
                       builder: (context, constraints) {
                         if (constraints.maxWidth > 500) {
                           return GridView.count(
@@ -100,9 +100,9 @@ class ProductSubPage extends StatelessWidget {
                                 );
                         }
                       },
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),

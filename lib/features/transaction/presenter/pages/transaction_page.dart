@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
+import 'package:garing_bakery_apk/core/widgets/search_widget.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/widgets/kasir/button_checkout_widget.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/widgets/kasir/product_cart_widget.dart';
@@ -64,6 +65,14 @@ class TransactionPage extends StatelessWidget {
         color: Colors.white,
         child: Column(
           children: [
+            SearchWidget(
+              fn: (String keyword) {
+                debugPrint(keyword);
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
             Expanded(
               child: FutureBuilder<List<ProductModel>>(
                 future: cartProvider.getProduct(),
