@@ -57,7 +57,7 @@ class ReportSalesToExcel extends StatelessWidget {
 
               final ReportTransactionSalesResponse data =
                   snapshot.data as ReportTransactionSalesResponse;
-              final totalBarang = data.data.fold(0,
+              final totalBarang = data.data.report.fold(0,
                   (previousValue, element) => previousValue + element.quantity);
               return Container(
                 color: const Color.fromARGB(255, 255, 247, 238),
@@ -129,7 +129,10 @@ class ReportSalesToExcel extends StatelessWidget {
                         ],
                       ),
                     ),
-                    DownloadExcel(data: data.data),
+                    DownloadExcel(
+                      data: data.data.report,
+                      total: data.data.total,
+                    ),
                   ],
                 ),
               );
@@ -143,9 +146,11 @@ class DownloadExcel extends StatefulWidget {
   const DownloadExcel({
     super.key,
     required this.data,
+    required this.total,
   });
 
   final List<DetailSales> data;
+  final int total;
 
   @override
   State<DownloadExcel> createState() => _DownloadExcelState();
@@ -212,9 +217,10 @@ class _DownloadExcelState extends State<DownloadExcel> {
     sheet.getRangeByName('b1').cellStyle.bold = true;
     sheet.getRangeByName('C1').setText("Tanggal");
     sheet.getRangeByName('c1').cellStyle.bold = true;
-    sheet.getRangeByName('D1').setText("Jumlah");
-    sheet.getRangeByName('d1').cellStyle.bold = true;
+    // sheet.getRangeByName('D1').setText("Jumlah");
+    // sheet.getRangeByName('d1').cellStyle.bold = true;
 
+    var no = 0;
     for (var i = 0; i < data.length; i++) {
       final item = data[i];
       sheet.getRangeByIndex(i + 2, 1).setText(item.productName.toString());
@@ -222,17 +228,18 @@ class _DownloadExcelState extends State<DownloadExcel> {
           .getRangeByIndex(i + 2, 2)
           .setText((item.sellingPrice * item.quantity).toString());
       sheet.getRangeByIndex(i + 2, 3).setText(item.tanggal.toString());
-      sheet.getRangeByIndex(i + 2, 4).setText(item.quantity.toString());
+      no += 1;
     }
+    sheet.getRangeByIndex(no + 2, 1).setText("Total Penjualan");
+    sheet.getRangeByIndex(no + 2, 2).cellStyle.bold = true;
+    sheet.getRangeByIndex(no + 2, 2).setText(widget.total.toString());
+    sheet.getRangeByIndex(no + 2, 2).cellStyle.bold = true;
 
     final totalBarang = data.fold(
         0, (previousValue, element) => previousValue + element.quantity);
 
-    //Save and launch the excel.
     final List<int> bytes = workbook.saveAsStream();
-    //Dispose the document.
     workbook.dispose();
-
     final path =
         '$totalBarang-${DateFormat('yyyy-MM-dd-HH-ss').format(DateTime.now())}.xlsx';
 

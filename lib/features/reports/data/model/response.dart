@@ -226,7 +226,7 @@ class Detail {
 class ReportTransactionSalesResponse {
   bool status;
   String message;
-  List<DetailSales> data;
+  DataReportExcel data;
 
   ReportTransactionSalesResponse({
     required this.status,
@@ -238,14 +238,35 @@ class ReportTransactionSalesResponse {
       ReportTransactionSalesResponse(
         status: json["status"],
         message: json["message"],
-        data: List<DetailSales>.from(
-            json["data"].map((x) => DetailSales.fromJson(x))),
+        data: DataReportExcel.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": data.toJson(),
+      };
+}
+
+class DataReportExcel {
+  List<DetailSales> report;
+  int total;
+
+  DataReportExcel({
+    required this.report,
+    required this.total,
+  });
+
+  factory DataReportExcel.fromJson(Map<String, dynamic> json) =>
+      DataReportExcel(
+        report: List<DetailSales>.from(
+            json["report"].map((x) => DetailSales.fromJson(x))),
+        total: json["total"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "report": List<dynamic>.from(report.map((x) => x.toJson())),
+        "total": total,
       };
 }
 
