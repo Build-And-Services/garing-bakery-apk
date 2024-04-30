@@ -209,6 +209,9 @@ class ReportAllWidget extends StatelessWidget {
                                       )
                                     ],
                                   ),
+                                ),
+                                const Icon(
+                                  Icons.arrow_forward,
                                 )
                               ],
                             ),
