@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/models/arguments/ArgumentReportTransaction.dart';
+import 'package:garing_bakery_apk/core/models/http/response.dart';
 import 'package:garing_bakery_apk/core/utils/save_file.dart';
 import 'package:garing_bakery_apk/core/widgets/no_data_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/problem_get_widget.dart';
@@ -31,7 +32,7 @@ class ReportSalesToExcel extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: appBar,
-        body: FutureBuilder<ReportTransactionSalesResponse>(
+        body: FutureBuilder<Response<DataReportExcel>>(
             future: ReportsService.getReportSalestoExcel(
                 date.date, date.month, date.tahun),
             builder: (context, snapshot) {
@@ -55,8 +56,9 @@ class ReportSalesToExcel extends StatelessWidget {
                 return const NoDataWidget();
               }
 
-              final ReportTransactionSalesResponse data =
-                  snapshot.data as ReportTransactionSalesResponse;
+              final Response<DataReportExcel> data =
+                  snapshot.data as Response<DataReportExcel>;
+              print(data.message);
               final totalBarang = data.data.report.fold(0,
                   (previousValue, element) => previousValue + element.quantity);
               return Container(
@@ -231,7 +233,7 @@ class _DownloadExcelState extends State<DownloadExcel> {
       no += 1;
     }
     sheet.getRangeByIndex(no + 2, 1).setText("Total Penjualan");
-    sheet.getRangeByIndex(no + 2, 2).cellStyle.bold = true;
+    sheet.getRangeByIndex(no + 2, 1).cellStyle.bold = true;
     sheet.getRangeByIndex(no + 2, 2).setText(widget.total.toString());
     sheet.getRangeByIndex(no + 2, 2).cellStyle.bold = true;
 

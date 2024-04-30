@@ -5,6 +5,7 @@ import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/features/printer/data/service/struck_service.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
+import 'package:intl/intl.dart';
 
 class PrintProvider with ChangeNotifier {
   final BluetoothPrint _bluetoothPrint = BluetoothPrint.instance;
@@ -85,8 +86,6 @@ class PrintProvider with ChangeNotifier {
             linefeed: 1,
           ),
         );
-        list.add(LineText(linefeed: 1));
-
         list.add(
           LineText(
             type: LineText.TYPE_TEXT,
@@ -110,6 +109,17 @@ class PrintProvider with ChangeNotifier {
           ),
         );
         list.add(LineText(linefeed: 1));
+        DateFormat formatter =
+            DateFormat('EEEE, dd MMMM yyyy, HH:mm:ss', 'id_ID');
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: formatter.format(data.createdAt),
+            weight: 0,
+            align: LineText.ALIGN_LEFT,
+            linefeed: 1,
+          ),
+        );
 
         list.add(LineText(linefeed: 1));
 
@@ -168,10 +178,11 @@ class PrintProvider with ChangeNotifier {
             content: formatRupiah(pembayaran),
             align: LineText.ALIGN_LEFT,
             linefeed: 0,
-            x: formatRupiah(pembayaran).length,
+            x: 200 - formatRupiah(pembayaran).length,
           ),
         );
-        // list.add(LineText(linefeed: 1));
+        list.add(LineText(linefeed: 1));
+
         list.add(
           LineText(
             type: LineText.TYPE_TEXT,
@@ -203,7 +214,6 @@ class PrintProvider with ChangeNotifier {
             x: 0,
           ),
         );
-        list.add(LineText(linefeed: 1));
 
         list.add(
           LineText(
