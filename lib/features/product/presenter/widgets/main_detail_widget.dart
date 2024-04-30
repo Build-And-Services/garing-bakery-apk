@@ -293,7 +293,7 @@ class _MainDetailProductWidgetState extends State<MainDetailProductWidget> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    product.category ?? "Null category",
+                    product.category ?? "-",
                     style: GoogleFonts.poppins(
                       fontSize: 15.sp,
                       color: Colors.black,
