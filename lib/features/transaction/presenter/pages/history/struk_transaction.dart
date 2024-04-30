@@ -13,6 +13,7 @@ import 'package:garing_bakery_apk/features/transaction/presenter/provider/print_
 import 'package:garing_bakery_apk/features/transaction/presenter/widgets/item_detail_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class StrukTransactionPage extends StatefulWidget {
   const StrukTransactionPage({super.key, required this.data});
@@ -41,6 +42,7 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
 
   @override
   Widget build(BuildContext context) {
+    printProvider = context.watch<PrintProvider>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -60,6 +62,7 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
         backgroundColor: MyTheme.primary,
         actions: const [
           InkWell(
+            // onTap: () => printProvider.print(data),
             child: Icon(
               Icons.print,
             ),
