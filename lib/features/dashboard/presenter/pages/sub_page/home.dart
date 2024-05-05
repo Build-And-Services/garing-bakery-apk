@@ -110,25 +110,36 @@ class HomeSubPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
       ),
-      child: GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: w > 480 ? 4 : 2,
-          childAspectRatio: w > 1000 ? 0.8 : 0.75,
-          mainAxisSpacing: 20.0,
-          crossAxisSpacing: 10.0,
-        ),
-        itemCount: dashboardProvider.dashboardData.data?.products.length,
-        itemBuilder: (context, index) {
-          final product = dashboardProvider.dashboardData.data?.products[index];
-          if (product == null) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return ProductCardItem(
-            product: product,
+      child: OrientationBuilder(
+        builder: (context, orientation) {
+          return GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: w > 480 ? 4 : 2,
+              childAspectRatio: w <= 480
+                  ? 0.78
+                  : w > 480 && w < 788
+                      ? 0.7
+                      : w > 789
+                          ? 0.8
+                          : 0.9,
+              mainAxisSpacing: 20.0,
+              crossAxisSpacing: 10.0,
+            ),
+            itemCount: dashboardProvider.dashboardData.data?.products.length,
+            itemBuilder: (context, index) {
+              final product =
+                  dashboardProvider.dashboardData.data?.products[index];
+              if (product == null) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return ProductCardItem(
+                product: product,
+              );
+            },
           );
         },
       ),

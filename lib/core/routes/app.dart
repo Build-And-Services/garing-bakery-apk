@@ -57,6 +57,9 @@ class Routes {
   // Printer and Struck
   static const String STRUCK_SETTING = '/struck_setting';
 
+  // profile
+  // static const String UPDATE_PROFILE = '/'
+
   static Route<dynamic> generateRoute(settings) {
     switch (settings.name) {
       case Routes.DASHBOARD:

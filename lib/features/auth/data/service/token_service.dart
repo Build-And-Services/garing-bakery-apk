@@ -32,7 +32,7 @@ class TokenService {
 
   static Future<String> getToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = "Bearer ${prefs.getString('token')}";
+    final token = "${prefs.getString('token')}";
     return token;
   }
 
