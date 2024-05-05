@@ -69,6 +69,7 @@ class TransactionPage extends StatelessWidget {
               fn: (String keyword) {
                 debugPrint(keyword);
               },
+              dispose: () {},
             ),
             const SizedBox(
               height: 10,
