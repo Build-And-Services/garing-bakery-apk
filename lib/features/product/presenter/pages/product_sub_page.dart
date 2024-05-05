@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
@@ -60,26 +61,26 @@ class ProductSubPage extends StatelessWidget {
             onRefresh: () async {
               productProvider.setLoading = true;
             },
-            child: SingleChildScrollView(
-              child: Container(
-                color: const Color.fromARGB(255, 255, 250, 244),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SearchWidget(
-                      fn: (String keyword) {
-                        productProvider.filter(keyword);
-                      },
-                      dispose: () {
-                        productProvider.getProduct();
-                      },
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    LayoutBuilder(
+            child: Container(
+              color: const Color.fromARGB(255, 255, 250, 244),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SearchWidget(
+                    fn: (String keyword) {
+                      productProvider.filter(keyword);
+                    },
+                    dispose: () {
+                      productProvider.getProduct();
+                    },
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Expanded(
+                    child: LayoutBuilder(
                       builder: (context, constraints) {
                         if (constraints.maxWidth > 500) {
                           return GridView.count(
@@ -89,12 +90,15 @@ class ProductSubPage extends StatelessWidget {
                             childAspectRatio: 2.8,
                             children: productProvider.products.map((e) {
                               return ProductCardTabletWidget(product: e);
+                              // return Container();
                             }).toList(),
                           );
+                          // return ProductCardTabletWidget(
+                          //     product: productProvider.products[0]);
                         } else {
                           return productProvider.eventLoadingStatus
                               ? const ProductSimmer()
-                              : Column(
+                              : ListView(
                                   children: productProvider.products.map((e) {
                                     return ProductCardWidget(
                                       product: e,
@@ -103,9 +107,9 @@ class ProductSubPage extends StatelessWidget {
                                 );
                         }
                       },
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             ),
           ),

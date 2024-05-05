@@ -15,10 +15,13 @@ class ProfileSubPage extends StatefulWidget {
 
 class _ProfileSubPageState extends State<ProfileSubPage> {
   UserModel? user;
+  String? token;
 
   Future getStringValuesSF() async {
     UserModel userCache = await TokenService.getCacheUser();
+    String userToken = await TokenService.getToken();
     setState(() {
+      token = userToken;
       user = userCache;
     });
   }
@@ -68,8 +71,35 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
                   _tileInformation(
                     Icons.email,
                     "Token Login",
-                    "&65jhjgwuegr37uyggbfuegwruyegr",
+                    token!.split(" ").length >= 2
+                        ? "${token!.split(" ")[1].substring(0, 20)}****"
+                        : "TOKEN",
                   ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Container(
+                      padding: const EdgeInsets.all(
+                        10,
+                      ),
+                      width: width,
+                      decoration: const BoxDecoration(
+                        color: MyTheme.primary,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            10,
+                          ),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Update data",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -108,6 +138,8 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
                   color: Colors.grey,
                   fontWeight: FontWeight.w700,
                 ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
               Text(
                 info,
@@ -121,6 +153,8 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
                   ),
                   fontWeight: FontWeight.w600,
                 ),
+                overflow: TextOverflow.visible,
+                maxLines: 1,
               ),
             ],
           )
@@ -265,8 +299,8 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
 
   Container _contentProfile(double width, UserModel user) {
     return Container(
-      width: width / 3,
-      height: width / 3,
+      width: width < 480 ? width / 3 : width / 6,
+      height: width < 480 ? width / 3 : width / 6,
       decoration: BoxDecoration(
         border: Border.all(
           color: Colors.white,
