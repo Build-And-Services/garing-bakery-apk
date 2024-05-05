@@ -10,10 +10,9 @@ class ButtonConnectPrint extends StatelessWidget {
   Future<void> connect(
       PrintProvider printProvider, BuildContext context) async {
     if (printProvider.device == null) {
-      MyTheme.showSnackBarFun(
+      MyTheme.alertWarning(
         context,
-        "Pilih Device terlebih dahulu",
-        const Color.fromARGB(255, 142, 115, 16),
+        "Harap pilih printer terlebih dahulu",
       );
     } else {
       printProvider.connect().catchError((error) {
