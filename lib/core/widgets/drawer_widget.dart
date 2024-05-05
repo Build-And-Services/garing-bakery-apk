@@ -104,19 +104,12 @@ class DrawerPage extends StatelessWidget {
         future: TokenService.getCacheUser(),
         builder: (context, snapshot) {
           if (ConnectionState.waiting == snapshot.connectionState) {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: const Center(
-                child: CircularProgressIndicator(
-                  color: MyTheme.brown,
-                ),
-              ),
-            );
+            return Container();
           }
           if (snapshot.data == null) {
             return Container();
           }
+
           UserModel dataUser = snapshot.data;
           return Row(
             children: [
@@ -124,16 +117,17 @@ class DrawerPage extends StatelessWidget {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                    color: MyTheme.primary,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(
-                        100,
-                      ),
+                  color: MyTheme.primary,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(
+                      100,
                     ),
-                    image: DecorationImage(
-                      image: NetworkImage(dataUser.image),
-                      fit: BoxFit.cover,
-                    )),
+                  ),
+                  image: DecorationImage(
+                    image: NetworkImage(dataUser.image),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               const SizedBox(
                 width: 15,
