@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
+import 'package:garing_bakery_apk/core/models/user_model.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,7 +45,6 @@ class DrawerPage extends StatelessWidget {
                 Routes.STRUCK_SETTING,
               ),
             ),
-            // _tapSidebar(Icons.money_sharp, "Keuangan", () {}),
             _tapSidebar(
               Icons.note_outlined,
               "Laporan",
@@ -67,8 +67,8 @@ class DrawerPage extends StatelessWidget {
     );
   }
 
-  GestureDetector _tapSidebar(IconData icon, String label, Function() ontap) {
-    return GestureDetector(
+  InkWell _tapSidebar(IconData icon, String label, Function() ontap) {
+    return InkWell(
       onTap: ontap,
       child: Container(
         margin: const EdgeInsets.only(
@@ -99,55 +99,70 @@ class DrawerPage extends StatelessWidget {
     );
   }
 
-  Row _profileArea() {
-    return Row(
-      children: [
-        Container(
-          width: 80,
-          height: 80,
-          decoration: const BoxDecoration(
-            color: MyTheme.primary,
-            borderRadius: BorderRadius.all(
-              Radius.circular(
-                100,
+  FutureBuilder _profileArea() {
+    return FutureBuilder(
+        future: TokenService.getCacheUser(),
+        builder: (context, snapshot) {
+          if (ConnectionState.waiting == snapshot.connectionState) {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: const Center(
+                child: CircularProgressIndicator(
+                  color: MyTheme.brown,
+                ),
               ),
-            ),
-          ),
-          child: const Center(
-            child: Icon(
-              Icons.person,
-              size: 50,
-              color: Color.fromARGB(255, 71, 31, 17),
-            ),
-          ),
-        ),
-        const SizedBox(
-          width: 15,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Heri Setyawan',
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
+            );
+          }
+          if (snapshot.data == null) {
+            return Container();
+          }
+          UserModel dataUser = snapshot.data;
+          return Row(
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                    color: MyTheme.primary,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(
+                        100,
+                      ),
+                    ),
+                    image: DecorationImage(
+                      image: NetworkImage(dataUser.image),
+                      fit: BoxFit.cover,
+                    )),
               ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-            Text(
-              'Cashier Store',
-              style: GoogleFonts.poppins(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
+              const SizedBox(
+                width: 15,
               ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-          ],
-        )
-      ],
-    );
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    dataUser.name,
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  Text(
+                    dataUser.role,
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ],
+              )
+            ],
+          );
+        });
   }
 }
