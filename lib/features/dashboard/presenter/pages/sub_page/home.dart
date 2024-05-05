@@ -22,44 +22,82 @@ class HomeSubPage extends StatelessWidget {
         ),
       );
     }
-    return Scaffold(
-      drawer: const DrawerPage(),
-      appBar: AppBar(
-        title: const Text(
-          'Dashboard',
-          style: TextStyle(
-            color: Colors.white,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Are you sure?'),
+              content: const Text(
+                'Are you sure you want to leave this page?',
+              ),
+              actions: <Widget>[
+                TextButton(
+                  style: TextButton.styleFrom(
+                    textStyle: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  child: const Text('Nevermind'),
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    textStyle: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  child: const Text('Leave'),
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      },
+      child: Scaffold(
+        drawer: const DrawerPage(),
+        appBar: AppBar(
+          title: const Text(
+            'Dashboard',
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
+          centerTitle: true,
+          backgroundColor: MyTheme.primary,
         ),
-        centerTitle: true,
-        backgroundColor: MyTheme.primary,
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          dashboardProvider.setLoading = true;
-        },
-        child: ListView(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _headerHome(),
-            _textTitle("Semua Kategori", () => dashboardProvider.changeTab = 3),
-            const SizedBox(
-              height: 20,
-            ),
-            dashboardProvider.dashboardData.data!.categories.isEmpty
-                ? Container(
-                    padding: const EdgeInsets.all(
-                      20,
-                    ),
-                    child: const Text('category not found'),
-                  )
-                : _carouselCategory(dashboardProvider),
-            _textTitle("Semua Barang", () => dashboardProvider.changeTab = 1),
-            const SizedBox(
-              height: 20,
-            ),
-            _builderGridProduct(dashboardProvider, context),
-          ],
+        body: RefreshIndicator(
+          onRefresh: () async {
+            dashboardProvider.setLoading = true;
+          },
+          child: ListView(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _headerHome(),
+              _textTitle(
+                  "Semua Kategori", () => dashboardProvider.changeTab = 3),
+              const SizedBox(
+                height: 20,
+              ),
+              dashboardProvider.dashboardData.data!.categories.isEmpty
+                  ? Container(
+                      padding: const EdgeInsets.all(
+                        20,
+                      ),
+                      child: const Text('category not found'),
+                    )
+                  : _carouselCategory(dashboardProvider),
+              _textTitle("Semua Barang", () => dashboardProvider.changeTab = 1),
+              const SizedBox(
+                height: 20,
+              ),
+              _builderGridProduct(dashboardProvider, context),
+            ],
+          ),
         ),
       ),
     );
