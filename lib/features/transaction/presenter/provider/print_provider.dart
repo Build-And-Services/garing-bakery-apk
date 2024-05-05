@@ -86,6 +86,7 @@ class PrintProvider with ChangeNotifier {
             linefeed: 1,
           ),
         );
+        list.add(LineText(linefeed: 1));
         list.add(
           LineText(
             type: LineText.TYPE_TEXT,
@@ -96,7 +97,6 @@ class PrintProvider with ChangeNotifier {
             linefeed: 1,
           ),
         );
-        list.add(LineText(linefeed: 1));
         list.add(
           LineText(
             type: LineText.TYPE_TEXT,

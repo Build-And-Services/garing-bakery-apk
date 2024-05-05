@@ -6,13 +6,20 @@ class DashboardProvider with ChangeNotifier {
   DashboardModel _dashboardData = DashboardModel(success: false, message: '');
   bool _loading = true;
   int _selectedTab = 0;
+  bool _pop = false;
 
   DashboardModel get dashboardData => _dashboardData;
   bool get loading => _loading;
   int get selectedTab => _selectedTab;
+  bool get pop => _pop;
 
   set setLoading(bool loading) {
     _loading = loading;
+    notifyListeners();
+  }
+
+  set setPop(bool pop) {
+    _pop = pop;
     notifyListeners();
   }
 
