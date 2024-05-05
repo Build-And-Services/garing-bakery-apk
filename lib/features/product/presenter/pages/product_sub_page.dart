@@ -70,7 +70,10 @@ class ProductSubPage extends StatelessWidget {
                     ),
                     SearchWidget(
                       fn: (String keyword) {
-                        debugPrint(keyword);
+                        productProvider.filter(keyword);
+                      },
+                      dispose: () {
+                        productProvider.getProduct();
                       },
                     ),
                     const SizedBox(

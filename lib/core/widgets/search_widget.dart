@@ -4,9 +4,11 @@ class SearchWidget extends StatefulWidget {
   const SearchWidget({
     super.key,
     required this.fn,
+    required this.dispose,
   });
 
   final Function(String keyword) fn;
+  final Function() dispose;
 
   @override
   State<SearchWidget> createState() => _SearchWidgetState();
@@ -18,7 +20,10 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   void dispose() {
     super.dispose();
+
     _controller.dispose();
+          widget.dispose();
+
   }
 
   @override
@@ -28,11 +33,9 @@ class _SearchWidgetState extends State<SearchWidget> {
       child: Row(
         children: [
           Expanded(
-            // width: double.infinity,
             child: TextField(
               onChanged: (value) {
                 widget.fn(value);
-                debugPrint("widget search: $value");
               },
               decoration: const InputDecoration(
                 contentPadding: EdgeInsets.symmetric(

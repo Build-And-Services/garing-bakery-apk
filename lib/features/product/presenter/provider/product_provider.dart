@@ -8,6 +8,7 @@ import 'package:garing_bakery_apk/features/product/presenter/provider/form_provi
 
 class ProductProvider with ChangeNotifier {
   List<ProductModel> _products = [];
+  List<ProductModel> _productsTemp = [];
   ProductModel? _product;
 
   bool _eventLoadingStatus = true;
@@ -19,6 +20,7 @@ class ProductProvider with ChangeNotifier {
       ProductDelResponse(success: false, message: '');
 
   List<ProductModel> get products => _products;
+  List<ProductModel> get productsTemp => _productsTemp;
   ProductModel? get product => _product;
   bool get eventLoadingStatus => _eventLoadingStatus;
   ProductAddResponse get responseAdd => _responseAdd;
@@ -42,13 +44,26 @@ class ProductProvider with ChangeNotifier {
   }
 
   void filter(String keyword) {
-    debugPrint(keyword);
+    if (keyword == "") {
+      debugPrint("search: Asu");
+      _products = _productsTemp;
+    } else {
+      _products = _productsTemp
+          .where(
+            (product) => product.name.toLowerCase().contains(
+                  keyword.toLowerCase(),
+                ),
+          )
+          .toList();
+    }
+    notifyListeners();
   }
 
   Future<List<ProductModel>> getProduct() async {
     try {
       List<ProductModel> productsResp = await ProductService.allProducts();
       setProduct = productsResp;
+      _productsTemp = productsResp;
       _eventLoadingStatus = false;
       notifyListeners();
       return productsResp;
