@@ -11,6 +11,7 @@ import 'package:garing_bakery_apk/features/product/presenter/pages/add_product_p
 import 'package:garing_bakery_apk/features/product/presenter/pages/detail_product_page.dart';
 import 'package:garing_bakery_apk/features/product/presenter/pages/detail_stock_product_page.dart';
 import 'package:garing_bakery_apk/features/product/presenter/pages/edit_product_page.dart';
+import 'package:garing_bakery_apk/features/profile/presenter/pages/update_data_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_sales/reports_sales_page.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/pages/reports_stocks/reports_stocks_page.dart';
@@ -58,7 +59,7 @@ class Routes {
   static const String STRUCK_SETTING = '/struck_setting';
 
   // profile
-  // static const String UPDATE_PROFILE = '/'
+  static const String UPDATE_PROFILE = '/update_profile';
 
   static Route<dynamic> generateRoute(settings) {
     switch (settings.name) {
@@ -175,6 +176,11 @@ class Routes {
         return PageTransition(
           child: const StruckSetting(),
           type: PageTransitionType.fade,
+        );
+      case Routes.UPDATE_PROFILE:
+        return PageTransition(
+          child: const UpdateProfilePage(),
+          type: PageTransitionType.rightToLeft,
         );
       default:
         return PageTransition(

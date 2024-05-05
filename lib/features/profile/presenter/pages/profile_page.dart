@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/models/user_model.dart';
+import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -76,7 +77,11 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
                         : "TOKEN",
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        Routes.UPDATE_PROFILE,
+                      );
+                    },
                     child: Container(
                       padding: const EdgeInsets.all(
                         10,
