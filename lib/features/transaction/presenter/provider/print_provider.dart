@@ -79,9 +79,8 @@ class PrintProvider with ChangeNotifier {
             content: struck["company"] != null
                 ? "${struck["company"]}"
                 : "Gading Bakery",
-            weight: 2,
-            width: 2,
-            height: 2,
+            weight: 1,
+            height: 1,
             align: LineText.ALIGN_CENTER,
             linefeed: 1,
           ),
@@ -113,7 +112,7 @@ class PrintProvider with ChangeNotifier {
         list.add(
           LineText(
             type: LineText.TYPE_TEXT,
-            content: '-----------------------------',
+            content: '------------------------------',
             weight: 1,
             align: LineText.ALIGN_CENTER,
             linefeed: 1,
@@ -133,7 +132,7 @@ class PrintProvider with ChangeNotifier {
         list.add(
           LineText(
             type: LineText.TYPE_TEXT,
-            content: '-----------------------------',
+            content: '------------------------------',
             weight: 1,
             align: LineText.ALIGN_CENTER,
             linefeed: 1,
@@ -168,7 +167,7 @@ class PrintProvider with ChangeNotifier {
           final total = formatRupiah(
               data.details[i].sellingPrice * data.details[i].quantity);
           pembayaran += data.details[i].sellingPrice * data.details[i].quantity;
-          debugPrint(total.length.toString());
+
           list.add(
             LineText(
               type: LineText.TYPE_TEXT,
@@ -183,13 +182,12 @@ class PrintProvider with ChangeNotifier {
         list.add(
           LineText(
             type: LineText.TYPE_TEXT,
-            content: '-----------------------------',
+            content: '------------------------------',
             weight: 1,
             align: LineText.ALIGN_CENTER,
             linefeed: 1,
           ),
         );
-        list.add(LineText(linefeed: 1));
         list.add(
           LineText(
             type: LineText.TYPE_TEXT,
@@ -267,12 +265,10 @@ class PrintProvider with ChangeNotifier {
         list.add(LineText(linefeed: 1));
         list.add(LineText(linefeed: 1));
 
-        debugPrint(list.toString());
-
         _bluetoothPrint.printReceipt(config, list);
       });
     } else {
-      throw "unconnected";
+      throw ("some arbitrary error");
     }
   }
 }

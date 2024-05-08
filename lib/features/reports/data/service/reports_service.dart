@@ -63,7 +63,6 @@ class ReportsService {
           ReportTahunTransactionsResponse.fromJson(jsonDecode(result.body));
       return data;
     } catch (e) {
-      print(e.toString());
       rethrow;
     }
   }
@@ -85,14 +84,12 @@ class ReportsService {
           ReportDayTransactionResponse.fromJson(jsonDecode(result.body));
       return data;
     } catch (e) {
-      print(e.toString());
       rethrow;
     }
   }
 
   static Future<ReportSalesResponse> getReportSales(String filter) async {
     try {
-      print(filter);
       final result =
           await http.get(Uri.parse("${RemoteApi().REPORTS}/$filter"));
       if (result.statusCode != 200) {
@@ -125,7 +122,7 @@ class ReportsService {
       if (result.statusCode != 200) {
         throw 'Gagal mengambil data';
       }
-      print(jsonDecode(result.body));
+
       Response<DataReportExcel> data = Response.fromJson(
           jsonDecode(result.body), (json) => DataReportExcel.fromJson(json));
       return data;

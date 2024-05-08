@@ -79,8 +79,6 @@ class CategoryProvider with ChangeNotifier {
       await CategoryService.deleteCategory(id);
       _categories.removeWhere((item) => item.id == id);
       notifyListeners();
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 }

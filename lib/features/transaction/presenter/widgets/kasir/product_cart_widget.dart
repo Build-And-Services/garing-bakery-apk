@@ -17,7 +17,7 @@ class ProductCartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = context.watch<CartProvider>();
+    final cartProvider = context.read<CartProvider>();
     return Container(
       margin: const EdgeInsets.only(
         left: 20,

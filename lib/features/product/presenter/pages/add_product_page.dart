@@ -44,10 +44,6 @@ class _AddProductPageState extends State<AddProductPage> {
       );
     }
 
-    print(category.items.where(
-      (element) => element['value'] == formProduct.category,
-    ));
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

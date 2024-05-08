@@ -48,7 +48,6 @@ class ReportSalesToExcel extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                debugPrint(snapshot.error.toString());
                 return const ProblemWidget();
               }
 
@@ -58,7 +57,7 @@ class ReportSalesToExcel extends StatelessWidget {
 
               final Response<DataReportExcel> data =
                   snapshot.data as Response<DataReportExcel>;
-              print(data.message);
+
               final totalBarang = data.data.report.fold(0,
                   (previousValue, element) => previousValue + element.quantity);
               return Container(

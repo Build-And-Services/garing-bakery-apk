@@ -25,7 +25,6 @@ class TransactionService {
       }
       return products;
     } catch (e) {
-      print(e);
       return products;
     }
   }
@@ -45,7 +44,6 @@ class TransactionService {
       );
 
       final data = jsonDecode(result.body)['data'];
-      print(jsonDecode(result.body)['data']["id"].runtimeType);
       return TransactionAddResponse(
         id: data["id"],
         cashier: data["cashier"],
@@ -69,7 +67,6 @@ class TransactionService {
       final result = await http.get(
         Uri.parse('${RemoteApi().TRANSACTION}/$id'),
       );
-      print(jsonDecode(result.body)['data']);
       return TransactionAddResponse.fromJson(
         jsonDecode(result.body)['data'],
       );

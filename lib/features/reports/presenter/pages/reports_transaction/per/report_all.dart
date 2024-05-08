@@ -105,7 +105,6 @@ class ReportAllWidget extends StatelessWidget {
                       .map(
                         (e) => InkWell(
                           onTap: () {
-                            debugPrint(e.toJson().toString());
                             Navigator.of(context).pushNamed(
                               Routes.REPORTS_PER_TRANSACTIONS,
                               arguments: ArgumentReportTransaction(
