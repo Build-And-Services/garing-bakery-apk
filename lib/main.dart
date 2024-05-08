@@ -10,6 +10,7 @@ import 'package:garing_bakery_apk/features/printer/presenter/provider/setting_st
 import 'package:garing_bakery_apk/features/product/presenter/provider/form_edit_stok_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/form_provider.dart';
 import 'package:garing_bakery_apk/features/product/presenter/provider/product_provider.dart';
+import 'package:garing_bakery_apk/features/profile/presenter/provider/form_profile_provider.dart';
 import 'package:garing_bakery_apk/features/reports/presenter/provider/reports_sales_provider.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/print_provider.dart';
@@ -63,7 +64,10 @@ void selectInitialRoute() async {
         ),
         ChangeNotifierProvider(
           create: (_) => SettingStruckProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (_) => FormProfileProvider(),
+        ),
       ],
       child: ScreenUtilInit(
           minTextAdapt: true,

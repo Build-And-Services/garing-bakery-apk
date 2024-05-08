@@ -178,8 +178,9 @@ class Routes {
           type: PageTransitionType.fade,
         );
       case Routes.UPDATE_PROFILE:
+        final id = settings.arguments.toString();
         return PageTransition(
-          child: const UpdateProfilePage(),
+          child: UpdateProfilePage(id: id),
           type: PageTransitionType.rightToLeft,
         );
       default:
