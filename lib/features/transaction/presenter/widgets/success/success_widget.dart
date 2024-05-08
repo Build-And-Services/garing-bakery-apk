@@ -56,61 +56,80 @@ class PrintButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final printProvider = context.watch<PrintProvider>();
-    return InkWell(
-      onTap: () async {
-        printProvider.print(result).catchError((onError) {
-          MyTheme.alertError(
-            context,
-            "Anda belum terkoneksi dengan printer",
+    return FutureBuilder(
+        future: printProvider.bluetoothPrint.isConnected,
+        builder: (context, snapshot) {
+          bool connected = false;
+          if (snapshot.data != null) {
+            connected = snapshot.data!;
+          }
+
+          return InkWell(
+            onTap: () async {
+              if ((await printProvider.bluetoothPrint.isConnected)!) {
+                printProvider.print(result).then((value) {
+                  if (!value) {
+                    return MyTheme.alertError(
+                      context,
+                      "Terjadi Kesalahan",
+                    );
+                  }
+                });
+              } else {
+                // ignore: use_build_context_synchronously
+                return MyTheme.alertError(
+                  context,
+                  "Anda belum terkoneksi dengan printer",
+                );
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: const Color.fromARGB(255, 20, 120, 25),
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(20),
+                ),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.print_outlined,
+                    color: Color.fromARGB(255, 20, 120, 25),
+                    size: 30,
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Cetak Struk",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 20, 120, 25),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        connected
+                            ? "Langsung Cetak"
+                            : "Printer belum di setting",
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 10,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
           );
         });
-      },
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: const Color.fromARGB(255, 20, 120, 25),
-          ),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(20),
-          ),
-        ),
-        child: Row(
-          children: [
-            const Icon(
-              Icons.print_outlined,
-              color: Color.fromARGB(255, 20, 120, 25),
-              size: 30,
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Cetak Struk",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 20, 120, 25),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  printProvider.connected
-                      ? "Langsung Cetak"
-                      : "Printer belum di setting",
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 10,
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
   }
 }
 

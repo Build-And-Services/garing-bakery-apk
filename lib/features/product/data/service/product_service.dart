@@ -17,7 +17,6 @@ class ProductService {
       }
       return products;
     } catch (e) {
-      print(e.toString());
       return products;
     }
   }
@@ -105,7 +104,6 @@ class ProductService {
       );
       return result;
     } catch (e) {
-      print(e);
       rethrow;
     }
   }
@@ -153,7 +151,6 @@ class ProductService {
           StockProductResponse.fromJson(response["data"]);
       return data;
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
@@ -169,7 +166,6 @@ class ProductService {
       ProductModel data = ProductModel.fromJson(response["data"]);
       return data;
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
@@ -190,7 +186,6 @@ class ProductService {
       }
       return true;
     } catch (e) {
-      print(e.toString());
       return false;
     }
   }

@@ -29,8 +29,15 @@ class EditProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = context.watch<ProductProvider>();
-    final formProduct = context.read<FormProductProvider>();
+    final formProduct = context.watch<FormProductProvider>();
     final category = context.watch<CategoryProvider>();
+    if (product.product != null) {
+      formProduct.name.text = product.product!.name;
+      formProduct.stock.text = product.product!.quantity.toString();
+      formProduct.selling.text = product.product!.sellingPrice.toString();
+      formProduct.purchase.text = product.product!.purchasePrice.toString();
+      formProduct.code.text = product.product!.productCode.toString();
+    }
     if (category.isLoading) {
       category.getCategories().then((value) {
         if (value.where((element) => element['value'] == 'no').length != 1) {
@@ -45,6 +52,9 @@ class EditProductPage extends StatelessWidget {
         child: const LoadingWidget(),
       );
     }
+
+    // String? categorySelected = category.items.firstWhere(
+    //     (item) => item['label'] == product.product!.category)['value'];
 
     if (product.isLoadingDetail) {
       product.getProductBy(
@@ -144,9 +154,9 @@ class EditProductPage extends StatelessWidget {
                                 )
                                 .toList(),
                             onChanged: (String? newValue) {
-                              // if (newValue != null) {
-                              //   formProduct.setCategory = newValue;
-                              // }
+                              if (newValue != null) {
+                                formProduct.setCategory = newValue;
+                              }
                             },
                           ),
                         ),

@@ -1,20 +1,20 @@
+import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:bluetooth_print/bluetooth_print.dart';
-import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/features/printer/data/service/struck_service.dart';
+import 'dart:async';
 import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PrintProvider with ChangeNotifier {
-  final BluetoothPrint _bluetoothPrint = BluetoothPrint.instance;
+  final BlueThermalPrinter _bluetoothPrint = BlueThermalPrinter.instance;
   bool _connected = false;
   BluetoothDevice? _device;
   String _tips = "Hubungkan";
   List<BluetoothDevice> _devices = [];
 
-  BluetoothPrint get bluetoothPrint => _bluetoothPrint;
+  BlueThermalPrinter get bluetoothPrint => _bluetoothPrint;
   bool get connected => _connected;
   BluetoothDevice? get device => _device;
   List<BluetoothDevice> get devices => _devices;
@@ -25,250 +25,110 @@ class PrintProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  set setTips(String tips) {
+    _tips = tips;
+    notifyListeners();
+  }
+
   set setDevices(List<BluetoothDevice> devices) {
     _devices = devices;
     notifyListeners();
   }
 
-  Future<void> initBluetooth() async {
-    bluetoothPrint.startScan(timeout: const Duration(seconds: 4));
+  Future<List<BluetoothDevice>> getDevices() async {
+    _devices = await _bluetoothPrint.getBondedDevices();
+    notifyListeners();
+    return _devices;
+  }
 
-    bool isConnected = await bluetoothPrint.isConnected ?? false;
-
-    bluetoothPrint.state.listen((state) {
-      switch (state) {
-        case BluetoothPrint.CONNECTED:
-          _connected = true;
-          break;
-        case BluetoothPrint.DISCONNECTED:
-          _connected = false;
-          break;
-        default:
-          break;
+  Future<bool> connect({BluetoothDevice? device}) async {
+    if (device != null) {
+      _device = device;
+    }
+    try {
+      if (_device != null) {
+        debugPrint(_connected.toString());
+        bool? conn = await _bluetoothPrint.isConnected;
+        if (conn == null || conn == false) {
+          _tips = "Sedang Menghubungkan";
+          await _bluetoothPrint.connect(_device!);
+          _connected = (await _bluetoothPrint.isConnected)!;
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString("print_name", _device!.name!);
+          prefs.setString("print_address", _device!.address!);
+        }
+        notifyListeners();
+        return true;
+      } else {
+        return false;
       }
-    });
-
-    if (isConnected) {
-      _connected = true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
     }
   }
 
-  Future connect() async {
-    if (_device != null) {
-      final result = await bluetoothPrint.connect(_device!);
-      if (result) {
-        _tips = "Cetak";
-      }
+  Future<bool> disconnect() async {
+    try {
+      _bluetoothPrint.disconnect();
       notifyListeners();
-      return result;
-    } else {
-      throw "error device not selected";
+      return true;
+    } catch (e) {
+      debugPrint("ok");
+      return false;
     }
   }
 
-  Future<void> print(TransactionAddResponse data) async {
-    if (_connected) {
+  Future<bool> print(TransactionAddResponse data) async {
+    debugPrint("Hallo");
+    debugPrint((await _bluetoothPrint.isConnected)!.toString());
+    if ((await _bluetoothPrint.isConnected)!) {
       SettingStruckService.getData().then((struck) {
-        Map<String, dynamic> config = {};
-        List<LineText> list = [];
-        list.add(LineText(linefeed: 1));
-
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: struck["company"] != null
-                ? "${struck["company"]}"
-                : "Gading Bakery",
-            weight: 1,
-            height: 1,
-            align: LineText.ALIGN_CENTER,
-            linefeed: 1,
-          ),
-        );
-        list.add(LineText(linefeed: 1));
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: struck["alamat"] != null
-                ? "Address: ${struck["alamat"]}"
-                : "Address: Gading Bakery",
-            align: LineText.ALIGN_CENTER,
-            linefeed: 1,
-          ),
-        );
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: struck["notelp"] != null
-                ? "No Hp: ${struck["notelp"]}"
-                : "No Hp: ",
-            weight: 0,
-            align: LineText.ALIGN_CENTER,
-            linefeed: 1,
-          ),
-        );
-        list.add(LineText(linefeed: 1));
-
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: '------------------------------',
-            weight: 1,
-            align: LineText.ALIGN_CENTER,
-            linefeed: 1,
-          ),
-        );
+        _bluetoothPrint.printNewLine();
+        _bluetoothPrint.printCustom(struck["company"], 3, 1);
+        _bluetoothPrint.printNewLine();
+        _bluetoothPrint.printCustom(struck["alamat"], 1, 1);
+        _bluetoothPrint.printCustom(struck["notelp"], 1, 1);
+        _bluetoothPrint.printNewLine();
+        _bluetoothPrint.printCustom("------------------------------", 0, 1);
         DateFormat formatter =
             DateFormat('EEEE, dd MMMM yyyy, HH:mm:ss', 'id_ID');
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: formatter.format(data.createdAt),
-            weight: 0,
-            align: LineText.ALIGN_LEFT,
-            linefeed: 1,
-          ),
-        );
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: '------------------------------',
-            weight: 1,
-            align: LineText.ALIGN_CENTER,
-            linefeed: 1,
-          ),
-        );
-
-        list.add(LineText(linefeed: 1));
-
-        var pembayaran = 0;
-
+        _bluetoothPrint.printCustom(formatter.format(data.createdAt), 0, 1);
+        _bluetoothPrint.printCustom("------------------------------", 0, 1);
+        _bluetoothPrint.printNewLine();
+        _bluetoothPrint.printCustom("------------------------------", 0, 0);
+        int pembayaran = 0;
         for (var i = 0; i < data.details.length; i++) {
-          list.add(
-            LineText(
-              type: LineText.TYPE_TEXT,
-              content: data.details[i].productsName,
-              weight: 0,
-              align: LineText.ALIGN_LEFT,
-              linefeed: 1,
-            ),
-          );
-
-          list.add(
-            LineText(
-              type: LineText.TYPE_TEXT,
-              content:
-                  "${data.details[i].sellingPrice} x ${data.details[i].quantity}",
-              align: LineText.ALIGN_LEFT,
-              linefeed: 0,
-              x: 0,
-            ),
-          );
-          final total = formatRupiah(
-              data.details[i].sellingPrice * data.details[i].quantity);
+          _bluetoothPrint.printCustom(data.details[i].productsName, 0, 0);
+          // _bluetoothPrint.printCustom(
+          //     "${data.details[i].sellingPrice} x ${data.details[i].quantity}",
+          //     1,
+          //     0);
+          // _bluetoothPrint.printCustom(c, 0, 2);
           pembayaran += data.details[i].sellingPrice * data.details[i].quantity;
-
-          list.add(
-            LineText(
-              type: LineText.TYPE_TEXT,
-              content: total,
-              align: LineText.ALIGN_RIGHT,
-              linefeed: 0,
-              x: 200 - total.length,
-            ),
-          );
-          list.add(LineText(linefeed: 1));
+          _bluetoothPrint.printLeftRight(
+              "${data.details[i].sellingPrice} x ${data.details[i].quantity}",
+              formatRupiah(
+                  data.details[i].sellingPrice * data.details[i].quantity),
+              0);
         }
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: '------------------------------',
-            weight: 1,
-            align: LineText.ALIGN_CENTER,
-            linefeed: 1,
-          ),
-        );
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: "Total",
-            align: LineText.ALIGN_LEFT,
-            linefeed: 0,
-            x: 0,
-          ),
-        );
+        _bluetoothPrint.printCustom("------------------------------", 0, 0);
+        _bluetoothPrint.printLeftRight("Total", formatRupiah(pembayaran), 0);
+        _bluetoothPrint.printLeftRight("CASH", formatRupiah(data.nominal), 0);
+        _bluetoothPrint.printLeftRight(
+            "Kembalian", formatRupiah(data.change), 0);
 
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: formatRupiah(pembayaran),
-            align: LineText.ALIGN_LEFT,
-            linefeed: 0,
-            x: 200 - formatRupiah(pembayaran).length,
-          ),
-        );
-        list.add(LineText(linefeed: 1));
+        _bluetoothPrint.printNewLine();
+        _bluetoothPrint.printNewLine();
+        _bluetoothPrint.printCustom(struck["footer"], 1, 1);
+        _bluetoothPrint.printNewLine();
+        _bluetoothPrint.printNewLine();
 
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: "CASH",
-            align: LineText.ALIGN_LEFT,
-            linefeed: 0,
-            x: 0,
-          ),
-        );
-
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: formatRupiah(data.nominal),
-            align: LineText.ALIGN_LEFT,
-            linefeed: 0,
-            x: 200 - formatRupiah(data.nominal).length,
-          ),
-        );
-
-        list.add(LineText(linefeed: 1));
-
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: "Kembalian",
-            align: LineText.ALIGN_LEFT,
-            linefeed: 0,
-            x: 0,
-          ),
-        );
-
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: formatRupiah(data.change),
-            align: LineText.ALIGN_LEFT,
-            linefeed: 0,
-            x: 200 - formatRupiah(data.change).length,
-          ),
-        );
-
-        list.add(LineText(linefeed: 1));
-        list.add(LineText(linefeed: 1));
-
-        list.add(
-          LineText(
-            type: LineText.TYPE_TEXT,
-            content: struck["footer"] ?? "Terima Kasih Sudah berbelanja",
-            align: LineText.ALIGN_CENTER,
-            linefeed: 1,
-          ),
-        );
-        list.add(LineText(linefeed: 1));
-        list.add(LineText(linefeed: 1));
-
-        _bluetoothPrint.printReceipt(config, list);
+        debugPrint(struck.toString());
       });
+      return true;
     } else {
-      throw ("some arbitrary error");
+      return false;
     }
   }
 }
