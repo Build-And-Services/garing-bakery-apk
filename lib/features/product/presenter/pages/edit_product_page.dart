@@ -144,7 +144,6 @@ class EditProductPage extends StatelessWidget {
                                 )
                                 .toList(),
                             onChanged: (String? newValue) {
-                              print(newValue);
                               // if (newValue != null) {
                               //   formProduct.setCategory = newValue;
                               // }

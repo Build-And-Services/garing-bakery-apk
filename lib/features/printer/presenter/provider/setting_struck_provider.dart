@@ -37,7 +37,6 @@ class SettingStruckProvider extends ChangeNotifier {
       await SettingStruckService.getData();
       notifyListeners();
       return true;
-      // print()
     } catch (e) {
       return false;
     }

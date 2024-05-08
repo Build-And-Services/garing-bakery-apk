@@ -151,7 +151,6 @@ class ProductCardWidget extends StatelessWidget {
                     ? Container()
                     : InkWell(
                         onTap: () {
-                          debugPrint(product.id.toString());
                           MyTheme.alertWarning(
                             context,
                             "Apakah anda yakin menghapus",

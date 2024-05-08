@@ -45,7 +45,6 @@ class ProductProvider with ChangeNotifier {
 
   void filter(String keyword) {
     if (keyword == "") {
-      debugPrint("search: Asu");
       _products = _productsTemp;
     } else {
       _products = _productsTemp
@@ -105,7 +104,6 @@ class ProductProvider with ChangeNotifier {
       {FormProductProvider? formProductProvider,
       List<Map<String, dynamic>>? items}) async {
     try {
-      print("edit");
       late ProductModel product;
 
       // get data jika belum ada

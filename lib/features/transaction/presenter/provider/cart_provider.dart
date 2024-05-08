@@ -177,9 +177,8 @@ class CartProvider with ChangeNotifier {
       clear();
       return result;
     } catch (e) {
-      print(e);
+      return null;
     }
-    return null;
   }
 
   CartModel getCart(ProductModel product) {

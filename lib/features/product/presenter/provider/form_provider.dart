@@ -29,7 +29,6 @@ class FormProductProvider with ChangeNotifier {
     _purchase.clear();
     _selling.clear();
     _category = 'no';
-    print("dispose");
     _image = null;
   }
 

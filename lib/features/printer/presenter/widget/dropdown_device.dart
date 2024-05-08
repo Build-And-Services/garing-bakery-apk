@@ -20,6 +20,7 @@ class DropdownDevice extends StatelessWidget {
         stream: printProvider.bluetoothPrint.scanResults,
         initialData: const [],
         builder: (context, snapshot) {
+          print(snapshot.data);
           return Container(
             margin: const EdgeInsets.symmetric(
               vertical: 10,
@@ -36,39 +37,28 @@ class DropdownDevice extends StatelessWidget {
                 alignedDropdown: true,
                 child: DropdownButton(
                   borderRadius: BorderRadius.circular(8),
-                  value: snapshot.data!.isEmpty
-                      ? "-"
-                      : printProvider.device?.address == null
-                          ? null
-                          : !snapshot.data!.any((e) =>
-                                  e.address == printProvider.device!.address)
-                              ? null
-                              : printProvider.device?.address,
-                  items: snapshot.data!.isEmpty
-                      ? [
-                          const DropdownMenuItem(
-                            value: "-",
-                            child: Text('Data Kosong'),
+                  value: snapshot.data!.any(
+                          (e) => e.address == printProvider.device!.address)
+                      ? null
+                      : printProvider.device?.address,
+                  items: snapshot.data!
+                      .map(
+                        (e) => DropdownMenuItem(
+                          value: e.address,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(e.name ?? 'No name device'),
+                              // Text(e.address ?? 'No address device'),
+                            ],
                           ),
-                        ]
-                      : snapshot.data!
-                          .map(
-                            (e) => DropdownMenuItem(
-                              value: e.address,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(e.name ?? 'No name device'),
-                                  Text(e.address ?? 'No address device'),
-                                ],
-                              ),
-                              onTap: () {
-                                printProvider.setDevice = e;
-                              },
-                            ),
-                          )
-                          .toList(),
+                          onTap: () {
+                            printProvider.setDevice = e;
+                          },
+                        ),
+                      )
+                      .toList(),
                   onChanged: (value) {},
                 ),
               ),
