@@ -37,6 +37,9 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    // print(user!.id);
+    print(token);
+    print(user?.name);
     if (user == null) {
       return const Scaffold(
         body: Center(
@@ -62,24 +65,19 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
                   _tileInformation(
                     Icons.person,
                     "Role",
-                    "${user!.email} store",
+                    user!.role,
                   ),
                   _tileInformation(
                     Icons.email,
                     "Password",
                     "***************",
                   ),
-                  _tileInformation(
-                    Icons.email,
-                    "Token Login",
-                    token!.split(" ").length >= 2
-                        ? "${token!.split(" ")[1].substring(0, 20)}****"
-                        : "TOKEN",
-                  ),
+                  _tileInformation(Icons.email, "Token Login", "****"),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pushNamed(
                         Routes.UPDATE_PROFILE,
+                        arguments: user!.id,
                       );
                     },
                     child: Container(
