@@ -67,12 +67,7 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
           InkWell(
             onTap: () {
               if (printProvider != null) {
-                printProvider
-                    ?.print(dataPrint)
-                    .catchError((onError) => MyTheme.alertWarning(
-                          context,
-                          "Anda Belum terkoneksi device",
-                        ));
+                printProvider?.print(dataPrint);
               }
             },
             child: const Icon(

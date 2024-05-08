@@ -14,13 +14,25 @@ class ButtonConnectPrint extends StatelessWidget {
         context,
         "Harap pilih printer terlebih dahulu",
       );
+    } else if (printProvider.connected) {
+      MyTheme.alertWarning(
+        context,
+        "Sudah terkoneksi",
+      );
     } else {
-      printProvider.connect().catchError((error) {
-        MyTheme.showSnackBarFun(
-          context,
-          "Terjadi Kesalahan",
-          Colors.red,
-        );
+      printProvider.connect().then((value) {
+        if (value) {
+          printProvider.setTips = "Sudah terkoneksi";
+          MyTheme.alertSucces(
+            context,
+            "Berhasil Terkoneksi",
+          );
+        } else {
+          MyTheme.alertError(
+            context,
+            "Terjadi Kesalahan",
+          );
+        }
       });
     }
   }
@@ -28,32 +40,71 @@ class ButtonConnectPrint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PrintProvider printProvider = context.watch<PrintProvider>();
-    return InkWell(
-      onTap: () => connect(printProvider, context),
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: 12,
-          horizontal: 20,
-        ),
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-          color: Colors.indigo,
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              50,
+    return FutureBuilder(
+        future: printProvider.bluetoothPrint.isConnected,
+        builder: (context, snapshot) {
+          if (snapshot.data != null && snapshot.data!) {
+            return InkWell(
+              onTap: () => printProvider.disconnect().then((value) {
+                if (value) {
+                  MyTheme.alertSucces(context, "Berhasil diputus");
+                } else {
+                  MyTheme.alertError(context, "Terjadi Kesalahan");
+                }
+              }),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 20,
+                ),
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      50,
+                    ),
+                  ),
+                ),
+                child: Text(
+                  "Disconnect Device",
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+          return InkWell(
+            onTap: () => connect(printProvider, context),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 12,
+                horizontal: 20,
+              ),
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                color: Colors.indigo,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    50,
+                  ),
+                ),
+              ),
+              child: Text(
+                printProvider.tips,
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-        ),
-        child: Text(
-          printProvider.connected ? "Connected" : "Try to Connect!",
-          style: GoogleFonts.poppins(
-            fontSize: 18,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
+          );
+        });
   }
 }
