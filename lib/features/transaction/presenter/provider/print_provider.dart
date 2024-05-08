@@ -109,6 +109,16 @@ class PrintProvider with ChangeNotifier {
           ),
         );
         list.add(LineText(linefeed: 1));
+
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: '-----------------------------',
+            weight: 1,
+            align: LineText.ALIGN_CENTER,
+            linefeed: 1,
+          ),
+        );
         DateFormat formatter =
             DateFormat('EEEE, dd MMMM yyyy, HH:mm:ss', 'id_ID');
         list.add(
@@ -117,6 +127,15 @@ class PrintProvider with ChangeNotifier {
             content: formatter.format(data.createdAt),
             weight: 0,
             align: LineText.ALIGN_LEFT,
+            linefeed: 1,
+          ),
+        );
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: '-----------------------------',
+            weight: 1,
+            align: LineText.ALIGN_CENTER,
             linefeed: 1,
           ),
         );
@@ -161,6 +180,15 @@ class PrintProvider with ChangeNotifier {
           );
           list.add(LineText(linefeed: 1));
         }
+        list.add(
+          LineText(
+            type: LineText.TYPE_TEXT,
+            content: '-----------------------------',
+            weight: 1,
+            align: LineText.ALIGN_CENTER,
+            linefeed: 1,
+          ),
+        );
         list.add(LineText(linefeed: 1));
         list.add(
           LineText(
