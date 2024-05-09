@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:garing_bakery_apk/core/models/enum/event_loading.dart';
+import 'package:garing_bakery_apk/core/models/user_model.dart';
 import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
 import 'package:garing_bakery_apk/features/profile/data/model/response.dart';
 import 'package:garing_bakery_apk/features/profile/data/service/profile_service.dart';
@@ -11,20 +13,24 @@ class FormProfileProvider with ChangeNotifier {
   final TextEditingController _email = TextEditingController();
   XFile? _image;
   bool _isLoading = false;
-  bool _eventLoadingStatus = false;
+  EventLoading _eventLoadingStatus = EventLoading.started;
+  UserModel? _userProfile;
+  String? _token;
 
   TextEditingController get name => _name;
   TextEditingController get email => _email;
   XFile? get image => _image;
   bool get isLoading => _isLoading;
-  bool get eventLoadingStatus => _eventLoadingStatus;
+  EventLoading get eventLoadingStatus => _eventLoadingStatus;
+  UserModel? get userProfile => _userProfile;
+  String? get token => _token;
 
   set isProccess(bool loading) {
     _isLoading = loading;
     notifyListeners();
   }
 
-  set setLoading(bool loading) {
+  set setLoading(EventLoading loading) {
     _eventLoadingStatus = loading;
     notifyListeners();
   }
@@ -32,6 +38,7 @@ class FormProfileProvider with ChangeNotifier {
   void clearController() {
     _name.clear();
     _email.clear();
+    _eventLoadingStatus = EventLoading.loading;
     _image = null;
   }
 
@@ -67,6 +74,22 @@ class FormProfileProvider with ChangeNotifier {
     return null;
   }
 
+  Future<UserModel?> getDataProfile() async {
+    final data = await TokenService.getCacheUser();
+    _userProfile = data;
+    _name.text = data.name;
+    _email.text = data.email;
+    _eventLoadingStatus = EventLoading.done;
+    notifyListeners();
+    return data;
+  }
+
+  Future<void> getToken() async {
+    final token = await TokenService.getToken();
+    _token = token;
+    notifyListeners();
+  }
+
   Future<ProfileUpdateResponse> profileUpdate(String id) async {
     try {
       final result = await ProfileService.update(
@@ -74,20 +97,12 @@ class FormProfileProvider with ChangeNotifier {
         image!.path,
         id,
       );
-
       await TokenService.saveData("${result.accessToken}", result.data!);
-
-      final token = await TokenService.getToken();
-      print(token);
-
-      // if (result.success) {
-      //   print(result.accessToken);
-      //   return result;
-      // }
+      _userProfile = result.data;
+      _token = result.accessToken;
       notifyListeners();
       return result;
     } catch (e) {
-      print(e.toString());
       return ProfileUpdateResponse(
         success: false,
         message: "Update Profile Failed",

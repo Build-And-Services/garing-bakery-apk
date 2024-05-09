@@ -4,43 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/models/user_model.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
-import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
+import 'package:garing_bakery_apk/features/profile/presenter/provider/form_profile_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-class ProfileSubPage extends StatefulWidget {
+class ProfileSubPage extends StatelessWidget {
   const ProfileSubPage({super.key});
-
-  @override
-  State<ProfileSubPage> createState() => _ProfileSubPageState();
-}
-
-class _ProfileSubPageState extends State<ProfileSubPage> {
-  UserModel? user;
-  String? token;
-
-  Future getStringValuesSF() async {
-    UserModel userCache = await TokenService.getCacheUser();
-    String userToken = await TokenService.getToken();
-    setState(() {
-      token = userToken;
-      user = userCache;
-    });
-  }
-
-  @override
-  void initState() {
-    getStringValuesSF();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    // print(user!.id);
-    print(token);
-    print(user?.name);
-    if (user == null) {
+    final dataProfile = context.watch<FormProfileProvider>();
+    if (dataProfile.userProfile == null || dataProfile.token == null) {
+      dataProfile.getDataProfile();
+      dataProfile.getToken();
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -52,7 +30,7 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
         width: double.infinity,
         child: Column(
           children: [
-            _headerProfile(width, height, user!),
+            _headerProfile(width, height, dataProfile.userProfile!),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.zero,
@@ -60,24 +38,25 @@ class _ProfileSubPageState extends State<ProfileSubPage> {
                   _tileInformation(
                     Icons.email,
                     "Email",
-                    user!.email,
+                    dataProfile.userProfile!.email,
                   ),
                   _tileInformation(
                     Icons.person,
                     "Role",
-                    user!.role,
+                    dataProfile.userProfile!.role,
                   ),
                   _tileInformation(
                     Icons.email,
                     "Password",
                     "***************",
                   ),
-                  _tileInformation(Icons.email, "Token Login", "****"),
+                  _tileInformation(Icons.email, "Token Login",
+                      "${dataProfile.token!.substring(0, 20)}***"),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pushNamed(
                         Routes.UPDATE_PROFILE,
-                        arguments: user!.id,
+                        arguments: dataProfile.userProfile!.id,
                       );
                     },
                     child: Container(
