@@ -68,7 +68,7 @@ class ReportAllWidget extends StatelessWidget {
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      interval: 4,
+                      interval: ((maxX + 16) - 2020) / 5,
                       getTitlesWidget: (value, meta) {
                         return Text(
                           value.toString().split('.')[0],
@@ -83,7 +83,7 @@ class ReportAllWidget extends StatelessWidget {
                     sideTitles: SideTitles(
                       reservedSize: 60,
                       showTitles: true,
-                      interval: 400000,
+                      interval: (maxY + 100000) / 4,
                       getTitlesWidget: (value, meta) {
                         return Text(
                           formatRupiah(
