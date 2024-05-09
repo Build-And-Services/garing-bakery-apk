@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
+import 'package:garing_bakery_apk/core/models/event/fetchProduct.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/core/models/user_model.dart';
 import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
@@ -11,18 +12,40 @@ import 'package:garing_bakery_apk/features/transaction/data/service/transaction_
 
 class CartProvider with ChangeNotifier {
   bool _isLoading = false;
+  EventLoading _eventProduct = EventLoading.started;
   List<String> _nominal = [];
   List<CartModel> _cartList = [];
   List<ProductModel> _products = [];
+  List<ProductModel> _productsTemp = [];
 
   List<CartModel> get cartList => _cartList;
   List<ProductModel> get products => _products;
+  List<ProductModel> get productsTemp => _productsTemp;
   bool get isLoading => _isLoading;
+  EventLoading get eventProduct => _eventProduct;
+
+  filter(String keyword) {
+    _products = _productsTemp
+        .where(
+          (product) => product.name.toLowerCase().contains(
+                keyword.toLowerCase(),
+              ),
+        )
+        .toList();
+    notifyListeners();
+  }
+
+  set setEventLoading(EventLoading event) {
+    _eventProduct = event;
+    notifyListeners();
+  }
 
   Future<List<ProductModel>> getProduct() async {
     try {
       List<ProductModel> productsResp = await ProductService.allProducts();
       _products = productsResp;
+      _productsTemp = productsResp;
+      _eventProduct = EventLoading.done;
       notifyListeners();
       return productsResp;
     } catch (e) {

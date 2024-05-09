@@ -2,22 +2,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
-import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';
+import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/widgets/kasir/AddItemWidget.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class ProductCartWidget extends StatelessWidget {
   const ProductCartWidget({
     super.key,
-    required this.index,
+    required this.productModel,
   });
 
-  final int index;
+  final ProductModel productModel;
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = context.read<CartProvider>();
     return Container(
       margin: const EdgeInsets.only(
         left: 20,
@@ -42,11 +40,11 @@ class ProductCartWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CachedNetworkImage(
-                imageUrl: cartProvider.products[index].image,
+                imageUrl: productModel.image,
                 progressIndicatorBuilder: (context, url, progress) {
                   return Container(
-                    width: 80,
-                    height: 80,
+                    width: 40,
+                    height: 40,
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(
                         Radius.circular(10),
@@ -83,7 +81,7 @@ class ProductCartWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      cartProvider.products[index].name,
+                      productModel.name,
                       style: GoogleFonts.poppins(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -92,13 +90,13 @@ class ProductCartWidget extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      "stock: ${cartProvider.products[index].quantity}",
+                      "stock: ${productModel.quantity}",
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     Text(
-                      formatRupiah(cartProvider.products[index].sellingPrice),
+                      formatRupiah(productModel.sellingPrice),
                       style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -109,7 +107,7 @@ class ProductCartWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              AddItemWidget(product: cartProvider.products[index])
+              AddItemWidget(product: productModel)
             ],
           ),
         ],
