@@ -9,6 +9,7 @@ import 'package:garing_bakery_apk/features/auth/presenter/pages/auth_page.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/pages/dashboard_page.dart';
 import 'package:garing_bakery_apk/features/printer/data/service/struck_service.dart';
+import 'package:garing_bakery_apk/features/profile/presenter/provider/form_profile_provider.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/print_provider.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +41,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     // ignore: use_build_context_synchronously
     final printProvider = context.read<PrintProvider>();
+    // ignore: use_build_context_synchronously
+    final profile = context.read<FormProfileProvider>();
 
     final company = prefs.getString("company");
     final alamat = prefs.getString("alamat");
@@ -52,6 +55,11 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     UserModel? userModel;
     if (prefs.getString("token") != null) {
       userModel = await TokenService.getCacheUser();
+    }
+
+    if (profile.userProfile == null || profile.token == null) {
+      profile.getDataProfile();
+      profile.getToken();
     }
 
     // check device
