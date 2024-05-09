@@ -36,13 +36,6 @@ class TransactionPage extends StatelessWidget {
               height: 10,
             ),
             Expanded(
-              // child: ListView.builder(
-              //   itemCount: 0,
-              //   itemBuilder: (context, index) {
-              //     return Container();
-              //     // return ProductCartWidget(productModel: ProductModel(id: id, name: name, image: image, productCode: productCode, category: category, quantity: quantity, purchasePrice: purchasePrice, sellingPrice: sellingPrice));
-              //   },
-              // ),
               child: ListView(
                 children: cartProvider.products
                     .map(
