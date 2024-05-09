@@ -159,7 +159,7 @@ class HomeSubPage extends StatelessWidget {
     );
   }
 
-  Container _headerHome(String role) {
+  Container _headerHome(String name) {
     return Container(
       padding: const EdgeInsets.all(
         20,
@@ -188,7 +188,7 @@ class HomeSubPage extends StatelessWidget {
             height: 20,
           ),
           Text(
-            "Hallo $role",
+            "Hallo $name",
             style: GoogleFonts.poppins(
               color: Colors.white,
               fontWeight: FontWeight.w400,
