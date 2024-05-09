@@ -48,9 +48,6 @@ class AuthProvider with ChangeNotifier {
       AuthModel result = await AuthService.login(_email.text, _password.text);
       if (result.message == 'success login') {
         await TokenService.saveData("${result.accessToken}", result.data!);
-        final token = await TokenService.getToken();
-        print(token);
-        // print(TokenService.getToken().toString());
         _isLogin = true;
         _message = result.message;
         setUserCache = await TokenService.getCacheUser();

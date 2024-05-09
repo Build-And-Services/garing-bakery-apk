@@ -97,7 +97,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                               MyTheme.alertSucces(
                                   context, category.responseAdd.message);
                               formCategory.clearForm();
-                              Future.delayed(Duration(milliseconds: 500))
+                              Future.delayed(const Duration(milliseconds: 500))
                                   .then((value) {
                                 Navigator.pop(context);
                               });

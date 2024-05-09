@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
-import 'package:garing_bakery_apk/core/models/event/fetchProduct.dart';
+import 'package:garing_bakery_apk/core/models/enum/fetch_product.dart';
 import 'package:garing_bakery_apk/core/widgets/loading_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/search_widget.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';

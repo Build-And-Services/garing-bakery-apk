@@ -63,7 +63,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         if (printName == devices[i].name! &&
             printAddress == devices[i].address!) {
           printProvider.connect(device: devices[i]);
-          print("oke");
         }
       }
     }
