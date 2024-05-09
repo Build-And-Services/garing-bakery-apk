@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
-import 'package:garing_bakery_apk/core/models/arguments/ArgumentStruck.dart';
+import 'package:garing_bakery_apk/core/models/arguments/argument_struck.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';

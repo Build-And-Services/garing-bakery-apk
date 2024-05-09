@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
-import 'package:garing_bakery_apk/core/models/arguments/ArgumentReportTransaction.dart';
+import 'package:garing_bakery_apk/core/models/arguments/argument_report_transaction.dart';
 import 'package:garing_bakery_apk/core/models/http/response.dart';
 import 'package:garing_bakery_apk/core/utils/save_file.dart';
 import 'package:garing_bakery_apk/core/widgets/no_data_widget.dart';
