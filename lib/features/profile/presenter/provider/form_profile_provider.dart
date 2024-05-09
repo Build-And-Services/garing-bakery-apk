@@ -12,7 +12,6 @@ class FormProfileProvider with ChangeNotifier {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _email = TextEditingController();
   XFile? _image;
-  bool _isLoading = false;
   EventLoading _eventLoadingStatus = EventLoading.started;
   UserModel? _userProfile;
   String? _token;
@@ -20,15 +19,9 @@ class FormProfileProvider with ChangeNotifier {
   TextEditingController get name => _name;
   TextEditingController get email => _email;
   XFile? get image => _image;
-  bool get isLoading => _isLoading;
   EventLoading get eventLoadingStatus => _eventLoadingStatus;
   UserModel? get userProfile => _userProfile;
   String? get token => _token;
-
-  set isProccess(bool loading) {
-    _isLoading = loading;
-    notifyListeners();
-  }
 
   set setLoading(EventLoading loading) {
     _eventLoadingStatus = loading;
