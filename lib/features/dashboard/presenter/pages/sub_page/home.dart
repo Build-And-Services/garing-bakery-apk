@@ -5,6 +5,7 @@ import 'package:garing_bakery_apk/features/dashboard/presenter/provider/dashboar
 import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/widgets/category_box_widget.dart';
 import 'package:garing_bakery_apk/features/dashboard/presenter/widgets/product_item_widget.dart';
+import 'package:garing_bakery_apk/features/profile/presenter/provider/form_profile_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +15,9 @@ class HomeSubPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dashboardProvider = context.watch<DashboardProvider>();
-    if (dashboardProvider.loading) {
+    final profile = context.read<FormProfileProvider>();
+    if (dashboardProvider.loading || profile.userProfile == null) {
+      profile.getDataProfile();
       dashboardProvider.getDataDashboard();
       return const Scaffold(
         body: Center(
@@ -41,7 +44,7 @@ class HomeSubPage extends StatelessWidget {
         child: ListView(
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _headerHome(),
+            _headerHome(profile.userProfile!.name),
             _textTitle("Semua Kategori", () => dashboardProvider.changeTab = 3),
             const SizedBox(
               height: 20,
@@ -156,7 +159,7 @@ class HomeSubPage extends StatelessWidget {
     );
   }
 
-  Container _headerHome() {
+  Container _headerHome(String role) {
     return Container(
       padding: const EdgeInsets.all(
         20,
@@ -185,7 +188,7 @@ class HomeSubPage extends StatelessWidget {
             height: 20,
           ),
           Text(
-            "Hello, admin",
+            "Hallo $role",
             style: GoogleFonts.poppins(
               color: Colors.white,
               fontWeight: FontWeight.w400,
