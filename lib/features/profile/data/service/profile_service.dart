@@ -20,14 +20,11 @@ class ProfileService {
             ..fields.addAll(body)
             ..headers.addAll(headers)
             ..files.add(await http.MultipartFile.fromPath('image', filepath));
-      print(request.fields);
+      // print(request.fields);
       var response = await request.send();
       var decoded = await response.stream.bytesToString().then(json.decode);
       late ProfileUpdateResponse result;
       late UserModel? data;
-
-      print(decoded.runtimeType);
-      print(decoded["success"]);
       if (response.statusCode == 202) {
         data = UserModel(
           id: decoded["data"]["id"],
@@ -43,19 +40,15 @@ class ProfileService {
           data: null,
         );
       }
-
       result = ProfileUpdateResponse(
         success: decoded["success"],
         message: decoded["message"],
         data: data,
-        accessToken: decoded["accessToken"],
-        tokenType: decoded["tokenType"],
+        accessToken: decoded["access_token"],
+        tokenType: decoded["token_type"],
       );
-      print(result.accessToken);
-
       return result;
     } catch (e) {
-      print(e);
       rethrow;
     }
   }

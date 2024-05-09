@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
+import 'package:garing_bakery_apk/core/models/enum/event_loading.dart';
 import 'package:garing_bakery_apk/core/widgets/button_widget.dart';
 import 'package:garing_bakery_apk/core/widgets/input_widget.dart';
-import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
+import 'package:garing_bakery_apk/core/widgets/loading_widget.dart';
 import 'package:garing_bakery_apk/features/profile/presenter/provider/form_profile_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,8 +21,12 @@ class UpdateProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final product = context.watch<ProductProvider>();
+
     final profile = context.watch<FormProfileProvider>();
-    final formProfile = context.watch<FormProfileProvider>();
+    if (profile.eventLoadingStatus != EventLoading.done) {
+      profile.getDataProfile();
+      return const LoadingWidget();
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -33,7 +37,7 @@ class UpdateProfilePage extends StatelessWidget {
             color: MyTheme.primary,
           ),
           onPressed: () {
-            formProfile.clearController();
+            profile.clearController();
             Navigator.of(context).pop();
           },
         ),
@@ -58,16 +62,14 @@ class UpdateProfilePage extends StatelessWidget {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _imagePreview(formProfile, context),
-                      ],
+                      children: [_imagePreview(profile, context)],
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    logoImage(formProfile),
-                    sectionName(formProfile),
-                    sectionEmail(formProfile),
+                    logoImage(profile),
+                    sectionName(profile),
+                    sectionEmail(profile),
                     const SizedBox(
                       height: 20,
                     ),
@@ -84,27 +86,21 @@ class UpdateProfilePage extends StatelessWidget {
                 horizontal: 20,
               ),
               child: ButtonWidget(
-                title: !profile.isLoading
-                    ? Text(
-                        "Update Profile",
-                        style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
-                    : const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      ),
+                title: Text(
+                  "Update Profile",
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 tap: () async {
                   if (_formKey.currentState!.validate()) {
-                    profile.setLoading = true;
-                    final image = formProfile.image;
+                    // profile.setLoading = true;
+                    final image = profile.image;
 
                     if (image != null) {
-                      profile.isProccess = true;
+                      // profile.isProccess = true;
 
                       profile.profileUpdate(id).then((value) async => {
                             if (value.success)
@@ -116,7 +112,7 @@ class UpdateProfilePage extends StatelessWidget {
                                 {MyTheme.alertError(context, value.message)}
                               }
                           });
-                      profile.isProccess = false;
+                      // profile.isProccess = false;
                     } else {
                       MyTheme.alertWarning(context, "Gambar belum dimasukan");
                     }
@@ -145,6 +141,11 @@ class UpdateProfilePage extends StatelessWidget {
   }
 
   InkWell _imagePreview(FormProfileProvider formProfile, BuildContext context) {
+    if (formProfile.image == null && formProfile.userProfile != null) {
+      if (formProfile.userProfile?.image != null) {
+        formProfile.setImage(formProfile.userProfile!.image);
+      }
+    }
     return InkWell(
       onTap: () => formProfile.getImage(ImageSource.gallery),
       child: Container(
@@ -158,19 +159,27 @@ class UpdateProfilePage extends StatelessWidget {
             ),
           ),
         ),
-        child: formProfile.image == null
-            ? const Icon(
-                Icons.upload_file_outlined,
-                size: 70,
-                color: MyTheme.primary,
-              )
-            : Image.file(
+        child: formProfile.image != null
+            ? Image.file(
                 //to show image, you type like this.
                 File(formProfile.image!.path),
                 fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width,
                 height: 300,
-              ),
+              )
+            // ignore: unnecessary_null_comparison
+            : formProfile.userProfile!.image != null
+                ? Image.network(
+                    formProfile.userProfile!.image,
+                    fit: BoxFit.cover,
+                    width: MediaQuery.of(context).size.width,
+                    height: 300,
+                  )
+                : const Icon(
+                    Icons.upload_file_outlined,
+                    size: 70,
+                    color: MyTheme.primary,
+                  ),
       ),
     );
   }
