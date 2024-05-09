@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
-import 'package:garing_bakery_apk/features/transaction/presenter/widgets/kasir/AddItemWidget.dart';
+import 'package:garing_bakery_apk/features/transaction/presenter/widgets/kasir/add_item_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProductCartWidget extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
-import 'package:garing_bakery_apk/core/models/arguments/ArgumentReportTransaction.dart';
+import 'package:garing_bakery_apk/core/models/arguments/argument_report_transaction.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:google_fonts/google_fonts.dart';
 
