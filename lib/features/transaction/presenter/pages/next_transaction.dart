@@ -139,11 +139,13 @@ class NextTransaction extends StatelessWidget {
                                         if (data != null) {
                                           printProvider
                                               .print(data)
-                                              .catchError((onError) {
-                                            MyTheme.alertError(
-                                              context,
-                                              "Anda belum terkoneksi dengan printer",
-                                            );
+                                              .then((value) {
+                                            if (!value) {
+                                              MyTheme.alertError(
+                                                context,
+                                                "Anda belum terkoneksi dengan printer",
+                                              );
+                                            }
                                           });
                                           Navigator.pushReplacementNamed(
                                             context,
@@ -245,14 +247,7 @@ class NextTransaction extends StatelessWidget {
                                         (result) {
                                           TransactionAddResponse? data = result;
                                           if (data != null) {
-                                            printProvider
-                                                .print(data)
-                                                .catchError((onError) {
-                                              MyTheme.alertError(
-                                                context,
-                                                "Anda belum terkoneksi dengan printer",
-                                              );
-                                            });
+                                            printProvider.print(data);
                                             Navigator.pushReplacementNamed(
                                               context,
                                               Routes.TRANSACTIONS_SUCCESS,
