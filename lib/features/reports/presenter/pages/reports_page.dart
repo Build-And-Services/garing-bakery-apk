@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
@@ -9,55 +10,67 @@ class ReportsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const DrawerPage(),
-      appBar: AppBar(
-        title: const Text(
-          'Laporan',
-          style: TextStyle(
-            color: Colors.white,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) {
+          return;
+        }
+        final bool shouldCloseTheApp = await MyTheme.showDialogClose(context);
+        if (shouldCloseTheApp) {
+          SystemNavigator.pop();
+        }
+      },
+      child: Scaffold(
+        drawer: const DrawerPage(),
+        appBar: AppBar(
+          title: const Text(
+            'Laporan',
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
+          centerTitle: true,
+          backgroundColor: MyTheme.primary,
         ),
-        centerTitle: true,
-        backgroundColor: MyTheme.primary,
-      ),
-      body: Container(
-        margin: const EdgeInsets.only(
-          top: 20,
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 10,
-        ),
-        child: ListView(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ListTileReport(
-              icon: Icons.card_travel,
-              title: "Laporan Penjualan",
-              tap: () => Navigator.of(context).pushNamed(
-                Routes.REPORTS_SALES,
+        body: Container(
+          margin: const EdgeInsets.only(
+            top: 20,
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
+          child: ListView(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTileReport(
+                icon: Icons.card_travel,
+                title: "Laporan Penjualan",
+                tap: () => Navigator.of(context).pushNamed(
+                  Routes.REPORTS_SALES,
+                ),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Divider(),
-            ),
-            ListTileReport(
-              icon: Icons.production_quantity_limits,
-              title: "Laporan Transaksi",
-              tap: () =>
-                  Navigator.of(context).pushNamed(Routes.REPORTS_TRANSACTIONS),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Divider(),
-            ),
-            // ListTileReport(
-            //   icon: Icons.inventory_outlined,
-            //   title: "Laporan Persediaan",
-            //   tap: () => Navigator.of(context).pushNamed(Routes.REPORTS_STOCKS),
-            // ),
-          ],
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Divider(),
+              ),
+              ListTileReport(
+                icon: Icons.production_quantity_limits,
+                title: "Laporan Transaksi",
+                tap: () => Navigator.of(context)
+                    .pushNamed(Routes.REPORTS_TRANSACTIONS),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Divider(),
+              ),
+              // ListTileReport(
+              //   icon: Icons.inventory_outlined,
+              //   title: "Laporan Persediaan",
+              //   tap: () => Navigator.of(context).pushNamed(Routes.REPORTS_STOCKS),
+              // ),
+            ],
+          ),
         ),
       ),
     );
