@@ -23,6 +23,12 @@ class FormProfileProvider with ChangeNotifier {
   UserModel? get userProfile => _userProfile;
   String? get token => _token;
 
+  clearAuth() {
+    _token = null;
+    _userProfile = null;
+    notifyListeners();
+  }
+
   set setLoading(EventLoading loading) {
     _eventLoadingStatus = loading;
     notifyListeners();

@@ -3,7 +3,9 @@ import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/models/user_model.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
+import 'package:garing_bakery_apk/features/profile/presenter/provider/form_profile_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class DrawerPage extends StatelessWidget {
   const DrawerPage({
@@ -55,10 +57,15 @@ class DrawerPage extends StatelessWidget {
             ),
             _tapSidebar(Icons.logout_outlined, "Logout", () {
               TokenService.logout().then(
-                (value) => Navigator.pushReplacementNamed(
-                  context,
-                  Routes.LOGIN,
-                ),
+                (value) {
+                  FormProfileProvider formProfileProvider =
+                      Provider.of<FormProfileProvider>(context, listen: false);
+                  formProfileProvider.clearAuth();
+                  Navigator.pushReplacementNamed(
+                    context,
+                    Routes.LOGIN,
+                  );
+                },
               );
             }),
           ],
