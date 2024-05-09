@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
@@ -31,40 +32,14 @@ class DashboardPage extends StatelessWidget {
     }
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
-        showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Are you sure?'),
-              content: const Text(
-                'Are you sure you want to leave this page?',
-              ),
-              actions: <Widget>[
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  child: const Text('Nevermind'),
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  child: const Text('Leave'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            );
-          },
-        );
-        return;
+      onPopInvoked: (didPop) async {
+        if (didPop) {
+          return;
+        }
+        final bool shouldCloseTheApp = await MyTheme.showDialogClose(context);
+        if (shouldCloseTheApp) {
+          SystemNavigator.pop();
+        }
       },
       child: Scaffold(
         body: _pages[dashboardProvider.selectedTab],

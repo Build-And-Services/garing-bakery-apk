@@ -120,6 +120,39 @@ class MyTheme {
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  static Future<bool> showDialogClose(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Close The App'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure you want to close the application?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            const SizedBox(width: 10),
+            FilledButton(
+              child: const Text('Close App'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 enum TypeStock { decrease, increase }
