@@ -55,11 +55,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     UserModel? userModel;
     if (prefs.getString("token") != null) {
       userModel = await TokenService.getCacheUser();
-    }
-
-    if (profile.userProfile == null || profile.token == null) {
-      profile.getDataProfile();
-      profile.getToken();
+      if (profile.userProfile == null || profile.token == null) {
+        profile.getDataProfile();
+        profile.getToken();
+      }
     }
 
     // check device

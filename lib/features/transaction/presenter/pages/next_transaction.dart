@@ -5,6 +5,7 @@ import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/print_provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class NextTransaction extends StatelessWidget {
@@ -68,7 +69,7 @@ class NextTransaction extends StatelessWidget {
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
-          if (constraints.maxWidth > 900) {
+          if (constraints.maxWidth > 600) {
             return _inputNominalTabletView(cartProvider, keys, context);
           } else {
             return _inputNominalAndroidView(cartProvider, keys, context);
@@ -110,7 +111,11 @@ class NextTransaction extends StatelessWidget {
             children: List.generate(keys.length, (index) {
               return InkWell(
                 onTap: () {
-                  cartProvider.setNominal = keys[index];
+                  if (keys[index] != "z") {
+                    cartProvider.setNominal = keys[index];
+                  } else {
+                    _dialogAutoNominal(context);
+                  }
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -216,12 +221,16 @@ class NextTransaction extends StatelessWidget {
         Expanded(
           child: GridView.count(
             crossAxisCount: 4,
-            childAspectRatio: 1,
-            physics: const NeverScrollableScrollPhysics(),
+            childAspectRatio: 0.7,
+            // physics: const (),
             children: List.generate(keys.length, (index) {
               return InkWell(
                 onTap: () {
-                  cartProvider.setNominal = keys[index];
+                  if (keys[index] != "z") {
+                    cartProvider.setNominal = keys[index];
+                  } else {
+                    _dialogAutoNominal(context);
+                  }
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -303,6 +312,130 @@ class NextTransaction extends StatelessWidget {
             }),
           ),
         ),
+      ],
+    );
+  }
+
+  Future<dynamic> _dialogAutoNominal(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(8.0),
+              ),
+            ),
+            backgroundColor: Colors.white,
+            contentPadding: EdgeInsets.only(top: 10.0),
+            content: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        "Pecahan Uang",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                    height: 4.0,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: 20.0, right: 20.0, top: 20.0, bottom: 20.0),
+                    child: Column(
+                      children: [
+                        NominalUang(
+                          nominal: 5000,
+                        ),
+                        NominalUang(
+                          nominal: 10000,
+                        ),
+                        NominalUang(
+                          nominal: 20000,
+                        ),
+                        NominalUang(
+                          nominal: 50000,
+                        ),
+                        NominalUang(
+                          nominal: 100000,
+                        ),
+                      ],
+                    ),
+                  ),
+                ]),
+          );
+        });
+  }
+}
+
+class NominalUang extends StatelessWidget {
+  const NominalUang({
+    super.key,
+    required this.nominal,
+  });
+
+  final int nominal;
+
+  @override
+  Widget build(BuildContext context) {
+    final cartProvider = context.read<CartProvider>();
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            cartProvider.autoNominal = nominal.toString().split("");
+            Navigator.pop(context);
+          },
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: MyTheme.brown,
+                width: 1,
+                style: BorderStyle.solid,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(5),
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 15,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  formatRupiah(nominal),
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: MyTheme.brown,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        )
       ],
     );
   }

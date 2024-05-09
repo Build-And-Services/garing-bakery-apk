@@ -52,7 +52,6 @@ class _StrukTransactionPageState extends State<StrukTransactionPage> {
           'Struk',
           style: GoogleFonts.poppins(
             color: Colors.white,
-            fontSize: 18.sp,
             fontWeight: FontWeight.w600,
           ),
         ),

@@ -185,7 +185,7 @@ class Routes {
         );
       default:
         return PageTransition(
-          child: DashboardPage(),
+          child: const SplashPage(),
           type: PageTransitionType.fade,
         );
     }

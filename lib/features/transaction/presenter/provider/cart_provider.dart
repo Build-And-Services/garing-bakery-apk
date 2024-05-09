@@ -96,6 +96,11 @@ class CartProvider with ChangeNotifier {
     }
   }
 
+  set autoNominal(List<String> nominal) {
+    _nominal = nominal;
+    notifyListeners();
+  }
+
   toggleCartProduct(ProductModel product, BuildContext context) {
     if (product.quantity != 0) {
       if (!isThereCart(product)) {
