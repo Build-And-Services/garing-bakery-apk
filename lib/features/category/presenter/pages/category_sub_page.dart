@@ -5,7 +5,6 @@ import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider
 import 'package:garing_bakery_apk/features/category/presenter/provider/category_provider.dart';
 import 'package:garing_bakery_apk/features/category/presenter/widgets/category_box_item.dart';
 import 'package:garing_bakery_apk/core/widgets/drawer_widget.dart';
-import 'package:garing_bakery_apk/core/widgets/search_widget.dart';
 import 'package:garing_bakery_apk/features/category/presenter/widgets/category_box_item_shimmer.dart';
 import 'package:provider/provider.dart';
 

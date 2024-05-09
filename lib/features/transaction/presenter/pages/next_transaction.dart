@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/helpers/format_rupiah.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
-import 'package:garing_bakery_apk/features/printer/data/service/struck_service.dart';
 import 'package:garing_bakery_apk/features/transaction/data/model/reponse_add.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/cart_provider.dart';
 import 'package:garing_bakery_apk/features/transaction/presenter/provider/print_provider.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class NextTransaction extends StatelessWidget {
