@@ -3,6 +3,7 @@ import 'package:garing_bakery_apk/core/config/theme.dart';
 import 'package:garing_bakery_apk/core/routes/app.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/provider/auth_provider.dart';
 import 'package:garing_bakery_apk/features/auth/presenter/widgets/input_login_widget.dart';
+import 'package:garing_bakery_apk/features/profile/presenter/provider/form_profile_provider.dart';
 import 'package:provider/provider.dart';
 
 class AuthLogin extends StatefulWidget {
@@ -82,6 +83,15 @@ class _AuthPage extends State<AuthLogin> {
                                 authProvider.stopLoading();
                                 if (authProvider.message != null &&
                                     authProvider.message != "success login") {
+                                  FormProfileProvider formProfileProvider =
+                                      Provider.of<FormProfileProvider>(context,
+                                          listen: false);
+                                  if (formProfileProvider.userProfile == null ||
+                                      formProfileProvider.token == null) {
+                                    formProfileProvider.getDataProfile();
+                                    formProfileProvider.getToken();
+                                  }
+
                                   dialogMessage(context, authProvider);
                                 } else {
                                   Navigator.of(context).pushNamedAndRemoveUntil(
