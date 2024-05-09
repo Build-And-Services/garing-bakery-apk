@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garing_bakery_apk/core/config/theme.dart';
-import 'package:garing_bakery_apk/core/models/event/fetchProduct.dart';
+import 'package:garing_bakery_apk/core/models/enum/fetch_product.dart';
 import 'package:garing_bakery_apk/core/models/products_model.dart';
 import 'package:garing_bakery_apk/core/models/user_model.dart';
 import 'package:garing_bakery_apk/features/auth/data/service/token_service.dart';
@@ -91,7 +91,9 @@ class CartProvider with ChangeNotifier {
         }
       }
       notifyListeners();
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 
   toggleCartProduct(ProductModel product, BuildContext context) {

@@ -21,6 +21,7 @@ class DashboardModel {
   Map<String, dynamic> toJson() => {
         "success": success,
         "message": message,
+        // ignore: prefer_null_aware_operators
         "data": data == null ? null : data?.toJson()
       };
 }

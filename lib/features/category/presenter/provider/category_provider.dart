@@ -75,10 +75,8 @@ class CategoryProvider with ChangeNotifier {
   }
 
   Future delete(int id) async {
-    try {
-      await CategoryService.deleteCategory(id);
-      _categories.removeWhere((item) => item.id == id);
-      notifyListeners();
-    } catch (e) {}
+    await CategoryService.deleteCategory(id);
+    _categories.removeWhere((item) => item.id == id);
+    notifyListeners();
   }
 }
